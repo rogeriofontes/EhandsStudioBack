@@ -2,7 +2,6 @@ package com.maosencantadas.model;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "artistas")
 public class Artista {
@@ -13,8 +12,6 @@ public class Artista {
 
     private String nome;
     private String endereco;
-    private String cep;
-    private String cidade;
     private String email;
     private String telefone;
     private String insta;
@@ -44,22 +41,6 @@ public class Artista {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }   
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }   
     
     public String getEmail() {
         return email;

@@ -31,8 +31,6 @@ public class ArtistaService {
             .map(artista -> {
                 artista.setNome(artistaAtualizado.getNome());
                 artista.setEndereco(artistaAtualizado.getEndereco());
-                artista.setCep(artistaAtualizado.getCep());
-                artista.setCidade(artistaAtualizado.getCidade());
                 artista.setEmail(artistaAtualizado.getEmail());
                 artista.setTelefone(artistaAtualizado.getTelefone());
                 artista.setInsta(artistaAtualizado.getInsta());
