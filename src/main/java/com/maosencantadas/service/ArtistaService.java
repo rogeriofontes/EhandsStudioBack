@@ -1,5 +1,6 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.Artista;
 import com.maosencantadas.repository.ArtistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,13 @@ public class ArtistaService {
                 artista.setFace(artistaAtualizado.getFace());
                 return artistaRepository.save(artista);
             })
-            .orElseThrow(() -> new RuntimeException("Artista não encontrado"));
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Artista não encontrado com id " + id));
     }
 
     public void deletarArtista(Long id) {
+        if (!artistaRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Artista não encontrado com id " + id);
+        }
         artistaRepository.deleteById(id);
     }
 }

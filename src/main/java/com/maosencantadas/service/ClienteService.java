@@ -1,5 +1,6 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.Cliente;
 import com.maosencantadas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,13 @@ public class ClienteService {
                 cliente.setTelefone(clienteAtualizado.getTelefone());
                 return clienteRepository.save(cliente);
             })
-            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado com id " + id));
     }
 
     public void deletarCliente(Long id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Cliente não encontrado com id " + id);
+        }
         clienteRepository.deleteById(id);
     }
 }

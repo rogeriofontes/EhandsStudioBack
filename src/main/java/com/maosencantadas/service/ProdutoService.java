@@ -1,5 +1,6 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.Produto;
 import com.maosencantadas.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,13 @@ public class ProdutoService {
                 produto.setPreco(produtoAtualizado.getPreco());
                 return produtoRepository.save(produto);
             })
-            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado com id " + id));
     }
 
     public void deletarProduto(Long id) {
+        if (!produtoRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Produto não encontrado com id " + id);
+        }
         produtoRepository.deleteById(id);
     }
 }
