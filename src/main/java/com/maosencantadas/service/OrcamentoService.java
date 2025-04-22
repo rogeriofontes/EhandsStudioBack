@@ -32,6 +32,7 @@ public class OrcamentoService {
             .map(orcamento -> {
                 orcamento.setStatus(orcamentoAtualizado.getStatus());
                 orcamento.setDataOrcamento(orcamentoAtualizado.getDataOrcamento());
+                orcamento.setImagemUrl(orcamentoAtualizado.getImagemUrl()); // <-- Atualizando imagemUrl também
                 return orcamentoRepository.save(orcamento);
             })
             .orElseThrow(() -> new RecursoNaoEncontradoException("Orçamento não encontrado com id " + id));

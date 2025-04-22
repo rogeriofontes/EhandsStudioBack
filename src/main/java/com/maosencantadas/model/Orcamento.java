@@ -18,6 +18,8 @@ public class Orcamento {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataOrcamento;
 
+    private String imagemUrl;  // Novo campo
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id") 
@@ -52,5 +54,13 @@ public class Orcamento {
 
     public void setDataOrcamento(LocalDateTime dataOrcamento) {
         this.dataOrcamento = dataOrcamento;
+    }
+
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 }
