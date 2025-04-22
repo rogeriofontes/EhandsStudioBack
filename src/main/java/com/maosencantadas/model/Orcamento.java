@@ -11,6 +11,7 @@ public class Orcamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     private String status;
@@ -25,9 +26,10 @@ public class Orcamento {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id") 
     private Cliente cliente;
 
+
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "produto_id", referencedColumnName = "id") 
+    @JoinColumn(name = "produtos_id", referencedColumnName = "id") 
     private Produto produto;
 
     // Getters e Setters
