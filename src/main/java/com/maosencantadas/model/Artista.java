@@ -39,7 +39,11 @@ public class Artista {
     }   
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        if (endereco != null && !endereco.trim().isEmpty()) {
+            this.endereco = "https://www.google.com/maps/search/?api=1&query=" + endereco.replace(" ", "+");
+        } else {
+            this.endereco = null;
+        }
     }
     
     public String getEmail() {
@@ -55,7 +59,7 @@ public class Artista {
     }
 
     public void setTelefone(String telefone) {
-            this.telefone = telefone;
+        this.telefone = telefone;
     }   
 
     public String getInsta() {
