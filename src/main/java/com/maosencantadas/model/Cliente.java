@@ -15,7 +15,6 @@ public class Cliente {
     private String email;
     private String telefone;
    
-	
     // Getters e Setters
     public Long getId() {
         return id;
@@ -38,7 +37,11 @@ public class Cliente {
     }   
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        if (endereco != null && !endereco.trim().isEmpty()) {
+            this.endereco = "https://www.google.com/maps/search/?api=1&query=" + endereco.replace(" ", "+");
+        } else {
+            this.endereco = null;
+        }
     }   
 
     public String getEmail() {
@@ -56,6 +59,4 @@ public class Cliente {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }   
-
-     
 }
