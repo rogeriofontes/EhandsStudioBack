@@ -36,6 +36,7 @@ public class ArtistaService {
                 artista.setTelefone(artistaAtualizado.getTelefone());
                 artista.setInsta(artistaAtualizado.getInsta());
                 artista.setFace(artistaAtualizado.getFace());
+                artista.setFoto(artistaAtualizado.getFoto()); // <<< Aqui adicionamos a atualização da foto
                 return artistaRepository.save(artista);
             })
             .orElseThrow(() -> new RecursoNaoEncontradoException("Artista não encontrado com id " + id));
