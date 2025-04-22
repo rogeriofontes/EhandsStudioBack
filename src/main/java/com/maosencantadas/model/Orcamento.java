@@ -65,4 +65,20 @@ public class Orcamento {
     public void setImagemUrl(String imagemUrl) {
         this.imagemUrl = imagemUrl;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    public Produto getProduto() {
+        return produto;
+    }   
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;     
+    }    
 }

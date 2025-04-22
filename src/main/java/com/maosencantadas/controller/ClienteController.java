@@ -22,7 +22,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Cliente> buscarCliente(@PathVariable Long id) { // <-- Corrigi aqui: buscarCliente (camelCase)
+    public Optional<Cliente> buscarCliente(@PathVariable Long id) { 
         return clienteService.buscarClientePorId(id);
     }
 
@@ -32,7 +32,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public Cliente atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) { // <-- Corrigi aqui: atualizarCliente (camelCase)
+    public Cliente atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) { 
         return clienteService.atualizarCliente(id, cliente);
     }
 
