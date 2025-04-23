@@ -2,7 +2,6 @@ package com.maosencantadas.controller;
 
 import com.maosencantadas.model.Produto;
 import com.maosencantadas.service.ProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +12,13 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService produtoService;
+
+    public ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
+    //@Autowired
+    //private ProdutoService produtoService;
 
     @GetMapping
     public List<Produto> listarProdutos() {

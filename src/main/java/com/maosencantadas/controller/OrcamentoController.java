@@ -2,7 +2,6 @@ package com.maosencantadas.controller;
 
 import com.maosencantadas.model.Orcamento;
 import com.maosencantadas.service.OrcamentoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class OrcamentoController {
 
-    @Autowired
-    private OrcamentoService orcamentoService;
+    private final OrcamentoService orcamentoService;
+
+    public OrcamentoController(OrcamentoService orcamentoService) {
+        this.orcamentoService = orcamentoService;
+    }
 
     @GetMapping
     public List<Orcamento> listarTodos() {

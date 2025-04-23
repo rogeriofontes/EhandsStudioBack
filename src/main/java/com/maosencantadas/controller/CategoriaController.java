@@ -2,7 +2,6 @@ package com.maosencantadas.controller;
 
 import com.maosencantadas.model.Categoria;
 import com.maosencantadas.service.CategoriaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,15 @@ import java.util.List;
 @RequestMapping("/api/categorias")
 public class CategoriaController {
 
-    @Autowired
-    private CategoriaService categoriaService;
+    
+    private final CategoriaService categoriaService;
+
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
+    }
+
+    //@Autowired
+    //private CategoriaService categoriaService; troquei por injençao por construtor, para facilitar teste
 
     @GetMapping
     public ResponseEntity<List<Categoria>> listarCategorias() {

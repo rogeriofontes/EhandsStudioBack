@@ -2,7 +2,6 @@ package com.maosencantadas.controller;
 
 import com.maosencantadas.model.Cliente;
 import com.maosencantadas.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +12,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class ClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
+
+    //@Autowired
+    //private ClienteService clienteService; por causa do S O L I "D"
 
     @GetMapping
     public List<Cliente> listarClientes() {

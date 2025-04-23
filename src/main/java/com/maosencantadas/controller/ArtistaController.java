@@ -2,7 +2,6 @@ package com.maosencantadas.controller;
 
 import com.maosencantadas.model.Artista;
 import com.maosencantadas.service.ArtistaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class ArtistaController {
 
-    @Autowired
-    private ArtistaService artistaService;
+    private final ArtistaService artistaService;
+
+    public ArtistaController(ArtistaService artistaService) {
+        this.artistaService = artistaService;
+    }
 
     @GetMapping
     public List<Artista> listarArtistas() {
