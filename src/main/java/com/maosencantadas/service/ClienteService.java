@@ -3,17 +3,17 @@ package com.maosencantadas.service;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.Cliente;
 import com.maosencantadas.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
     public List<Cliente> listarClientes() {
         return clienteRepository.findAll();

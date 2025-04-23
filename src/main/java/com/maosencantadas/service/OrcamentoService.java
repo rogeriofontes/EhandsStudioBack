@@ -3,17 +3,17 @@ package com.maosencantadas.service;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.Orcamento;
 import com.maosencantadas.repository.OrcamentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OrcamentoService {
 
-    @Autowired
-    private OrcamentoRepository orcamentoRepository;
+    private final OrcamentoRepository orcamentoRepository;
 
     public List<Orcamento> listarTodos() {
         return orcamentoRepository.findAll();
@@ -32,7 +32,7 @@ public class OrcamentoService {
             .map(orcamento -> {
                 orcamento.setStatus(orcamentoAtualizado.getStatus());
                 orcamento.setDataOrcamento(orcamentoAtualizado.getDataOrcamento());
-                orcamento.setImagemUrl(orcamentoAtualizado.getImagemUrl()); // <-- Atualizando imagemUrl também
+                orcamento.setImagemUrl(orcamentoAtualizado.getImagemUrl());
                 return orcamentoRepository.save(orcamento);
             })
             .orElseThrow(() -> new RecursoNaoEncontradoException("Orçamento não encontrado com id " + id));
@@ -45,3 +45,4 @@ public class OrcamentoService {
         orcamentoRepository.deleteById(id);
     }
 }
+
