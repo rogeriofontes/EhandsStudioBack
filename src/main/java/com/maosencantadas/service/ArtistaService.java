@@ -43,6 +43,7 @@ public class ArtistaService {
                 artista.setInsta(artistaAtualizado.getInsta());
                 artista.setFace(artistaAtualizado.getFace());
                 artista.setFoto(artistaAtualizado.getFoto());
+                artista.setWhatsapp(artistaAtualizado.getWhatsapp());
                 return artistaRepository.save(artista);
             })
             .orElseThrow(() -> new RecursoNaoEncontradoException("Artista não encontrado com id " + id));

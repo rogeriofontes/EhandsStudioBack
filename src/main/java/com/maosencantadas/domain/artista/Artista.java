@@ -32,5 +32,6 @@ public class Artista {
     private String telefone;
     private String insta;
     private String face;
+    private String whatsapp;
 }
 

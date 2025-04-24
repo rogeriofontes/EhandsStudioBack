@@ -6,6 +6,7 @@ CREATE TABLE artistas (
     email VARCHAR(255) NOT NULL UNIQUE,
     insta VARCHAR(100),
     face VARCHAR(100),
-    foto VARCHAR(255)
+    foto VARCHAR(255),
+    whatsapp VARCHAR(255)
 );
 
