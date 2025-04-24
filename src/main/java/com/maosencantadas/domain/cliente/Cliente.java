@@ -1,4 +1,4 @@
-package com.maosencantadas.model;
+package com.maosencantadas.domain.cliente;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,9 +15,8 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
-
-@Table(name = "categorias")
-public class Categoria {
+@Table(name = "clientes")
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +24,8 @@ public class Categoria {
     private Long id;
 
     private String nome;
-
+    private String endereco;
+    private String email;
+    private String telefone;
+    
 }

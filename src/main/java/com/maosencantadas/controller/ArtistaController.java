@@ -1,6 +1,6 @@
 package com.maosencantadas.controller;
 
-import com.maosencantadas.model.Artista;
+import com.maosencantadas.domain.artista.Artista;
 import com.maosencantadas.service.ArtistaService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,11 @@
-package com.maosencantadas.model;
+package com.maosencantadas.domain.produto;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import com.maosencantadas.domain.artista.Artista;
+import com.maosencantadas.domain.categoria.Categoria;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

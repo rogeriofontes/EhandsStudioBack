@@ -1,6 +1,6 @@
 package com.maosencantadas.controller;
 
-import com.maosencantadas.model.Categoria;
+import com.maosencantadas.domain.categoria.Categoria;
 import com.maosencantadas.service.CategoriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

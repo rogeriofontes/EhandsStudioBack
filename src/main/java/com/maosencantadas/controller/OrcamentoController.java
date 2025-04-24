@@ -1,6 +1,6 @@
 package com.maosencantadas.controller;
 
-import com.maosencantadas.model.Orcamento;
+import com.maosencantadas.domain.orcamento.Orcamento;
 import com.maosencantadas.service.OrcamentoService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.maosencantadas.model;
+package com.maosencantadas.domain.artista;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.maosencantadas.model;
+package com.maosencantadas.domain.orcamento;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +11,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.maosencantadas.domain.cliente.Cliente;
+import com.maosencantadas.domain.produto.Produto;
 
 @Entity
 @AllArgsConstructor

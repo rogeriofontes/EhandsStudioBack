@@ -1,7 +1,7 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.domain.cliente.Cliente;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
-import com.maosencantadas.model.Cliente;
 import com.maosencantadas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

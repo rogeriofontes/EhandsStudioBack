@@ -1,7 +1,7 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.domain.artista.Artista;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
-import com.maosencantadas.model.Artista;
 import com.maosencantadas.repository.ArtistaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

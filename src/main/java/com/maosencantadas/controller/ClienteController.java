@@ -1,6 +1,6 @@
 package com.maosencantadas.controller;
 
-import com.maosencantadas.model.Cliente;
+import com.maosencantadas.domain.cliente.Cliente;
 import com.maosencantadas.service.ClienteService;
 import org.springframework.web.bind.annotation.*;
 

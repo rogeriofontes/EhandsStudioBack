@@ -1,8 +1,9 @@
 package com.maosencantadas.repository;
 
-import com.maosencantadas.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.maosencantadas.domain.cliente.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {

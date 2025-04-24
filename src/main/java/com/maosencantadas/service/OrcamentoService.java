@@ -1,7 +1,7 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.domain.orcamento.Orcamento;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
-import com.maosencantadas.model.Orcamento;
 import com.maosencantadas.repository.OrcamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.maosencantadas.controller;
 
-import com.maosencantadas.model.Produto;
+import com.maosencantadas.domain.produto.Produto;
 import com.maosencantadas.service.ProdutoService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.maosencantadas.service;
 
+import com.maosencantadas.domain.categoria.Categoria;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
-import com.maosencantadas.model.Categoria;
 import com.maosencantadas.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
