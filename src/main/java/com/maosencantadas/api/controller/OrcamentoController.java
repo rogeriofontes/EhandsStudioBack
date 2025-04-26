@@ -1,15 +1,18 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.model.domain.orcamento.Orcamento;
+import com.maosencantadas.api.dto.OrcamentoDTO;
 import com.maosencantadas.model.service.OrcamentoService;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/orcamentos")
+@RequestMapping("/v1/orcamentos")
 @CrossOrigin(origins = "*")
 public class OrcamentoController {
 
@@ -20,27 +23,34 @@ public class OrcamentoController {
     }
 
     @GetMapping
-    public List<Orcamento> listarTodos() {
-        return orcamentoService.listarTodos();
+    public ResponseEntity<List<OrcamentoDTO>> listarTodos() {
+        List<OrcamentoDTO> orcamentos = orcamentoService.listarTodos();
+        return ResponseEntity.ok(orcamentos);
     }
 
     @GetMapping("/{id}")
-    public Optional<Orcamento> buscarPorId(@PathVariable Long id) {
-        return orcamentoService.buscarPorId(id);
+    public ResponseEntity<OrcamentoDTO> buscarPorId(@PathVariable Long id) {
+        OrcamentoDTO orcamento = orcamentoService.buscarPorId(id);
+        return ResponseEntity.of(Optional.of(orcamento));
     }
 
     @PostMapping
-    public Orcamento criar(@RequestBody Orcamento orcamento) {
-        return orcamentoService.criar(orcamento);
+    public ResponseEntity<OrcamentoDTO> criar(@RequestBody OrcamentoDTO orcamentoDTO) {
+        OrcamentoDTO novoOrcamento = orcamentoService.criar(orcamentoDTO);
+        URI location = URI.create(String.format("/v1/orcamentos/%s", novoOrcamento.getId()));
+        return ResponseEntity.created(location).body(novoOrcamento);
     }
 
     @PutMapping("/{id}")
-    public Orcamento atualizar(@PathVariable Long id, @RequestBody Orcamento orcamentoAtualizado) {
-        return orcamentoService.atualizar(id, orcamentoAtualizado);
+    public ResponseEntity<OrcamentoDTO> atualizar(@PathVariable Long id, @RequestBody OrcamentoDTO orcamentoAtualizado) {
+        OrcamentoDTO atualizado = orcamentoService.atualizar(id, orcamentoAtualizado);
+        return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         orcamentoService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
+

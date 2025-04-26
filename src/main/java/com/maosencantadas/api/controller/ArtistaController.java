@@ -1,15 +1,18 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.model.domain.artista.Artista;
+import com.maosencantadas.api.dto.ArtistaDTO;
 import com.maosencantadas.model.service.ArtistaService;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/artistas")
+@RequestMapping("/v1/artistas")
 @CrossOrigin(origins = "*")
 public class ArtistaController {
 
@@ -20,27 +23,33 @@ public class ArtistaController {
     }
 
     @GetMapping
-    public List<Artista> listarArtistas() {
-        return artistaService.listarArtistas();
+    public ResponseEntity<List<ArtistaDTO>> listarArtistas() {  
+        List<ArtistaDTO> artistaDTOS = artistaService.listarArtistas();
+        return ResponseEntity.ok(artistaDTOS);
     }
 
     @GetMapping("/{id}")
-    public Optional<Artista> buscarArtista(@PathVariable Long id) {
-        return artistaService.buscarArtistaPorId(id);
+    public ResponseEntity<ArtistaDTO> buscarArtistaPorId(@PathVariable Long id) {
+        ArtistaDTO artistaDTO = artistaService.buscarArtistaPorId(id);
+        return ResponseEntity.of(Optional.of(artistaDTO));
     }
 
     @PostMapping
-    public Artista criarArtista(@RequestBody Artista artista) {
-        return artistaService.salvarArtista(artista);
-    }
+    public ResponseEntity<ArtistaDTO> criarArtista(@RequestBody ArtistaDTO artistaDTO) {
+        ArtistaDTO artistaRetornado = artistaService.salvarArtista(artistaDTO);
 
+        log.info("Cliente criado com sucesso: {}", artistaRetornado);
+        URI location = URI.create(String.format("/v1/artistas/%s", artistaRetornado.getId()));
+        return ResponseEntity.created(location).body(artistaRetornado);
+    }        
     @PutMapping("/{id}")
-    public Artista atualizarArtista(@PathVariable Long id, @RequestBody Artista artista) {
-        return artistaService.atualizarArtista(id, artista);
+    public ArtistaDTO atualizarArtista(@PathVariable Long id, @RequestBody ArtistaDTO artistaDTO) {
+        return artistaService.atualizarArtista(id, artistaDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarArtista(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarArtista(@PathVariable Long id) {
         artistaService.deletarArtista(id);
+        return ResponseEntity.noContent().build();
     }
 }

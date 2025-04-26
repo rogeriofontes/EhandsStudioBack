@@ -1,55 +1,59 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.model.domain.categoria.Categoria;
+import com.maosencantadas.api.dto.CategoriaDTO;
 import com.maosencantadas.model.service.CategoriaService;
-
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/categorias")
+@RequestMapping("/v1/categorias")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CategoriaController {
 
-    
     private final CategoriaService categoriaService;
 
-    public CategoriaController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
-    }
-
-    //@Autowired
-    //private CategoriaService categoriaService; troquei por injençao por construtor, para facilitar teste
-
     @GetMapping
-    public ResponseEntity<List<Categoria>> listarCategorias() {
-        List<Categoria> categorias = categoriaService.listarCategorias();
-        return new ResponseEntity<>(categorias, HttpStatus.OK);
+    public ResponseEntity<List<CategoriaDTO>> listarCategorias() {
+        log.info("Listando todas as categorias");
+        List<CategoriaDTO> categorias = categoriaService.listarCategorias();
+        return ResponseEntity.ok(categorias);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> buscarCategoriaPorId(@PathVariable Long id) {
-        Categoria categoria = categoriaService.buscarCategoriaPorId(id);
-        return new ResponseEntity<>(categoria, HttpStatus.OK);
+    public ResponseEntity<CategoriaDTO> buscarCategoriaPorId(@PathVariable Long id) {
+        log.info("Buscando categoria com id: {}", id);
+        CategoriaDTO categoriaDTO = categoriaService.buscarCategoriaPorId(id);
+        return ResponseEntity.of(Optional.of(categoriaDTO));
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> salvarCategoria(@RequestBody Categoria categoria) {
-        Categoria novaCategoria = categoriaService.salvarCategoria(categoria);
-        return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
+    public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody CategoriaDTO categoriaDTO) {
+        log.info("Criando nova categoria: {}", categoriaDTO.getNome());
+        CategoriaDTO novaCategoria = categoriaService.salvarCategoria(categoriaDTO);
+        URI location = URI.create(String.format("/v1/categorias/%s", novaCategoria.getId()));
+        return ResponseEntity.created(location).body(novaCategoria);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long id, @RequestBody Categoria categoriaAtualizada) {
-        Categoria categoria = categoriaService.atualizarCategoria(id, categoriaAtualizada);
-        return new ResponseEntity<>(categoria, HttpStatus.OK);
+    public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable Long id, @RequestBody CategoriaDTO categoriaDTO) {
+        log.info("Atualizando categoria com id: {}", id);
+        CategoriaDTO categoriaAtualizada = categoriaService.atualizarCategoria(id, categoriaDTO);
+        return ResponseEntity.ok(categoriaAtualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCategoria(@PathVariable Long id) {
+        log.info("Deletando categoria com id: {}", id);
         categoriaService.deletarCategoria(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
+

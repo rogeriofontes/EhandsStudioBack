@@ -1,15 +1,18 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.model.domain.cliente.Cliente;
+import com.maosencantadas.api.dto.ClienteDTO;
 import com.maosencantadas.model.service.ClienteService;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/v1/clientes")
 @CrossOrigin(origins = "*")
 public class ClienteController {
 
@@ -19,31 +22,34 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    //@Autowired
-    //private ClienteService clienteService; por causa do S O L I "D"
-
     @GetMapping
-    public List<Cliente> listarClientes() {
-        return clienteService.listarClientes();
+    public ResponseEntity<List<ClienteDTO>> listarClientes() {
+        List<ClienteDTO> clientes = clienteService.listarClientes();
+        return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")
-    public Optional<Cliente> buscarCliente(@PathVariable Long id) { 
-        return clienteService.buscarClientePorId(id);
+    public ResponseEntity<ClienteDTO> buscarCliente(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.buscarClientePorId(id);
+        return ResponseEntity.of(Optional.of(cliente));
     }
 
     @PostMapping
-    public Cliente criarCliente(@RequestBody Cliente cliente) {
-        return clienteService.salvarCliente(cliente);
+    public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO clienteDTO) {
+        ClienteDTO clienteCriado = clienteService.salvarCliente(clienteDTO);
+        URI location = URI.create(String.format("/v1/clientes/%s", clienteCriado.getId()));
+        return ResponseEntity.created(location).body(clienteCriado);
     }
 
     @PutMapping("/{id}")
-    public Cliente atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) { 
-        return clienteService.atualizarCliente(id, cliente);
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
+        ClienteDTO clienteAtualizado = clienteService.atualizarCliente(id, clienteDTO);
+        return ResponseEntity.ok(clienteAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarCliente(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
         clienteService.deletarCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,7 @@
 package com.maosencantadas.model.service;
 
+import com.maosencantadas.api.dto.CategoriaDTO;
+import com.maosencantadas.api.mapper.CategoriaMapper;
 import com.maosencantadas.exception.RecursoNaoEncontradoException;
 import com.maosencantadas.model.domain.categoria.Categoria;
 import com.maosencantadas.model.repository.CategoriaRepository;
@@ -16,31 +18,40 @@ import java.util.List;
 public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final CategoriaMapper categoriaMapper;
 
-    public List<Categoria> listarCategorias() {
+    public List<CategoriaDTO> listarCategorias() {
         log.info("Listando todas as categorias");
-        return categoriaRepository.findAll();
+        List<Categoria> categorias = categoriaRepository.findAll();
+        return categorias.stream()
+                .map(categoriaMapper::toDTO)
+                .toList();
     }
 
-    public Categoria buscarCategoriaPorId(Long id) {
+    public CategoriaDTO buscarCategoriaPorId(Long id) {
         log.info("Buscando categoria pelo id: {}", id);
-        return categoriaRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada com id " + id));
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada com id " + id));
+        return categoriaMapper.toDTO(categoria);
     }
 
-    public Categoria salvarCategoria(Categoria categoria) {
-        log.info("Salvando nova categoria: {}", categoria.getNome());
-        return categoriaRepository.save(categoria);
+    public CategoriaDTO salvarCategoria(CategoriaDTO categoriaDTO) {
+        log.info("Salvando nova categoria: {}", categoriaDTO.getNome());
+        Categoria categoria = categoriaMapper.toEntity(categoriaDTO);
+        Categoria categoriaSalva = categoriaRepository.save(categoria);
+        return categoriaMapper.toDTO(categoriaSalva);
     }
 
-    public Categoria atualizarCategoria(Long id, Categoria categoriaAtualizada) {
+    public CategoriaDTO atualizarCategoria(Long id, CategoriaDTO categoriaDTO) {
         log.info("Atualizando categoria com id: {}", id);
-        return categoriaRepository.findById(id)
-            .map(categoria -> {
-                categoria.setNome(categoriaAtualizada.getNome());
-                return categoriaRepository.save(categoria);
-            })
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada com id " + id));
+        Categoria categoriaAtualizada = categoriaRepository.findById(id)
+                .map(categoria -> {
+                    categoria.setNome(categoriaDTO.getNome());
+                    return categoriaRepository.save(categoria);
+                })
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada com id " + id));
+
+        return categoriaMapper.toDTO(categoriaAtualizada);
     }
 
     public void deletarCategoria(Long id) {
@@ -51,4 +62,3 @@ public class CategoriaService {
         categoriaRepository.deleteById(id);
     }
 }
-

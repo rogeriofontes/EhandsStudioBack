@@ -9,6 +9,11 @@ public class ModelMapperConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setSkipNullEnabled(false) // não pula nulos
+                .setFieldMatchingEnabled(true) // match nos campos mesmo que não tenha getter
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE); // acessar até campos privados
+        return modelMapper;
     }
 }
