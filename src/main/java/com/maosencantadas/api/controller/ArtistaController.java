@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1/artistas")
 @CrossOrigin(origins = "*")
-@Tag(name = "Artista Controller", description = "Gerencia operações relacionadas aos Artistas")
+@Tag(name = "Artista Controller", description = "Operações relacionadas aos Artistas")
 public class ArtistaController {
 
     private final ArtistaService artistaService;

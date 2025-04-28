@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-@Schema(name = "CategoriaDTO", description = "DTO que representa uma categoria de produtos ou serviços")
+@Schema(name = "CategoriaDTO", description = "DTO que representa uma categoria de produtos")
 public class CategoriaDTO {
 
-    @Schema(description = "Identificador único da categoria", example = "1")
+    @Schema(description = "Identifica a categoria", example = "1")
     private Long id;
 
     @NotBlank(message = "Nome da categoria é obrigatório")
     @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-    @Schema(description = "Nome da categoria", example = "Manicure")
+    @Schema(description = "Nome da categoria", example = "TestandoCateg")
     private String nome;
 }

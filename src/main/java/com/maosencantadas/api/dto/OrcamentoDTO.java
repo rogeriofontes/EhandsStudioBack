@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(name = "OrcamentoDTO", description = "DTO que representa um orçamento")
 public class OrcamentoDTO {
 
-    @Schema(description = "Identificador único do orçamento", example = "1")
+    @Schema(description = "Identifica do orçamento", example = "1")
     private Long id;
 
     @NotBlank(message = "Status é obrigatório")
@@ -30,7 +30,7 @@ public class OrcamentoDTO {
     @Schema(description = "Data e hora em que o orçamento foi criado", example = "2024-04-27T15:30:00")
     private LocalDateTime dataOrcamento;
 
-    @Schema(description = "URL da imagem associada ao orçamento", example = "https://example.com/imagem.png")
+    @Schema(description = "URL da imagem associada ao orçamento", example = "https://exampleorcamento.com/imagem.png")
     private String imagemUrl;
 
     @NotNull(message = "ClienteId é obrigatório")

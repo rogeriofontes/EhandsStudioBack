@@ -16,33 +16,33 @@ import lombok.NoArgsConstructor;
 @Schema(name = "ArtistaDTO", description = "DTO que representa um artista")
 public class ArtistaDTO {
 
-    @Schema(description = "Identificador único do artista", example = "1")
+    @Schema(description = "Identifica o artista", example = "1")
     private Long id;
 
     @NotBlank(message = "Nome é obrigatório")
     @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-    @Schema(description = "Nome do artista", example = "João da Silva")
+    @Schema(description = "Nome do artista", example = "Amanda Testando")
     private String nome;
 
     @Schema(description = "URL da foto do artista", example = "https://example.com/foto.jpg")
     private String foto;
 
     @Size(max = 200, message = "Endereço deve ter no máximo 200 caracteres")
-    @Schema(description = "Endereço do artista", example = "Rua das Flores, 123 - Centro")
+    @Schema(description = "Endereço do artista", example = "Rua Padre Pio, 123 - Centro")
     private String endereco;
 
     @Email(message = "Email inválido")
-    @Schema(description = "Endereço de email do artista", example = "joao@example.com")
+    @Schema(description = "Endereço de email do artista", example = "teste@exemplo.com")
     private String email;
 
     @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres")
-    @Schema(description = "Número de telefone do artista", example = "(11) 98765-4321")
+    @Schema(description = "Número de telefone do artista", example = "(34) 98765-4321")
     private String telefone;
 
-    @Schema(description = "Perfil do Instagram do artista", example = "@joaoartista")
+    @Schema(description = "Perfil do Instagram do artista", example = "@testandoartista")
     private String insta;
 
-    @Schema(description = "Perfil do Facebook do artista", example = "facebook.com/joaoartista")
+    @Schema(description = "Perfil do Facebook do artista", example = "facebook.com/testandoartista")
     private String face;
 
     @Schema(description = "Número do WhatsApp do artista", example = "(11) 91234-5678")
