@@ -42,7 +42,7 @@ public class Cliente {
     @Schema(description = "Endereço de email do cliente", example = "testandoCleinte@example.com")
     private String email;
 
-    @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres")
-    @Schema(description = "Núme
+    @Schema(description = "Número de telefone do cliente", example = "(21) 99876-5432")
+    private String telefone;
     
 }
