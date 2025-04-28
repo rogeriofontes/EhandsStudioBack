@@ -19,16 +19,15 @@ import java.math.BigDecimal;
 @Schema(name = "ProdutoDTO", description = "DTO que representa um produto")
 public class ProdutoDTO {
 
-    @Schema(description = "Identificador único do produto", example = "1")
+    @Schema(description = "Identificador do produto", example = "1")
     private Long id;
 
-    @NotBlank(message = "Nome é obrigatório")
     @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-    @Schema(description = "Nome do produto", example = "Escultura de Gato")
+    @Schema(description = "Nome do produto", example = "Escultura de Cavalo")
     private String nome;
 
     @Size(max = 255, message = "Descrição deve ter no máximo 255 caracteres")
-    @Schema(description = "Descrição do produto", example = "Escultura artesanal de um gato, feita com materiais recicláveis.")
+    @Schema(description = "Descrição do produto", example = "Escultura artesanal de um cavalo, feita com materiais recicláveis.")
     private String descricao;
 
     @Size(max = 50, message = "Tamanho deve ter no máximo 50 caracteres")
@@ -38,16 +37,13 @@ public class ProdutoDTO {
     @Schema(description = "URL da imagem do produto", example = "https://example.com/produto-imagem.jpg")
     private String imagemUrl;
 
-    @NotNull(message = "Preço é obrigatório")
     @DecimalMin(value = "0.01", inclusive = true, message = "Preço deve ser maior que zero")
     @Schema(description = "Preço do produto", example = "150.00")
     private BigDecimal preco;
 
-    @NotNull(message = "CategoriaId é obrigatório")
     @Schema(description = "Identificador da categoria do produto", example = "2")
     private Long categoriaId;
 
-    @NotNull(message = "ArtistaId é obrigatório")
     @Schema(description = "Identificador do artista do produto", example = "3")
     private Long artistaId;
 }

@@ -1,7 +1,10 @@
 package com.maosencantadas.model.domain.orcamento;
 
-import jakarta.persistence.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,30 +25,34 @@ import com.maosencantadas.model.domain.produto.Produto;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @Table(name = "Orcamentos")
+@Schema(name = "Orcamento", description = "Representa um orçamento")
 public class Orcamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Schema(description = "Identifica do orçamento", example = "1")
     private Long id;
 
+    @NotBlank(message = "Status é obrigatório")
+    @Size(max = 50, message = "Status deve ter no máximo 50 caracteres")
+    @Schema(description = "Status atual do orçamento", example = "Pendente")
     private String status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "Data do orçamento é obrigatória")
+    @Schema(description = "Data e hora em que o orçamento foi criado", example = "2024-04-27T15:30:00")
     private LocalDateTime dataOrcamento;
 
-    private String imagemUrl;  // Novo campo
+    @Schema(description = "URL da imagem associada ao orçamento", example = "https://exampleorcamento.com/imagem.png")
+    private String imagemUrl;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", referencedColumnName = "id") 
-    private Cliente cliente;
+    @NotNull(message = "ClienteId é obrigatório")
+    @Schema(description = "Identificador do cliente associado ao orçamento", example = "5")
+    private Long clienteId;
 
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "produtos_id", referencedColumnName = "id") 
-    private Produto produto;
+    @NotNull(message = "ProdutoId é obrigatório")
+    @Schema(description = "Identificador do produto associado ao orçamento", example = "3")
+    private Long produtoId;
 
     
 }
