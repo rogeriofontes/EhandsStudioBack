@@ -7,6 +7,7 @@ CREATE TABLE artistas (
     insta VARCHAR(100),
     face VARCHAR(100),
     foto VARCHAR(255),
-    whatsapp VARCHAR(255)
+    whatsapp VARCHAR(255),
+    cpf varchar(255)
 );
 

@@ -1,6 +1,8 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.ArtistaDTO;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import com.maosencantadas.model.service.ArtistaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +16,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@Valid
+@Validated
 @Slf4j
 @RestController
 @RequestMapping("/v1/artistas")

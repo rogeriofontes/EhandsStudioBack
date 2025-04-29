@@ -61,7 +61,6 @@ public class Artista {
     private String whatsapp;
 
     @NotBlank(message = "CPF é obrigatório")
-    @Size(min = 11, max = 14, message = "CPF deve ter entre 11 e 14 caracteres")
     @Schema(description = "CPF do artista", example = "123.456.789-00")
     private String cpf;
 }
