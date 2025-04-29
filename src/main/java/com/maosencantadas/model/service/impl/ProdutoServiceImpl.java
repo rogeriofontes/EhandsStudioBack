@@ -32,6 +32,22 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
+    public List<ProdutoDTO> buscarPorArtista(Long artistaId) {
+        log.info("Buscando produtos do artista com id: {}", artistaId);
+        List<Produto> produtos = produtoRepository.findByArtistaId(artistaId);
+
+        if (produtos.isEmpty()) {
+            log.warn("Nenhum produto encontrado para o artista com id: {}", artistaId);
+            throw new RecursoNaoEncontradoException("Nenhum produto encontrado para o artista com id " + artistaId);
+        }
+
+        return produtos.stream()
+                .map(produtoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public ProdutoDTO buscarProdutoPorId(Long id) {
         log.info("Buscando produto pelo id: {}", id);
         Optional<Produto> produto = produtoRepository.findById(id);

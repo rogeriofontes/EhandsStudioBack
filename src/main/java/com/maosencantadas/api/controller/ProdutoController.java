@@ -40,6 +40,21 @@ public class ProdutoController {
         return ResponseEntity.ok(produtos);
     }
 
+    @Operation(summary = "Listar produtos por artista")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de produtos do artista retornada com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProdutoDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Artista não encontrado",
+                    content = @Content)
+    })
+    @GetMapping("/artista/{artistaId}")
+    public ResponseEntity<List<ProdutoDTO>> listarProdutosPorArtista(@PathVariable Long artistaId) {
+        List<ProdutoDTO> produtos = produtoService.buscarPorArtista(artistaId);
+        return ResponseEntity.ok(produtos);
+    }
+
+
     @Operation(summary = "Buscar um produto por ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Produto encontrado",
@@ -51,7 +66,7 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDTO> buscarProdutoPorId(@PathVariable Long id) {
         ProdutoDTO produto = produtoService.buscarProdutoPorId(id);
-        return ResponseEntity.ok(produto);  
+        return ResponseEntity.ok(produto);
     }
 
     @Operation(summary = "Criar um novo produto")

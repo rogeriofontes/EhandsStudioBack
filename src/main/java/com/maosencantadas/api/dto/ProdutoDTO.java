@@ -46,4 +46,7 @@ public class ProdutoDTO {
 
     @Schema(description = "Identificador do artista do produto", example = "3")
     private Long artistaId;
+
+
+
 }
