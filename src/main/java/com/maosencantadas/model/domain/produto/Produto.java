@@ -1,21 +1,14 @@
 package com.maosencantadas.model.domain.produto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
-
 import com.maosencantadas.model.domain.artista.Artista;
 import com.maosencantadas.model.domain.categoria.Categoria;
-
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @AllArgsConstructor
@@ -27,7 +20,7 @@ import lombok.Setter;
 @Table(name = "produtos")
 @Schema(name = "Produto", description = "Representa um produto")
 public class Produto {
-		
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -49,16 +42,16 @@ public class Produto {
     @Schema(description = "URL da imagem do produto", example = "https://example.com/produto-imagem.jpg")
     private String imagemUrl;
 
-    @DecimalMin(value = "0.01", inclusive = true, message = "Preço deve ser maior que zero")
+    @DecimalMin(value = "0.01", message = "Preço deve ser maior que zero")
     @Schema(description = "Preço do produto", example = "150.00")
     private BigDecimal preco;
 
-    @Schema(description = "Identificador da categoria do produto", example = "2")
-    private Long categoriaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
 
-    @Schema(description = "Identificador do artista do produto", example = "3")
-    private Long artistaId;
-	
-     
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artista_id", nullable = false)
+    private Artista artista;
 }
+

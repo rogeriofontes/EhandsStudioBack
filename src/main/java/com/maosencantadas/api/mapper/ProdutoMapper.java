@@ -18,7 +18,7 @@ public class ProdutoMapper {
     public ProdutoDTO toDTO(Produto produto) {
         return modelMapper.map(produto, ProdutoDTO.class);
     }
-    
+
     public Produto toEntity(ProdutoDTO produtoDTO) {
         return modelMapper.map(produtoDTO, Produto.class);
     }

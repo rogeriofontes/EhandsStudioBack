@@ -7,6 +7,10 @@ import java.util.List;
 public interface ProdutoService {
     List<ProdutoDTO> listarProdutos();
 
+    List<ProdutoDTO> buscarPorArtista(Long artistaId);
+
+    List<ProdutoDTO> buscarporCategoria(long categoriaId);
+
     ProdutoDTO buscarProdutoPorId(Long id);
 
     ProdutoDTO salvarProduto(ProdutoDTO produtoDTO);
