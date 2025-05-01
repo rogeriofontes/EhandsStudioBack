@@ -1,6 +1,6 @@
-package com.maosencantadas.spring.files.upload.service.impl;
+package com.maosencantadas.filesupload.model.service.impl;
 
-import com.maosencantadas.spring.files.upload.service.FilesStorageService;
+import com.maosencantadas.filesupload.model.service.FilesStorageService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
