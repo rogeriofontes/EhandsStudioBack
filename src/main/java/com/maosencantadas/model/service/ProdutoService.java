@@ -9,8 +9,11 @@ public interface ProdutoService {
 
     List<ProdutoDTO> buscarPorArtista(Long artistaId);
 
+<<<<<<< HEAD
     List<ProdutoDTO> buscarporCategoria(long categoriaId);
 
+=======
+>>>>>>> origin/main
     ProdutoDTO buscarProdutoPorId(Long id);
 
     ProdutoDTO salvarProduto(ProdutoDTO produtoDTO);
