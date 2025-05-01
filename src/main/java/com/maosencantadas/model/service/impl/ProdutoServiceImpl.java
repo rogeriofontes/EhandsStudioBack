@@ -46,7 +46,7 @@ public class ProdutoServiceImpl implements ProdutoService {
                 .collect(Collectors.toList());
     }
 
-<<<<<<< HEAD
+
     @Override
     public List<ProdutoDTO> buscarporCategoria(long categoriaId) {
         log.info("Buscando produtos pela catedoria com id: {}" , categoriaId);
@@ -61,9 +61,6 @@ public class ProdutoServiceImpl implements ProdutoService {
                 .map(produtoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
-=======
->>>>>>> origin/main
 
     @Override
     public ProdutoDTO buscarProdutoPorId(Long id) {
