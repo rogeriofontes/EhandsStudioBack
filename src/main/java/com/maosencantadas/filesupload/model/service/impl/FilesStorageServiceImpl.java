@@ -6,11 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.Comparator;
-
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -22,17 +21,19 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-    private final Path root = Paths.get("uploads");
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+    private Path root;
 
     @PostConstruct
     @Override
     public void init() {
         try {
+            this.root = Paths.get(uploadDir);
             if (!Files.exists(root)) {
-                Files.createDirectory(root);
+                Files.createDirectories(root); // Garante que o diretório de upload exista
             }
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!", e);
@@ -42,8 +43,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()),
-                    StandardCopyOption.REPLACE_EXISTING);
+            Path targetLocation = this.root.resolve(file.getOriginalFilename());
+            if (!Files.exists(targetLocation.getParent())) {
+                Files.createDirectories(targetLocation.getParent()); // Cria o diretório, se necessário
+            }
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage(), e);
         }
@@ -54,7 +58,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             Path file = root.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
-
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
@@ -85,7 +88,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                         try {
                             Files.delete(path);
                         } catch (IOException e) {
-                            // Silent fail
+                            log.error("Falha ao deletar o arquivo: {}", path, e);
                         }
                     });
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package com.maosencantadas.spring.files.upload.service;
+package com.maosencantadas.filesupload.model.service;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;

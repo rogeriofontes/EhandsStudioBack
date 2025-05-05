@@ -17,6 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
@@ -31,25 +32,10 @@ public class ProdutoServiceImpl implements ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ProdutoDTO> buscarPorArtista(Long artistaId) {
-        log.info("Buscando produtos do artista com id: {}", artistaId);
-        List<Produto> produtos = produtoRepository.findByArtistaId(artistaId);
-
-        if (produtos.isEmpty()) {
-            log.warn("Nenhum produto encontrado para o artista com id: {}", artistaId);
-            throw new RecursoNaoEncontradoException("Nenhum produto encontrado para o artista com id " + artistaId);
-        }
-
-        return produtos.stream()
-                .map(produtoMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
 
     @Override
-    public List<ProdutoDTO> buscarporCategoria(long categoriaId) {
-        log.info("Buscando produtos pela catedoria com id: {}" , categoriaId);
+    public List<ProdutoDTO> listarProdutosPorCategoria(Long categoriaId) {
+        log.info("Buscando produtos pela categoria com id: {}", categoriaId);
         List<Produto> produtos = produtoRepository.findByCategoriaId(categoriaId);
 
         if (produtos.isEmpty()) {
@@ -61,6 +47,23 @@ public class ProdutoServiceImpl implements ProdutoService {
                 .map(produtoMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProdutoDTO> listarProdutosPorArtista(Long artistaId) {
+            log.info("Buscando produtos do artista com id: {}", artistaId);
+            List<Produto> produtos = produtoRepository.findByArtistaId(artistaId);
+
+            if (produtos.isEmpty()) {
+                log.warn("Nenhum produto encontrado para o artista com id: {}", artistaId);
+                throw new RecursoNaoEncontradoException("Nenhum produto encontrado para o artista com id " + artistaId);
+            }
+
+            return produtos.stream()
+                    .map(produtoMapper::toDTO)
+                    .collect(Collectors.toList());
+        }
+
+
 
     @Override
     public ProdutoDTO buscarProdutoPorId(Long id) {

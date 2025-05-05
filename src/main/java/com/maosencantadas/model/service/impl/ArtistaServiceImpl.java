@@ -8,6 +8,7 @@ import com.maosencantadas.model.repository.ArtistaRepository;
 import com.maosencantadas.model.service.ArtistaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
 public class ArtistaServiceImpl implements ArtistaService {
 
     private final ArtistaRepository artistaRepository;

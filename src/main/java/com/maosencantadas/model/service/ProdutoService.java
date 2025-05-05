@@ -7,10 +7,6 @@ import java.util.List;
 public interface ProdutoService {
     List<ProdutoDTO> listarProdutos();
 
-    List<ProdutoDTO> buscarPorArtista(Long artistaId);
-
-    List<ProdutoDTO> buscarporCategoria(long categoriaId);
-
     ProdutoDTO buscarProdutoPorId(Long id);
 
     ProdutoDTO salvarProduto(ProdutoDTO produtoDTO);
@@ -18,4 +14,8 @@ public interface ProdutoService {
     ProdutoDTO atualizarProduto(Long id, ProdutoDTO produtoAtualizadoDTO);
 
     void deletarProduto(Long id);
+
+    List<ProdutoDTO> listarProdutosPorCategoria(Long categoriaId);
+
+    List<ProdutoDTO> listarProdutosPorArtista(Long artistaId);
 }

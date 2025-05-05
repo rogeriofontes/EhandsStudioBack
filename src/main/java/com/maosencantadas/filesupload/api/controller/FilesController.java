@@ -29,7 +29,7 @@ public class FilesController {
     @Autowired
     private FilesStorageService storageService;
 
-    @Operation(summary = "Faz o upload de um arquivo")
+    @Operation(summary = "Faz o upload de uma imagem")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Upload realizado com sucesso",
                     content = @Content(schema = @Schema(implementation = ResponseMessage.class))),
@@ -40,17 +40,17 @@ public class FilesController {
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             storageService.save(file);
-            String message = "O arquivo foi carregado com sucesso: " + file.getOriginalFilename();
+            String message = "A imagem foi carregada com sucesso: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
-            String message = "Não foi possível carregar o arquivo: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+            String message = "Não foi possível carregar a imagem: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
 
     @Operation(summary = "Lista todos os arquivos disponíveis")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Lista de arquivos carregada com sucesso",
+            @ApiResponse(responseCode = "201", description = "Lista de imagem carregada com sucesso",
                     content = @Content(schema = @Schema(implementation = FileInfo.class)))
     })
     @GetMapping("/files")
@@ -67,10 +67,10 @@ public class FilesController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @Operation(summary = "Baixa um arquivo específico pelo nome")
+    @Operation(summary = "Baixa uma imagem específica pelo nome")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Arquivo encontrado e retornado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Arquivo não encontrado")
+            @ApiResponse(responseCode = "201", description = "Imagem encontrada e retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Imagem não encontrada")
     })
     @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {

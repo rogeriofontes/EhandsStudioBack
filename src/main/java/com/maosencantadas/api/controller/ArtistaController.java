@@ -1,8 +1,6 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.ArtistaDTO;
-import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import com.maosencantadas.model.service.ArtistaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,13 +14,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-@Valid
-@Validated
 @Slf4j
 @RestController
 @RequestMapping("/v1/artistas")
 @CrossOrigin(origins = "*")
-@Tag(name = "Artista Controller", description = "Operações relacionadas aos Artistas")
+@Tag(name = "Artista", description = "Operações relacionadas aos Artistas")
 public class ArtistaController {
 
     private final ArtistaService artistaService;
@@ -63,6 +59,9 @@ public class ArtistaController {
                     @ApiResponse(responseCode = "400", description = "Erro de validação nos dados enviados")
             }
     )
+
+//    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping
     public ResponseEntity<ArtistaDTO> criarArtista(
             @RequestBody
@@ -81,6 +80,8 @@ public class ArtistaController {
                     @ApiResponse(responseCode = "404", description = "Artista não encontrado para atualização")
             }
     )
+
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ArtistaDTO atualizarArtista(
             @PathVariable
@@ -98,6 +99,8 @@ public class ArtistaController {
                     @ApiResponse(responseCode = "404", description = "Artista não encontrado para deletar")
             }
     )
+
+   // @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarArtista(
             @PathVariable
