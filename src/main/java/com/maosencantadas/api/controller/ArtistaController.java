@@ -60,7 +60,7 @@ public class ArtistaController {
             }
     )
 
-//    @PreAuthorize("hasRole('ADMIN')")
+
 
     @PostMapping
     public ResponseEntity<ArtistaDTO> criarArtista(
@@ -81,7 +81,7 @@ public class ArtistaController {
             }
     )
 
-//    @PreAuthorize("hasRole('ADMIN')")
+
     @PutMapping("/{id}")
     public ArtistaDTO atualizarArtista(
             @PathVariable
@@ -100,7 +100,7 @@ public class ArtistaController {
             }
     )
 
-   // @PreAuthorize("hasRole('ADMIN')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarArtista(
             @PathVariable

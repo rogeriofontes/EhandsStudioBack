@@ -37,14 +37,18 @@ public class FilesController {
                     content = @Content(schema = @Schema(implementation = ResponseMessage.class)))
     })
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<FileInfo> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             storageService.save(file);
-            String message = "A imagem foi carregada com sucesso: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+
+            String filename = file.getOriginalFilename();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(FilesController.class, "getFile", filename)
+                    .build().toString();
+
+            return ResponseEntity.status(HttpStatus.OK).body(new FileInfo(filename, url));
         } catch (Exception e) {
-            String message = "Não foi possível carregar a imagem: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
     }
 
