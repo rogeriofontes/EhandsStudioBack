@@ -24,6 +24,7 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+
                 .cors()
                 .and()
                 .csrf(csrf -> csrf.disable())
@@ -72,6 +73,7 @@ public class SecurityConfigurations {
 
                          // .requestMatchers(HttpMethod.GET, "/v1/admin/**").hasRole("ADMIN")
 
+                       
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )

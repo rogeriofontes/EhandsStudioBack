@@ -118,7 +118,7 @@ public class ImagemController {
             log.error("Erro ao buscar imagem por produto", e);
             return ResponseEntity.status(500).build();
         }
-    } // <- fechamento do método getImagemPorProduto (faltava isso!)
+    } 
 
     @GetMapping("/categoria/{id}")
     public ResponseEntity<Resource> getImagemPorCategoria(@PathVariable Long id) {
