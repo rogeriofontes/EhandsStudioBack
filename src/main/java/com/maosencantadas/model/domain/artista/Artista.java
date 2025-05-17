@@ -1,5 +1,6 @@
 package com.maosencantadas.model.domain.artista;
 
+import com.maosencantadas.model.domain.categoria.Categoria;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -63,5 +64,9 @@ public class Artista {
     @NotBlank(message = "CPF é obrigatório")
     @Schema(description = "CPF do artista", example = "123.456.789-00")
     private String cpf;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
 }
 

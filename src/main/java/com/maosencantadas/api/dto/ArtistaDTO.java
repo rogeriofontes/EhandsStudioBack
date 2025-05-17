@@ -54,4 +54,7 @@ public class ArtistaDTO {
     @Size(min = 11, max = 14, message = "CPF deve ter entre 11 e 14 caracteres")
     @Schema(description = "CPF do artista", example = "123.456.789-00")
     private String cpf;
+
+    @Schema(description = "Identificador da categoria do artista", example = "2")
+    private Long categoriaId;
 }

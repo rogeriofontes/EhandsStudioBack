@@ -8,11 +8,11 @@ import com.maosencantadas.model.repository.ArtistaRepository;
 import com.maosencantadas.model.service.ArtistaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +42,21 @@ public class ArtistaServiceImpl implements ArtistaService {
         }
 
         return artistaMapper.toDTO(artista.get());
+    }
+
+    @Override
+    public List<ArtistaDTO> listarArtistasPorCategoria(Long categoriaId) {
+        log.info("Buscando artista pela categoria com id: {}", categoriaId);
+        List<Artista> artistas = artistaRepository.findByCategoriaId(categoriaId);
+
+        if (artistas.isEmpty()) {
+            log.warn("Nenhum artista encontrado para a categoria com id: {}", categoriaId);
+            throw new RecursoNaoEncontradoException("Nenhum artista encontrado para a categoria com id " + categoriaId);
+        }
+
+        return artistas.stream()
+                .map(artistaMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
