@@ -27,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 @RequiredArgsConstructor
 @RequestMapping("auth")
-@CrossOrigin(origins = "*", allowedHeaders = "", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+//@CrossOrigin(origins = "*", allowedHeaders = "", maxAge = 3600)
 @Tag(name = "Authentication", description = "Autenticação Usuários")
 public class AuthenticationController {
 

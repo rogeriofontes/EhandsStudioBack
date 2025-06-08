@@ -11,9 +11,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Maos Encantadas API")
+                        .title("Enchanted Hands API")
                         .version("v1")
-                        .description("API gerenciamento de clientes com Spring Boot 3"));
+                        .description("API Client Management with Spring Boot 3"));
     }
 }
 

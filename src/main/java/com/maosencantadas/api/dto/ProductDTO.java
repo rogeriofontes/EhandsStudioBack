@@ -1,0 +1,53 @@
+package com.maosencantadas.api.dto;
+
+import com.maosencantadas.model.domain.artist.Artist;
+import com.maosencantadas.model.domain.category.Category;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+
+import java.math.BigDecimal;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@Schema(name = "ProductDTO", description = "DTO representing a product")
+public class ProductDTO {
+
+    @Schema(description = "Product identifier", example = "1")
+    private Long id;
+
+    @Size(max = 100, message = "Name must be at most 100 characters")
+    @Schema(description = "Name of the product", example = "Horse Sculpture")
+    private String name;
+
+    @Size(max = 255, message = "Description must be at most 255 characters")
+    @Schema(description = "Description of the product", example = "Handcrafted horse sculpture made from recycled materials.")
+    private String description;
+
+    @Size(max = 50, message = "Size must be at most 50 characters")
+    @Schema(description = "Size of the product", example = "Medium")
+    private String size;
+
+    @Schema(description = "Image URL of the product", example = "https://example.com/product-image.jpg")
+    private String imageUrl;
+
+    @DecimalMin(value = "0.01", message = "Price must be greater than zero")
+    @Schema(description = "Price of the product", example = "150.00")
+    private BigDecimal price;
+
+    @Schema(description = "ID of the product's category", example = "2")
+    private Long categoryId;
+
+    @Schema(description = "ID of the product's artist", example = "5")
+    private Long artistId;
+
+
+
+}

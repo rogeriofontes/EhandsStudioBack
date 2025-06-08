@@ -8,7 +8,9 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface FilesStorageService {
+
     @PostConstruct
+
     void init();
 
     void save(MultipartFile file);
