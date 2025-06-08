@@ -10,6 +10,8 @@ public interface BudgetService {
 
     BudgetDTO findBudgetById(Long id);
 
+    BudgetDTO createBudget(BudgetDTO dto);
+
     BudgetDTO updateBudget(Long id, BudgetDTO budgetDTO);
 
     void deleteBudget(Long id);

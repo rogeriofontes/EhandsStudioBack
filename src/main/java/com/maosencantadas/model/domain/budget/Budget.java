@@ -42,7 +42,7 @@ public class Budget {
     @NotNull(message = "Budget date is required")
     @Column(name = "date_budget")
     @Schema(description = "Date and time the budget was created", example = "2024-04-27T15:30:00")
-    private LocalDateTime date_budget;
+    private LocalDateTime dateBudget;
 
     @Size(max = 200, message = "Description must be at most 200 characteres")
     @Column(name = "description")

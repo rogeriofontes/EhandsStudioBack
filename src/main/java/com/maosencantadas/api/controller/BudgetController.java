@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,8 @@ public class BudgetController {
     })
     @PostMapping
     public ResponseEntity<BudgetDTO> create(@RequestBody BudgetDTO budgetDTO) {
-        throw new UnsupportedOperationException("Create operation not implemented yet");
+        BudgetDTO created = budgetService.createBudget(budgetDTO);
+        return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
     }
 
     @Operation(summary = "Update an existing budget")
@@ -71,7 +73,7 @@ public class BudgetController {
             @ApiResponse(responseCode = "404", description = "Budget not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BudgetDTO> update(@PathVariable Long id, @RequestBody BudgetDTO updatedBudget) {
+    public ResponseEntity<BudgetDTO> update(@PathVariable Long id, @Valid @RequestBody BudgetDTO updatedBudget) {
         BudgetDTO budget = budgetService.updateBudget(id, updatedBudget);
         return ResponseEntity.ok(budget);
     }
