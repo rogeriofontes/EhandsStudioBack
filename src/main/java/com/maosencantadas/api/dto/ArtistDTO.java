@@ -1,5 +1,6 @@
 package com.maosencantadas.api.dto;
 
+import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -13,6 +14,7 @@ import lombok.*;
 @Setter
 @Builder
 @Valid
+
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
 public class ArtistDTO {
 
@@ -52,7 +54,9 @@ public class ArtistDTO {
     @Schema(description = "Artist's CPF", example = "123.456.789-00")
     private String cpf;
 
-    @Schema(description = "ID of the artist's category", example = "1")
-    private Long category;
+    @Schema(description = "Category ID", example = "1")
+    private CategoryDTO category;
 
+    @Schema(description = "User ID associated with the Artist", example = "id: 2, login: test@test.com, password: ******, UserRole: ARTIST")
+    private UserDTO user;
 }

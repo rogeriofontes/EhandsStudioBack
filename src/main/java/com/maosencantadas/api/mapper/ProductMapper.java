@@ -19,13 +19,13 @@ public class ProductMapper {
     public void setupMapper() {
         modelMapper.typeMap(Product.class, ProductDTO.class)
                 .addMappings(mapper -> {
-                    mapper.map(src -> src.getArtist().getId(), ProductDTO::setArtistId);
-                    mapper.map(src -> src.getCategory().getId(), ProductDTO::setCategoryId);
+                    mapper.map(src -> src.getArtist().getName(), ProductDTO::setArtist);
+                    mapper.map(src -> src.getCategory().getName(), ProductDTO::setCategory);
                 });
 
         modelMapper.typeMap(ProductDTO.class, Product.class)
                 .addMappings(mapper -> {
-                    mapper.skip(Product::setArtist); // será setado manualmente no service
+                    mapper.skip(Product::setArtist);
                     mapper.skip(Product::setCategory);
                 });
     }

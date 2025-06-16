@@ -1,5 +1,8 @@
 package com.maosencantadas.model.domain.customer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -46,8 +49,23 @@ public class Customer {
     @Schema(description = "Customer email address", example = "testingcustomer@example.com")
     private String email;
 
+    @Column(name = "cpf")
+    @Schema(description = "Customer cpf number", example = "111.111.111-11")
+    private String cpf;
+
     @Column(name = "phone")
     @Schema(description = "Customer phone number", example = "(21) 99876-5432")
     private String phone;
+
+    @Column(name = "whatsapp")
+    @Schema(description = "Customer whatsapp phone number", example = "(21) 99876-5432")
+    private String whatsapp;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    @JsonManagedReference
+    @Schema(description = "Customer user")
+    private User user;
+
     
 }

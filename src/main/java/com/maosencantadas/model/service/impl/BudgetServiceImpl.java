@@ -13,6 +13,14 @@ import com.maosencantadas.model.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +99,43 @@ public class BudgetServiceImpl implements BudgetService {
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Budget not found with id " + id));
         return budgetMapper.toDto(budgetUpdated);
+    }
+
+    @Override
+    public BudgetDTO createBudgetWithImage(String description, Long productId, Long customerId, MultipartFile image) {
+        log.info("Creating budget with image (customerId={}, productId={})", customerId, productId);
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+
+        Budget budget = new Budget();
+        budget.setDescription(description);
+        budget.setCustomer(customer);
+        budget.setProduct(product);
+        budget.setStatus("PENDING");
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
+                Path uploadDir = Paths.get("uploads/budgets");
+                Files.createDirectories(uploadDir);
+
+                Path filePath = uploadDir.resolve(fileName);
+                image.transferTo(filePath.toFile());
+
+                String imageUrl = "/uploads/budgets/" + fileName;
+                budget.setImageUrl(imageUrl);
+            } catch (IOException e) {
+                log.error("Error saving budget image", e);
+                throw new RuntimeException("Error saving image", e);
+            }
+        }
+
+        Budget saved = budgetRepository.save(budget);
+        return budgetMapper.toDto(saved);
     }
 
     @Override

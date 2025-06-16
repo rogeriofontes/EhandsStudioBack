@@ -72,10 +72,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO saveProduct(ProductDTO dto) {
         log.info("Saving new product");
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategoryId()));
-        Artist artist = artistRepository.findById(dto.getArtistId())
-                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtistId()));
+        Category category = categoryRepository.findById(dto.getCategory().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategory().getId()));
+
+        Artist artist = artistRepository.findById(dto.getArtist().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtist().getId()));
+
+
 
         Product product = productMapper.toEntity(dto);
         product.setCategory(category);
@@ -88,10 +91,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO updateProduct(Long id, ProductDTO dto) {
         log.info("Updating product with id: {}", id);
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategoryId()));
-        Artist artist = artistRepository.findById(dto.getArtistId())
-                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtistId()));
+        Category category = categoryRepository.findById(dto.getCategory().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategory().getId()));
+
+        Artist artist = artistRepository.findById(dto.getArtist().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtist().getId()));
+
 
         Product updated = productRepository.findById(id)
                 .map(product -> {

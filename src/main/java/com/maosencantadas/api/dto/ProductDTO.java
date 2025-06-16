@@ -42,11 +42,11 @@ public class ProductDTO {
     @Schema(description = "Price of the product", example = "150.00")
     private BigDecimal price;
 
-    @Schema(description = "ID of the product's category", example = "2")
-    private Long categoryId;
+    @Schema(description = "ID of the product's category or Name of the product's category", example = "2, Arts em Geral")
+    private CategoryDTO category;
 
-    @Schema(description = "ID of the product's artist", example = "5")
-    private Long artistId;
+    @Schema(description = "ID of the product's artist or Name of the product's artist", example = "5, Gerald")
+    private ArtistDTO artist;
 
 
 

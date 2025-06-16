@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,19 +101,39 @@ public class ArtistController {
     }
 
     @GetMapping("/category/{categoryId}")
-    @Operation(summary = "List artists by category", description = "Returns a list of all artists associated with the specified category ID.")
+    @Operation(summary = "List artists by category ID", description = "Returns a list of all artists associated with the specified category ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Artists successfully listed by category",
+            @ApiResponse(responseCode = "200", description = "Artists successfully listed by category ID",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArtistDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Category or artists not found for the provided ID"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<ArtistDTO>> getArtistsByCategoryId(
+            @Parameter(description = "ID of the category", example = "1")
+            @PathVariable Long categoryId) {
+        log.info("Listing artists for category ID: {}", categoryId);
+        List<ArtistDTO> artists = artistService.findArtistsByCategoryId(categoryId);
+        if (artists.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(artists);
+    }
+
+    @GetMapping("/category/name/{categoryName}")
+    @Operation(summary = "List artists by category name", description = "Returns a list of all artists associated with the specified category name.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Artists successfully listed by category name",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ArtistDTO.class))),
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ArtistDTO>> findArtistsByCategory(
-            @Parameter(description = "ID of the category", example = "1")
-            @PathVariable Long categoryId) {
-        log.info("Listing artists for category ID: {}", categoryId);
-        List<ArtistDTO> artists = artistService.findArtistsByCategory(categoryId);
+    public ResponseEntity<List<ArtistDTO>> findArtistsByCategoryName(
+            @Parameter(description = "Name of the category", example = "Rock")
+            @PathVariable String categoryName) {
+        log.info("Listing artists for category name: {}", categoryName);
+        List<ArtistDTO> artists = artistService.findArtistsByCategoryName(categoryName);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

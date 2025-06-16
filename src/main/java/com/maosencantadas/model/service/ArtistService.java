@@ -10,11 +10,13 @@ public interface ArtistService {
 
     ArtistDTO findArtistById(Long id);
 
-    List<ArtistDTO> findArtistsByCategory(Long category_id);
+    List<ArtistDTO> findArtistsByCategoryId(Long categoryId);
 
     ArtistDTO saveArtist(ArtistDTO artistDTO);
 
     ArtistDTO updateArtist(Long id, ArtistDTO artistDTO);
 
     void deleteArtist(Long id);
+
+    List<ArtistDTO> findArtistsByCategoryName(String categoryName);
 }

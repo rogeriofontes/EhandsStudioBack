@@ -1,6 +1,9 @@
 package com.maosencantadas.model.domain.artist;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -74,9 +77,15 @@ public class Artist {
     @Schema(description = "Artist's CPF", example = "123.456.789-00")
     private String cpf;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_name", nullable = false)
     @Schema(description = "Artist's category")
     private Category category;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonManagedReference
+    @Schema(description = "Artist user")
+    private User user;
 }
 

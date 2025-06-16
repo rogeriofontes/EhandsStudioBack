@@ -39,7 +39,7 @@ public class Product {
     private String description;
 
     @Size(max = 50, message = "Size must be at most 50 characters")
-    @Column(name = "site")
+    @Column(name = "size")
     @Schema(description = "Size of the product", example = "Medium")
     private String size;
 
@@ -53,10 +53,10 @@ public class Product {
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_name", nullable = false)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false)
+    @JoinColumn(name = "artist_name", nullable = false)
     private Artist artist;
 }

@@ -2,9 +2,12 @@ package com.maosencantadas.model.repository;
 
 import com.maosencantadas.model.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User, String> {
+import java.util.Optional;
 
-    UserDetails findByLogin(String login);
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByLogin(String login);
 }
+

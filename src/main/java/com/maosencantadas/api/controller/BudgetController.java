@@ -11,8 +11,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -59,11 +61,17 @@ public class BudgetController {
                             schema = @Schema(implementation = BudgetDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
     })
-    @PostMapping
-    public ResponseEntity<BudgetDTO> create(@RequestBody BudgetDTO budgetDTO) {
-        BudgetDTO created = budgetService.createBudget(budgetDTO);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BudgetDTO> create(
+            @RequestParam("description") String description,
+            @RequestParam("productId") Long productId,
+            @RequestParam("customerId") Long customerId,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        BudgetDTO created = budgetService.createBudgetWithImage(description, productId, customerId, image);
         return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
     }
+
 
     @Operation(summary = "Update an existing budget")
     @ApiResponses(value = {

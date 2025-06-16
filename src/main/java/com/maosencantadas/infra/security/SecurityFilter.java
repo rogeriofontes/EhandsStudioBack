@@ -17,39 +17,41 @@ import java.io.IOException;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    TokenService tokenService;
+        @Autowired
+        private TokenService tokenService;
 
-    @Autowired
-    UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+            String path = request.getRequestURI();
 
-        String path = request.getRequestURI();
-
-        
-        if (path.startsWith("/api/uploads") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        var token = this.recoverToken(request);
-        if (token != null) {
-            var login = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByLogin(login);
-            if (token != null) {
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (path.startsWith("/api/uploads") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+                filterChain.doFilter(request, response);
+                return;
             }
 
-        }
-        filterChain.doFilter(request, response);
-    }
+            String token = recoverToken(request);
 
-    private String recoverToken(HttpServletRequest request){
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
-        return authHeader.replace("Bearer", "");
+            if (token != null && !token.isBlank()) {
+                String login = tokenService.validateToken(token);
+                if (login != null && !login.isBlank()) {
+                    userRepository.findByLogin(login).ifPresent(user -> {
+                        var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    });
+                }
+            }
+
+            filterChain.doFilter(request, response);
+        }
+
+        private String recoverToken(HttpServletRequest request){
+            String authHeader = request.getHeader("Authorization");
+            if(authHeader != null && authHeader.startsWith("Bearer ")) {
+                return authHeader.substring(7);
+            }
+            return null;
+        }
     }
-}

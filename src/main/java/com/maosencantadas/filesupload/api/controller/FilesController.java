@@ -29,11 +29,11 @@ public class FilesController {
     @Autowired
     private FilesStorageService storageService;
 
-    @Operation(summary = "Faz o upload de uma imagem")
+    @Operation(summary = "Upload an image")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Upload realizado com sucesso",
+            @ApiResponse(responseCode = "201", description = "Upload completed successfully",
                     content = @Content(schema = @Schema(implementation = ResponseMessage.class))),
-            @ApiResponse(responseCode = "417", description = "Erro ao realizar upload",
+            @ApiResponse(responseCode = "417", description = "Error when uploading",
                     content = @Content(schema = @Schema(implementation = ResponseMessage.class)))
     })
     @PostMapping("/upload")
@@ -52,9 +52,9 @@ public class FilesController {
         }
     }
 
-    @Operation(summary = "Lista todos os arquivos disponíveis")
+    @Operation(summary = "List all available files")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Lista de imagem carregada com sucesso",
+            @ApiResponse(responseCode = "201", description = "Image list loaded successfully",
                     content = @Content(schema = @Schema(implementation = FileInfo.class)))
     })
     @GetMapping("/files")
@@ -71,10 +71,10 @@ public class FilesController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @Operation(summary = "Baixa uma imagem específica pelo nome")
+    @Operation(summary = "Download a specific image by name")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Imagem encontrada e retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Imagem não encontrada")
+            @ApiResponse(responseCode = "201", description = "Image found and returned successfully"),
+            @ApiResponse(responseCode = "404", description = "Image not found")
     })
     @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
