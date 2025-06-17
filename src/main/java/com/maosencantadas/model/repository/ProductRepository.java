@@ -14,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategoryId(long categoryId);
 
+
     @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.category")
     List<Product> findAllWithArtistAndCategory();
 

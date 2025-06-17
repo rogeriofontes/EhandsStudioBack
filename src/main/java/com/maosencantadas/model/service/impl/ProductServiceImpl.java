@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public ProductDTO findProductById(Long id) {
         log.info("Finding product by id: {}", id);
@@ -69,16 +68,16 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDTO(product);
     }
 
+
     @Override
     public ProductDTO saveProduct(ProductDTO dto) {
         log.info("Saving new product");
-        Category category = categoryRepository.findById(dto.getCategory().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategory().getId()));
 
-        Artist artist = artistRepository.findById(dto.getArtist().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtist().getId()));
+        Category category = categoryRepository.findByName(dto.getCategoryName())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with name: " + dto.getCategoryName()));
 
-
+        Artist artist = artistRepository.findByName(dto.getArtistName())
+                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with name: " + dto.getArtistName()));
 
         Product product = productMapper.toEntity(dto);
         product.setCategory(category);
@@ -91,12 +90,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO updateProduct(Long id, ProductDTO dto) {
         log.info("Updating product with id: {}", id);
-        Category category = categoryRepository.findById(dto.getCategory().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + dto.getCategory().getId()));
 
-        Artist artist = artistRepository.findById(dto.getArtist().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + dto.getArtist().getId()));
+        Category category = categoryRepository.findByName(dto.getCategoryName())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with name: " + dto.getCategoryName()));
 
+        Artist artist = artistRepository.findByName(dto.getArtistName())
+                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with name: " + dto.getArtistName()));
 
         Product updated = productRepository.findById(id)
                 .map(product -> {
