@@ -54,6 +54,19 @@ public class BudgetController {
         return ResponseEntity.ok(budget);
     }
 
+    @Operation(summary = "Get a budget by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Budget found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BudgetDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Budget not found", content = @Content)
+    })
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<BudgetDTO> findByCustomerId(@PathVariable("customerId") Long customerId) {
+        BudgetDTO budget = budgetService.findBudgetByCustomerId(customerId);
+        return ResponseEntity.ok(budget);
+    }
+
     @Operation(summary = "Create a new budget")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Budget successfully created",

@@ -7,19 +7,21 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.repository.ArtistRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret:my-secret-key}")
-
+    @Value("${api.security.token.secret}")
     private String secret;
 
     private final ArtistRepository artistRepository;
@@ -30,8 +32,6 @@ public class TokenService {
 
     public String generateToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
             Optional<Artist> artistOptional = artistRepository.findByUser(user);
 
             var tokenBuilder = JWT.create()
@@ -43,7 +43,7 @@ public class TokenService {
 
             artistOptional.ifPresent(artist -> tokenBuilder.withClaim("artistId", artist.getId()));
 
-            return tokenBuilder.sign(algorithm);
+            return tokenBuilder.sign(getAlgorithm());
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }
@@ -51,8 +51,7 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
+            return JWT.require(getAlgorithm())
                     .withIssuer("auth-api")
                     .build()
                     .verify(token)
@@ -60,6 +59,11 @@ public class TokenService {
         } catch (JWTVerificationException exception) {
             return "";
         }
+    }
+
+    private Algorithm getAlgorithm() {
+        log.info("Using secret for HMAC256: {}", secret);
+        return Algorithm.HMAC256(Base64.getDecoder().decode(secret));
     }
 
     private Instant genExpirationDate() {

@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +69,19 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public ArtistDTO findArtistByUserId(Long userId) {
+        Optional<Artist> artist = artistRepository.findByUserId(userId);
+        log.info("Finding artist by user ID: {}", userId);
+
+        if (artist.isEmpty()) {
+            log.warn("No artist found for user ID '{}'", userId);
+            throw new ResourceNotFoundException("No artist found for user with ID '" + userId + "'");
+        }
+
+        return artistMapper.toDTO(artist.get());
+    }
+
+    @Override
     public List<ArtistDTO> findArtistsByCategoryId(Long categoryId) {
         log.info("Finding artists by category ID: {}", categoryId);
 
@@ -93,35 +107,29 @@ public class ArtistServiceImpl implements ArtistService {
     public ArtistDTO saveArtist(ArtistDTO artistDTO) {
         log.info("Saving new artist: {}", artistDTO.getName());
 
-        if (artistDTO.getUser() == null) {
+        if (artistDTO.getUserId() == null) {
             throw new IllegalArgumentException("User information is required");
         }
 
-        User user = createUserFromDTO(artistDTO.getUser());
-
+        User user = createUserFromUserId(artistDTO.getUserId());
         log.debug("Artist User saved with ID: {}", user.getId());
 
-        if (artistDTO.getCategory() == null || artistDTO.getCategory().getId() == null) {
-            throw new IllegalArgumentException("Category ID is required");
-        }
-
-        Category category = categoryRepository.findById(artistDTO.getCategory().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with ID: " + artistDTO.getCategory().getId()));
-
+        Category category = createCategoryFromCategoryId(artistDTO.getCategoryId());
         log.debug("Artist category found with ID: {}", category.getId());
 
-        Artist artist = new Artist();
-        artist.setName(artistDTO.getName());
-        artist.setAddress(artistDTO.getAddress());
-        artist.setEmail(artistDTO.getEmail());
-        artist.setCpf(artistDTO.getCpf());
-        artist.setPhone(artistDTO.getPhone());
-        artist.setWhatsapp(artistDTO.getWhatsapp());
-        artist.setFace(artistDTO.getFace());
-        artist.setInsta(artistDTO.getInsta());
-        artist.setImageUrl(artistDTO.getImageUrl());
-        artist.setCategory(category);
-        artist.setUser(user);
+        Artist artist = Artist.builder()
+                .name(artistDTO.getName())
+                .address(artistDTO.getAddress())
+                .email(artistDTO.getEmail())
+                .cpf(artistDTO.getCpf())
+                .phone(artistDTO.getPhone())
+                .whatsapp(artistDTO.getWhatsapp())
+                .face(artistDTO.getFace())
+                .insta(artistDTO.getInsta())
+                .imageUrl(artistDTO.getImageUrl())
+                .category(category)
+                .user(user)
+                .build();
 
         Artist savedArtist = artistRepository.save(artist);
         log.debug("Artist saved with ID: {}", savedArtist.getId());
@@ -129,12 +137,30 @@ public class ArtistServiceImpl implements ArtistService {
         return artistMapper.toDTO(savedArtist);
     }
 
-    private User createUserFromDTO(UserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin());
-        user.setPassword(passwordEncoder.encode("senhaTemporaria123"));
-        user.setRole(UserRole.ARTIST);
-        return userRepository.save(user);
+    private Category createCategoryFromCategoryId(Long categoryId) {
+        log.info("Creating user for artist with category ID: {}", categoryId);
+
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isPresent()) {
+            log.debug("Category found with ID: {}", category.get().getId());
+            return category.get();
+        } else {
+            log.warn("Category not found with ID: {}", category);
+            throw new EntityNotFoundException("User not found with ID: " + categoryId);
+        }
+    }
+
+    private User createUserFromUserId(Long userId) {
+        log.info("Creating user for artist with user ID: {}", userId);
+
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            log.debug("User found with ID: {}", user.get().getId());
+            return user.get();
+        } else {
+            log.warn("User not found with ID: {}", userId);
+            throw new EntityNotFoundException("User not found with ID: " + userId);
+        }
     }
 
     @Override
@@ -144,15 +170,15 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id " + id));
 
-        if (artistDTO.getCategory() == null || artistDTO.getCategory().getId() == null) {
+        if (artistDTO.getCategoryId() == null) {
             throw new IllegalArgumentException("Category ID is required for update");
         }
 
-        Category category = categoryRepository.findById(artistDTO.getCategory().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID '" + artistDTO.getCategory().getId() + "'"));
+        User user = createUserFromUserId(artistDTO.getUserId());
+        log.debug("Artist User found for updated with ID: {}", user.getId());
 
-        User user = userRepository.findById(artistDTO.getUser().getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + artistDTO.getUser().getId()));
+        Category category = createCategoryFromCategoryId(artistDTO.getUserId());
+        log.debug("Artist category found for updated  with ID: {}", category.getId());
 
         if (user.getRole() != UserRole.ARTIST) {
             throw new IllegalArgumentException("The user must have ARTIST role");

@@ -1,8 +1,6 @@
 package com.maosencantadas.api.dto;
 
-import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -43,7 +41,7 @@ public class CustomerDTO {
     private String whatsapp;
 
     @Schema(description = "User ID associated with the customer", example = "id: 2, login: test@test.com, password: ******, UserRole: CUSTOMER")
-    private UserDTO user;
+    private Long userId;
 
 
 }

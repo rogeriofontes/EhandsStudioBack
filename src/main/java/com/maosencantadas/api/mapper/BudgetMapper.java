@@ -17,8 +17,8 @@ public class BudgetMapper {
                 .description(dto.getDescription())
                 .response(dto.getResponse())
                 .imageUrl(dto.getImageUrl())
-                .customer(Customer.builder().id(dto.getCustomer()).build())
-                .product(Product.builder().id(dto.getProduct()).build())
+                .customer(Customer.builder().id(dto.getCustomerId()).build())
+                .product(Product.builder().id(dto.getProductId()).build())
                 .build();
     }
 
@@ -30,8 +30,8 @@ public class BudgetMapper {
                 .description(budget.getDescription())
                 .response(budget.getResponse())
                 .imageUrl(budget.getImageUrl())
-                .customer(budget.getCustomer() != null ? budget.getCustomer().getId() : null)
-                .product(budget.getProduct() != null ? budget.getProduct().getId() : null)
+                .customerId(budget.getCustomer() != null ? budget.getCustomer().getId() : null)
+                .productId(budget.getProduct() != null ? budget.getProduct().getId() : null)
                 .build();
     }
 

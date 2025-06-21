@@ -41,9 +41,9 @@ public class BudgetDTO {
 
     @NotNull(message = "Customer ID is required")
     @Schema(description = "ID of the customer who requested the budget", example = "5")
-    private Long customer;
+    private Long customerId;
 
     @NotNull(message = "Product ID is required")
     @Schema(description = "ID of the product related to the budget", example = "3")
-    private Long product;
+    private Long productId;
 }

@@ -60,6 +60,23 @@ public class ArtistController {
         return ResponseEntity.of(Optional.ofNullable(artistDTO));
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Find artist by ID", description = "Retrieves a single artist by its unique identifier.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Artist found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArtistDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Artist not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<ArtistDTO> findArtistByUserId(
+            @Parameter(description = "Unique ID of the artist", example = "1")
+            @PathVariable("userId") Long userId) {
+        log.info("Finding artist by User ID: {}", userId);
+        ArtistDTO artistDTO = artistService.findArtistByUserId(userId);
+        return ResponseEntity.of(Optional.ofNullable(artistDTO));
+    }
+
     @PostMapping
     @Operation(summary = "Create a new artist", description = "Creates and returns a new artist with the provided data.")
     @ApiResponses(value = {

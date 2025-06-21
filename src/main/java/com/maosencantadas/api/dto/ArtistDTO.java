@@ -55,8 +55,8 @@ public class ArtistDTO {
     private String cpf;
 
     @Schema(description = "Category ID", example = "1")
-    private CategoryDTO category;
+    private Long categoryId;
 
     @Schema(description = "User ID associated with the Artist", example = "id: 2, login: test@test.com, password: ******, UserRole: ARTIST")
-    private UserDTO user;
+    private Long userId;
 }

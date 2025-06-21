@@ -25,7 +25,6 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @Schema(name = "Artist", description = "represents an artist")
-
 public class Artist {
 
     @EqualsAndHashCode.Include

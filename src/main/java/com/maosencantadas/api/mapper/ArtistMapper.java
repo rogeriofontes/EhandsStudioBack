@@ -39,7 +39,7 @@ public class ArtistMapper {
                 userDTO.setId(user.getId());
                 userDTO.setLogin(user.getLogin());
                 userDTO.setUserRole(user.getRole().name());
-                destination.setUser(userDTO);
+                destination.setUserId(userDTO.getId());
             }
 
             if (source.getCategory() != null) {
@@ -47,7 +47,7 @@ public class ArtistMapper {
                 CategoryDTO categoryDTO = new CategoryDTO();
                 categoryDTO.setId(category.getId());
                 categoryDTO.setName(category.getName());
-                destination.setCategory(categoryDTO);
+                destination.setCategoryId(categoryDTO.getId());
             }
 
             return destination;
@@ -58,22 +58,17 @@ public class ArtistMapper {
             ArtistDTO source = context.getSource();
             Artist destination = context.getDestination();
 
-            if (source.getUser() != null) {
-                UserDTO userDTO = source.getUser();
+            if (source.getUserId() != null) {
+                Long userId = source.getUserId();
                 User user = new User();
-                user.setId(userDTO.getId());
-                user.setLogin(userDTO.getLogin());
-                if (userDTO.getUserRole() != null) {
-                    user.setRole(Enum.valueOf(UserRole.class, userDTO.getUserRole()));
-                }
+                user.setId(userId);
                 destination.setUser(user);
             }
 
-            if (source.getCategory() != null) {
-                CategoryDTO categoryDTO = source.getCategory();
+            if (source.getCategoryId() != null) {
+                Long categoryId = source.getCategoryId();
                 Category category = new Category();
-                category.setId(categoryDTO.getId());
-                category.setName(categoryDTO.getName());
+                category.setId(categoryId);
                 destination.setCategory(category);
             }
 

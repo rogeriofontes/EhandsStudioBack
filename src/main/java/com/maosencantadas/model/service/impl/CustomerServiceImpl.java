@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,24 +54,24 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving new customer: {}", customerDTO.getName());
 
-        if (customerDTO.getUser() == null || customerDTO.getUser().getId() == null) {
-            throw new IllegalArgumentException("User information is required with valid ID");
+        Optional<User> userById = userRepository.findById(customerDTO.getUserId());
+        if (userById.isPresent()) {
+            log.debug("User with ID {} already exists, using existing user", customerDTO.getUserId());
+
+            //if (userById.get().getRole() != UserRole.CUSTOMER) {
+              //  throw new IllegalArgumentException("The user must have CUSTOMER role");
+            //}
+
+            Customer customer = customerMapper.toEntity(customerDTO);
+            customer.setUser(userById.get());
+
+            Customer savedCustomer = customerRepository.save(customer);
+            log.debug("Customer saved with ID: {}", savedCustomer.getId());
+
+            return customerMapper.toDTO(savedCustomer);
         }
 
-        User user = userRepository.findById(customerDTO.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + customerDTO.getUser().getId()));
-
-        if (user.getRole() != UserRole.CUSTOMER) {
-            throw new IllegalArgumentException("The user must have CUSTOMER role");
-        }
-
-        Customer customer = customerMapper.toEntity(customerDTO);
-        customer.setUser(user);
-
-        Customer savedCustomer = customerRepository.save(customer);
-        log.debug("Customer saved with ID: {}", savedCustomer.getId());
-
-        return customerMapper.toDTO(savedCustomer);
+        return null;
     }
 
 
@@ -89,17 +90,12 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));
 
-        if (customerDTO.getUser() == null || customerDTO.getUser().getId() == null) {
-            throw new IllegalArgumentException("User ID must be provided to update customer");
-        }
-
-        User user = userRepository.findById(customerDTO.getUser().getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = userRepository.findById(customerDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + customerDTO.getUserId()));
 
         if (user.getRole() != UserRole.CUSTOMER) {
             throw new IllegalArgumentException("The user must have CUSTOMER role");
         }
-
 
         customer.setUser(user);
         customer.setName(customerDTO.getName());

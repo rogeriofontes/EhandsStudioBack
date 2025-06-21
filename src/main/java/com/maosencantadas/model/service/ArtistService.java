@@ -19,4 +19,6 @@ public interface ArtistService {
     void deleteArtist(Long id);
 
     List<ArtistDTO> findArtistsByCategoryName(String categoryName);
+
+    ArtistDTO findArtistByUserId(Long userId);
 }

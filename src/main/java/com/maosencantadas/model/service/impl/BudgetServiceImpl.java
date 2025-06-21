@@ -61,11 +61,11 @@ public class BudgetServiceImpl implements BudgetService {
     public BudgetDTO createBudget(BudgetDTO dto) {
         log.info("Creating new budget");
 
-        Customer customer = customerRepository.findById(dto.getCustomer())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + dto.getCustomer()));
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + dto.getCustomerId()));
 
-        Product product = productRepository.findById(dto.getProduct())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + dto.getProduct()));
+        Product product = productRepository.findById(dto.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + dto.getProductId()));
 
         Budget budget = budgetMapper.toEntity(dto);
         budget.setCustomer(customer);
@@ -80,11 +80,11 @@ public class BudgetServiceImpl implements BudgetService {
     public BudgetDTO updateBudget(Long id, BudgetDTO budgetDTO) {
         log.info("Updating budget with id: {}", id);
 
-        Customer customer = customerRepository.findById(budgetDTO.getCustomer())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + budgetDTO.getCustomer()));
+        Customer customer = customerRepository.findById(budgetDTO.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + budgetDTO.getCustomerId()));
 
-        Product product = productRepository.findById(budgetDTO.getProduct())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + budgetDTO.getProduct()));
+        Product product = productRepository.findById(budgetDTO.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + budgetDTO.getProductId()));
 
         Budget budgetUpdated = budgetRepository.findById(id)
                 .map(budget -> {
@@ -136,6 +136,18 @@ public class BudgetServiceImpl implements BudgetService {
 
         Budget saved = budgetRepository.save(budget);
         return budgetMapper.toDto(saved);
+    }
+
+    @Override
+    public BudgetDTO findBudgetByCustomerId(Long customerID) {
+        Optional<Budget> budgetByCustomerId = budgetRepository.findBudgetByCustomerId(customerID);
+        if (budgetByCustomerId.isEmpty()) {
+            log.warn("Budget not found for customer with id: {}", customerID);
+            throw new ResourceNotFoundException("Budget not found for customer with id: " + customerID);
+        }
+        log.info("Budget found for customer with id: {}", customerID);
+        Budget budget = budgetByCustomerId.get();
+        return budgetMapper.toDto(budget);
     }
 
     @Override

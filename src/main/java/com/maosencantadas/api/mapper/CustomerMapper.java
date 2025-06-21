@@ -39,7 +39,7 @@ public class CustomerMapper {
                 userDTO.setId(user.getId());
                 userDTO.setLogin(user.getLogin());
                 userDTO.setUserRole(user.getRole().name());
-                destination.setUser(userDTO);
+                destination.setUserId(userDTO.getId());
             }
 
             return destination;
@@ -50,15 +50,11 @@ public class CustomerMapper {
             CustomerDTO source = context.getSource();
             Customer destination = context.getDestination();
 
-            if (source.getUser() != null) {
-                UserDTO userDTO = source.getUser();
-                User user = new User();
-                user.setId(userDTO.getId());
-                user.setLogin(userDTO.getLogin());
-                if (userDTO.getUserRole() != null) {
-                    user.setRole(Enum.valueOf(UserRole.class, userDTO.getUserRole()));
-                }
-                destination.setUser(user);
+            if (source.getUserId() != null) {
+                Long userId = source.getUserId();
+                // Assuming you have a method to fetch UserDTO by ID
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(userId);
             }
 
             return destination;
