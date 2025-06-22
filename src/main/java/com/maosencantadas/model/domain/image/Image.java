@@ -1,5 +1,6 @@
 package com.maosencantadas.model.domain.image;
 
+import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.product.Product;
 import com.maosencantadas.model.domain.category.Category;
@@ -7,15 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
-@Table(name = "images")
-@Getter
-@Setter
+@Table(name = "tb_image")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Schema(name = "Image", description = "Represents images linked to artists, products, or categories")
-public class Image {
+public class Image extends AuditDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -17,8 +17,8 @@ public class ProductMapper {
         dto.setSize(product.getSize());
         dto.setImageUrl(product.getImageUrl());
         dto.setPrice(product.getPrice());
-        dto.setArtistName(product.getArtist() != null ? product.getArtist().getName() : null);
-        dto.setCategoryName(product.getCategory() != null ? product.getCategory().getName() : null);
+        dto.setArtistId(product.getArtist() != null ? product.getArtist().getId() : null);
+        dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
 
         return dto;
     }

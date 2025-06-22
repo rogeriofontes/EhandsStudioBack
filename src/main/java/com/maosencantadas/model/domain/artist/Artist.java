@@ -1,31 +1,26 @@
 package com.maosencantadas.model.domain.artist;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.category.Category;
 import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "artists")
+@Table(name = "tb_artist")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
+@ToString
 @Schema(name = "Artist", description = "represents an artist")
-public class Artist {
+public class Artist extends AuditDomain {
 
     @EqualsAndHashCode.Include
     @Id
@@ -36,12 +31,11 @@ public class Artist {
 
     @NotBlank(message = "Name is mandatory")
     @Size(max = 100, message = "Name must have a maximum of 100 characters")
-    @Column(name="name")
     @Schema(description = "Artist name", example = "Amanda")
     private String name;
 
-    @Column(name="image_url")
     @Schema(description = "Artist photo URL", example = "https://testing.com/foto.jpg")
+    @Column(name="image_url")
     private String imageUrl;
 
     @Size(max = 200, message = "Address must have a maximum of 200 characters")
@@ -77,7 +71,7 @@ public class Artist {
     private String cpf;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_name", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     @Schema(description = "Artist's category")
     private Category category;
 

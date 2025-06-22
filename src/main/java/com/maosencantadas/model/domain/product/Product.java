@@ -1,5 +1,6 @@
 package com.maosencantadas.model.domain.product;
 
+import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.category.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,16 +12,15 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
+@Table(name = "tb_product")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
 @Schema(name = "Product", description = "Represents a product")
-
-public class Product {
+public class Product extends AuditDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,10 +53,10 @@ public class Product {
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_name", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_name", nullable = false)
+    @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
 }

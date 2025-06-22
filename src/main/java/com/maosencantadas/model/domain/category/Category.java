@@ -1,27 +1,21 @@
 package com.maosencantadas.model.domain.category;
 
+import com.maosencantadas.model.domain.AuditDomain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Table(name = "tb_category")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
-
 @Schema(name = "Category", description = "Represents a category of products")
-@Table(name = "categories")
-public class Category {
+public class Category extends AuditDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

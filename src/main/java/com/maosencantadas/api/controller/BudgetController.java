@@ -1,6 +1,7 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.BudgetDTO;
+import com.maosencantadas.api.dto.BudgetResponseDTO;
 import com.maosencantadas.model.service.BudgetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -74,17 +75,41 @@ public class BudgetController {
                             schema = @Schema(implementation = BudgetDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<BudgetDTO> create(
-            @RequestParam("description") String description,
-            @RequestParam("productId") Long productId,
-            @RequestParam("customerId") Long customerId,
-            @RequestParam(value = "image", required = false) MultipartFile image
-    ) {
-        BudgetDTO created = budgetService.createBudgetWithImage(description, productId, customerId, image);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BudgetDTO> create(@RequestBody BudgetDTO request) {
+        BudgetDTO created = budgetService.createBudgetWithoutImage(request);
         return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
     }
 
+    @Operation(summary = "Create a new budget")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Budget successfully created",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BudgetDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
+    })
+    @PatchMapping(value = "/{budgetId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BudgetDTO> create(
+            @PathVariable("budgetId") Long budgetId,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        BudgetDTO created = budgetService.createBudgetWithImage(budgetId, image);
+        return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
+    }
+
+    @Operation(summary = "Create a new budget")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Budget successfully created",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BudgetDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
+    })
+    @PatchMapping(value = "/{budgetId}/response", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BudgetDTO> createResponse(
+            @PathVariable("budgetId") Long budgetId,
+            @RequestBody BudgetResponseDTO budgetResponseDTO) {
+        BudgetDTO created = budgetService.createBudgetResponse(budgetId, budgetResponseDTO);
+        return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
+    }
 
     @Operation(summary = "Update an existing budget")
     @ApiResponses(value = {

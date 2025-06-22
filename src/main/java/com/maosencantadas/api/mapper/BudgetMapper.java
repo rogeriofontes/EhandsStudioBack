@@ -12,7 +12,7 @@ public class BudgetMapper {
     public Budget toEntity(BudgetDTO dto) {
         return Budget.builder()
                 .id(dto.getId())
-                .status(dto.getStatus())
+                .budgetStatus(dto.getStatus())
                 .dateBudget(dto.getDateBudget())
                 .description(dto.getDescription())
                 .response(dto.getResponse())
@@ -25,13 +25,14 @@ public class BudgetMapper {
     public BudgetDTO toDto(Budget budget) {
         return BudgetDTO.builder()
                 .id(budget.getId())
-                .status(budget.getStatus())
+                .status(budget.getBudgetStatus())
                 .dateBudget(budget.getDateBudget())
                 .description(budget.getDescription())
                 .response(budget.getResponse())
                 .imageUrl(budget.getImageUrl())
                 .customerId(budget.getCustomer() != null ? budget.getCustomer().getId() : null)
                 .productId(budget.getProduct() != null ? budget.getProduct().getId() : null)
+                .artistId(budget.getArtist() != null ? budget.getArtist().getId() : null)
                 .build();
     }
 

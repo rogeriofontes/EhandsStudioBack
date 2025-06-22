@@ -1,5 +1,7 @@
 package com.maosencantadas.model.domain.budget;
 
+import com.maosencantadas.model.domain.AuditDomain;
+import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.product.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,25 +9,20 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "budgets")
+@Table(name = "tb_budget")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
+@ToString
 @Schema(name = "Budget", description = "Represents a budget or quotation for a product requested by a customer")
-public class Budget {
+public class Budget extends AuditDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +32,9 @@ public class Budget {
 
     @NotBlank(message = "Status is required")
     @Size(max = 50, message = "Status must be at most 50 characters")
-    @Column(name = "status")
+    @Column(name = "budget_status")
     @Schema(description = "Current status of the budget", example = "Pending")
-    private String status;
+    private String budgetStatus;
 
     @NotNull(message = "Budget date is required")
     @Column(name = "date_budget")
@@ -62,11 +59,21 @@ public class Budget {
     @NotNull(message = "Customer ID is required")
     @JoinColumn(name = "customer_id", nullable = false)
     @Schema(description = "ID of the customer who requested the budget", example = "5")
+    @ToString.Exclude
     private Customer customer;
 
     @ManyToOne
     @NotNull(message = "Product ID is required")
     @JoinColumn(name = "product_id", nullable = false)
     @Schema(description = "ID of the product related to the budget", example = "3")
+    @ToString.Exclude
     private Product product;
+
+    @ManyToOne
+    @NotNull(message = "Artist ID is required")
+    @JoinColumn(name = "artist_id", nullable = false)
+    @Schema(description = "ID of the artist who will handle the budget", example = "2")
+    @ToString.Exclude
+    private Artist artist;
+
 }

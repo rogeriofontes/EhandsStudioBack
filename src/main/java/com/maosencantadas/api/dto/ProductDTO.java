@@ -43,10 +43,8 @@ public class ProductDTO {
     private BigDecimal price;
 
     @Schema(description = "ID of the product's category or Name of the product's category", example = "2, Arts em Geral")
-    private String categoryName;
+    private Long categoryId;
 
     @Schema(description = "ID of the product's artist or Name of the product's artist", example = "5, Gerald")
-    private String artistName;
-
-
+    private Long artistId;
 }

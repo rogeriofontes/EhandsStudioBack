@@ -29,8 +29,9 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    //TODO - Criara um media entity para armazenar as imagens no banco de dados e ser usado nos outros objetos
     @Operation(summary = "Upload an image")
-    @PostMapping("/upload")
+    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ImageDTO> uploadImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "artist", required = false) Long artistId,

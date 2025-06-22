@@ -46,4 +46,8 @@ public class BudgetDTO {
     @NotNull(message = "Product ID is required")
     @Schema(description = "ID of the product related to the budget", example = "3")
     private Long productId;
+
+    @NotNull(message = "Product ID is required")
+    @Schema(description = "ID of the product related to the budget", example = "3")
+    private Long artistId;
 }

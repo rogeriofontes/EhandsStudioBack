@@ -1,6 +1,7 @@
 package com.maosencantadas.model.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.artist.Artist;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,14 +15,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
+@Table(name = "tb_user")
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class User implements UserDetails {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class User extends AuditDomain implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
