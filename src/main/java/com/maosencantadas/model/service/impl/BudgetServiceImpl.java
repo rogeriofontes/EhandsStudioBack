@@ -7,11 +7,9 @@ import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.budget.Budget;
 import com.maosencantadas.model.domain.customer.Customer;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
-import com.maosencantadas.model.repository.ArtistRepository;
-import com.maosencantadas.model.repository.BudgetRepository;
-import com.maosencantadas.model.repository.CustomerRepository;
-import com.maosencantadas.model.repository.ProductRepository;
+import com.maosencantadas.model.repository.*;
 import com.maosencantadas.model.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,14 +35,12 @@ import java.util.stream.Collectors;
 
 public class BudgetServiceImpl implements BudgetService {
 
-    @Value("${app.upload.dir}")
-    private String uploadSODirectory;
-
     private final BudgetRepository budgetRepository;
     private final BudgetMapper budgetMapper;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final ArtistRepository artistRepository;
+    private final MediaRepository mediaRepository;
 
     @Override
     public List<BudgetDTO> findAllBudgets() {
@@ -79,11 +75,14 @@ public class BudgetServiceImpl implements BudgetService {
         Artist artist = artistRepository.findById(dto.getArtistId())
                 .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id: " + dto.getArtistId()));
 
+        Media media = mediaRepository.findById(dto.getMediaId()).orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + dto.getMediaId()));
+
         Budget budget = budgetMapper.toEntity(dto);
 
         budget.setCustomer(customer);
         budget.setProduct(product);
         budget.setArtist(artist);
+        budget.setMedia(media);
 
         Budget saved = budgetRepository.save(budget);
         return budgetMapper.toDto(saved);
@@ -102,6 +101,8 @@ public class BudgetServiceImpl implements BudgetService {
         Artist artist = artistRepository.findById(budgetDTO.getArtistId())
                 .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id: " + budgetDTO.getArtistId()));
 
+        Media media = mediaRepository.findById(budgetDTO.getMediaId()).orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + budgetDTO.getMediaId()));
+
         Budget budgetUpdated = budgetRepository.findById(id)
                 .map(budget -> {
                     budget.setBudgetStatus(budgetDTO.getStatus());
@@ -112,6 +113,7 @@ public class BudgetServiceImpl implements BudgetService {
                     budget.setCustomer(customer);
                     budget.setProduct(product);
                     budget.setArtist(artist);
+                    budget.setMedia(media);
                     return budgetRepository.save(budget);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Budget not found with id " + id));
@@ -131,6 +133,8 @@ public class BudgetServiceImpl implements BudgetService {
         Artist artist = artistRepository.findById(request.getArtistId())
                 .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id: " + request.getArtistId()));
 
+        Media media = mediaRepository.findById(request.getMediaId()).orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + request.getMediaId()));
+
         Budget budget = Budget.builder()
                 .description(request.getDescription())
                 .customer(customer)
@@ -139,6 +143,7 @@ public class BudgetServiceImpl implements BudgetService {
                 .budgetStatus("PENDING")
                 .dateBudget(request.getDateBudget())
                 .imageUrl(request.getImageUrl())
+                .media(media)
                 .build();
 
         Budget saved = budgetRepository.save(budget);
@@ -160,35 +165,6 @@ public class BudgetServiceImpl implements BudgetService {
 
         log.info("Budget response updated for budget with id: {}", budgetId);
         return budgetMapper.toDto(updatedBudget);
-    }
-
-    @Override
-    public BudgetDTO createBudgetWithImage(Long budgetId, MultipartFile image) {
-        Optional<Budget> budget = budgetRepository.findById(budgetId);
-        if (budget.isEmpty()) {
-            log.warn("Budget for record image, not found with id: {}", budgetId);
-            throw new ResourceNotFoundException("Budget not found with id: " + budgetId);
-        }
-
-        if (image != null && !image.isEmpty()) {
-            try {
-                String fileName = System.currentTimeMillis() + "_" + StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-                Path uploadDir = Paths.get(uploadSODirectory);
-                Files.createDirectories(uploadDir);
-
-                Path filePath = uploadDir.resolve(fileName);
-                image.transferTo(filePath.toFile());
-
-                String imageUrl = "/uploads/budgets/" + fileName;
-                budget.get().setImageUrl(imageUrl);
-                return budgetMapper.toDto(budgetRepository.save(budget.get()));
-            } catch (IOException e) {
-                log.error("Error saving budget image", e);
-                throw new RuntimeException("Error saving image", e);
-            }
-        }
-
-        return null;
     }
 
     @Override

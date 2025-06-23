@@ -1,6 +1,7 @@
 package com.maosencantadas.model.domain.category;
 
 import com.maosencantadas.model.domain.AuditDomain;
+import com.maosencantadas.model.domain.media.Media;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -29,4 +30,8 @@ public class Category extends AuditDomain {
     @Schema(description = "Category name", example = "TestingCategory")
     private String name;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id", nullable = false)
+    @Schema(description = "Customer's media")
+    private Media media;
 }

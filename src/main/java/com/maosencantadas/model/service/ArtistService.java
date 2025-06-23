@@ -6,19 +6,19 @@ import java.util.List;
 
 public interface ArtistService {
 
-    List<ArtistDTO> findAllArtists();
+    List<ArtistDTO> findAll();
 
-    ArtistDTO findArtistById(Long id);
+    ArtistDTO findById(Long id);
 
-    List<ArtistDTO> findArtistsByCategoryId(Long categoryId);
+    List<ArtistDTO> findByCategoryId(Long categoryId);
 
-    ArtistDTO saveArtist(ArtistDTO artistDTO);
+    ArtistDTO save(ArtistDTO artistDTO);
 
-    ArtistDTO updateArtist(Long id, ArtistDTO artistDTO);
+    ArtistDTO update(Long id, ArtistDTO artistDTO);
 
-    void deleteArtist(Long id);
+    void delete(Long id);
 
-    List<ArtistDTO> findArtistsByCategoryName(String categoryName);
+    List<ArtistDTO> findByCategoryName(String categoryName);
 
-    ArtistDTO findArtistByUserId(Long userId);
+    ArtistDTO findByUserId(Long userId);
 }

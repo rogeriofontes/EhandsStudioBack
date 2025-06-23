@@ -3442,7 +3442,7 @@ instanceKlass com/maosencantadas/model/domain/artist/Artist$HibernateInstantiato
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601885800
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601885400
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601885000
-instanceKlass com/maosencantadas/model/domain/image/Image$HibernateInstantiator$bGbAsX4A
+instanceKlass com/maosencantadas/model/domain/media/Image$HibernateInstantiator$bGbAsX4A
 instanceKlass com/maosencantadas/model/domain/user/User$HibernateInstantiator$97VcSNhi
 instanceKlass net/bytebuddy/description/type/TypeDescription$Generic$AnnotationReader$ForWildcardUpperBoundType$AnnotatedWildcardType
 instanceKlass net/bytebuddy/description/type/TypeDescription$Generic$AnnotationReader$ForTypeArgument$AnnotatedParameterizedType
@@ -4428,7 +4428,7 @@ instanceKlass org/hibernate/annotations/common/reflection/java/generics/SimpleTy
 instanceKlass org/springframework/security/core/GrantedAuthority
 instanceKlass jakarta/validation/constraints/DecimalMin$List
 instanceKlass com/maosencantadas/model/domain/product/Product$ProductBuilder
-instanceKlass com/maosencantadas/model/domain/image/Image$ImageBuilder
+instanceKlass com/maosencantadas/model/domain/media/Image$ImageBuilder
 instanceKlass com/maosencantadas/model/domain/customer/Customer$CustomerBuilder
 instanceKlass com/maosencantadas/model/domain/category/Category$CategoryBuilder
 instanceKlass jakarta/validation/constraints/NotNull$List
@@ -7870,7 +7870,7 @@ instanceKlass org/springframework/security/core/userdetails/UserDetails
 instanceKlass com/maosencantadas/model/repository/UserRepository
 instanceKlass com/maosencantadas/model/domain/product/Product
 instanceKlass com/maosencantadas/model/repository/ProductRepository
-instanceKlass com/maosencantadas/model/domain/image/Image
+instanceKlass com/maosencantadas/model/domain/media/Image
 instanceKlass com/maosencantadas/model/repository/ImageRepository
 instanceKlass com/maosencantadas/model/domain/customer/Customer
 instanceKlass com/maosencantadas/model/repository/CustomerRepository

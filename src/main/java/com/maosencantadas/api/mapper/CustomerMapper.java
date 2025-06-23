@@ -3,6 +3,7 @@ package com.maosencantadas.api.mapper;
 import com.maosencantadas.api.dto.CustomerDTO;
 import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.customer.Customer;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.domain.user.UserRole;
 import org.modelmapper.ModelMapper;
@@ -42,6 +43,10 @@ public class CustomerMapper {
                 destination.setUserId(userDTO.getId());
             }
 
+            if (source.getMedia() != null) {
+                destination.setMediaId(source.getMedia().getId());
+            }
+
             return destination;
         });
 
@@ -55,6 +60,12 @@ public class CustomerMapper {
                 // Assuming you have a method to fetch UserDTO by ID
                 UserDTO userDTO = new UserDTO();
                 userDTO.setId(userId);
+            }
+
+            if (source.getMediaId() != null) {
+                Media media = new Media();
+                media.setId(source.getMediaId());
+                destination.setMedia(media);
             }
 
             return destination;

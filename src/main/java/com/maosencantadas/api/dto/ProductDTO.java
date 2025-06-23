@@ -47,4 +47,7 @@ public class ProductDTO {
 
     @Schema(description = "ID of the product's artist or Name of the product's artist", example = "5, Gerald")
     private Long artistId;
+
+    @Schema(description = "Media ID", example = "1")
+    private Long mediaId;
 }

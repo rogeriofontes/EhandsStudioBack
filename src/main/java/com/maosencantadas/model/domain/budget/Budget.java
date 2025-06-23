@@ -3,6 +3,7 @@ package com.maosencantadas.model.domain.budget;
 import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.customer.Customer;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -76,4 +77,8 @@ public class Budget extends AuditDomain {
     @ToString.Exclude
     private Artist artist;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id", nullable = false)
+    @Schema(description = "Budget's media")
+    private Media media;
 }

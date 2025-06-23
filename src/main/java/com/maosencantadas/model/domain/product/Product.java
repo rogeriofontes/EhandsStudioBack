@@ -3,6 +3,7 @@ package com.maosencantadas.model.domain.product;
 import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.media.Media;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -59,4 +60,9 @@ public class Product extends AuditDomain {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id", nullable = false)
+    @Schema(description = "Product's media")
+    private Media media;
 }

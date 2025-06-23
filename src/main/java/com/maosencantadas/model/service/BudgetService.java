@@ -18,8 +18,6 @@ public interface BudgetService {
 
     void deleteBudget(Long id);
 
-    BudgetDTO createBudgetWithImage(Long budgetId, MultipartFile image);
-
     BudgetDTO findBudgetByCustomerId(Long customerID);
 
     BudgetDTO createBudgetWithoutImage(BudgetDTO request);

@@ -6,10 +6,12 @@ import com.maosencantadas.api.mapper.ArtistMapper;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.domain.user.UserRole;
 import com.maosencantadas.model.repository.ArtistRepository;
 import com.maosencantadas.model.repository.CategoryRepository;
+import com.maosencantadas.model.repository.MediaRepository;
 import com.maosencantadas.model.repository.UserRepository;
 import com.maosencantadas.model.service.ArtistService;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,10 +33,11 @@ public class ArtistServiceImpl implements ArtistService {
     private final ArtistMapper artistMapper;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final MediaRepository mediaRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<ArtistDTO> findAllArtists() {
+    public List<ArtistDTO> findAll() {
         log.info("Listing all artists");
         return artistRepository.findAll()
                 .stream()
@@ -43,7 +46,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public ArtistDTO findArtistById(Long id) {
+    public ArtistDTO findById(Long id) {
         log.info("Finding artist by id: {}", id);
         Artist artist = artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Artist not found with id: " + id));
@@ -51,7 +54,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public List<ArtistDTO> findArtistsByCategoryName(String categoryName) {
+    public List<ArtistDTO> findByCategoryName(String categoryName) {
         log.info("Finding artists by category name: {}", categoryName);
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with name '" + categoryName + "'"));
@@ -69,7 +72,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public ArtistDTO findArtistByUserId(Long userId) {
+    public ArtistDTO findByUserId(Long userId) {
         Optional<Artist> artist = artistRepository.findByUserId(userId);
         log.info("Finding artist by user ID: {}", userId);
 
@@ -82,7 +85,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public List<ArtistDTO> findArtistsByCategoryId(Long categoryId) {
+    public List<ArtistDTO> findByCategoryId(Long categoryId) {
         log.info("Finding artists by category ID: {}", categoryId);
 
         if (!categoryRepository.existsById(categoryId)) {
@@ -104,7 +107,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     @Transactional
-    public ArtistDTO saveArtist(ArtistDTO artistDTO) {
+    public ArtistDTO save(ArtistDTO artistDTO) {
         log.info("Saving new artist: {}", artistDTO.getName());
 
         if (artistDTO.getUserId() == null) {
@@ -116,6 +119,9 @@ public class ArtistServiceImpl implements ArtistService {
 
         Category category = createCategoryFromCategoryId(artistDTO.getCategoryId());
         log.debug("Artist category found with ID: {}", category.getId());
+
+        Media media = createMediaFromMediaId(artistDTO.getMediaId());
+        log.debug("Artist media found with ID: {}", media.getId());
 
         Artist artist = Artist.builder()
                 .name(artistDTO.getName())
@@ -129,12 +135,27 @@ public class ArtistServiceImpl implements ArtistService {
                 .imageUrl(artistDTO.getImageUrl())
                 .category(category)
                 .user(user)
+                .media(media)
                 .build();
 
         Artist savedArtist = artistRepository.save(artist);
         log.debug("Artist saved with ID: {}", savedArtist.getId());
 
         return artistMapper.toDTO(savedArtist);
+    }
+
+    private Media createMediaFromMediaId(Long mediaId) {
+        log.info("Creating user for artist with media ID: {}", mediaId);
+
+        Optional<Media> media = mediaRepository.findById(mediaId);
+
+        if (media.isPresent()) {
+            log.debug("Media found with ID: {}", media.get().getId());
+            return media.get();
+        } else {
+            log.warn("Media not found with ID: {}", media);
+            throw new EntityNotFoundException("User not found with ID: " + media);
+        }
     }
 
     private Category createCategoryFromCategoryId(Long categoryId) {
@@ -164,7 +185,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public ArtistDTO updateArtist(Long id, ArtistDTO artistDTO) {
+    public ArtistDTO update(Long id, ArtistDTO artistDTO) {
         log.info("Updating artist with id: {}", id);
 
         Artist artist = artistRepository.findById(id)
@@ -179,6 +200,9 @@ public class ArtistServiceImpl implements ArtistService {
 
         Category category = createCategoryFromCategoryId(artistDTO.getUserId());
         log.debug("Artist category found for updated  with ID: {}", category.getId());
+
+        Media media = createMediaFromMediaId(artistDTO.getMediaId());
+        log.debug("Artist media found with ID: {}", media.getId());
 
         if (user.getRole() != UserRole.ARTIST) {
             throw new IllegalArgumentException("The user must have ARTIST role");
@@ -195,13 +219,14 @@ public class ArtistServiceImpl implements ArtistService {
         artist.setCpf(artistDTO.getCpf());
         artist.setCategory(category);
         artist.setUser(user);
+        artist.setMedia(media);
 
         Artist updated = artistRepository.save(artist);
         return artistMapper.toDTO(updated);
     }
 
     @Override
-    public void deleteArtist(Long id) {
+    public void delete(Long id) {
         log.info("Deleting artist with id: {}", id);
         if (!artistRepository.existsById(id)) {
             log.warn("Attempted to delete non-existent artist with id {}", id);

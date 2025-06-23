@@ -1,9 +1,9 @@
 package com.maosencantadas.api.mapper;
 
+import com.maosencantadas.model.domain.media.Media;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import com.maosencantadas.api.dto.ImageDTO;
-import com.maosencantadas.model.domain.image.Image;
+import com.maosencantadas.api.dto.MediaDTO;
 
 @Component
 public class ImageMapper {
@@ -12,7 +12,7 @@ public class ImageMapper {
 
     public ImageMapper(ModelMapper modelMapper) {this.modelMapper = modelMapper;}
 
-    public ImageDTO toDTO (Image image) {return modelMapper.map(image , ImageDTO.class);}
+    public MediaDTO toDTO (Media media) {return modelMapper.map(media, MediaDTO.class);}
 
-    public Image toEntity (ImageDTO imageDTO) {return modelMapper.map(imageDTO, Image.class);}
+    public Media toEntity (MediaDTO imageDTO) {return modelMapper.map(imageDTO, Media.class);}
 }

@@ -43,5 +43,6 @@ public class CustomerDTO {
     @Schema(description = "User ID associated with the customer", example = "id: 2, login: test@test.com, password: ******, UserRole: CUSTOMER")
     private Long userId;
 
-
+    @Schema(description = "Media ID", example = "1")
+    private Long mediaId;
 }

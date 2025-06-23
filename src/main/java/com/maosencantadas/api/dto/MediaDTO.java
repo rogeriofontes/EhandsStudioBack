@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Schema(name = "ImageDTO", description = "DTO representing an image")
-public class ImageDTO {
+public class MediaDTO {
 
     @Schema(description = "Image identifier", example = "1")
     private Long id;
@@ -20,12 +20,6 @@ public class ImageDTO {
     @Schema(description = "Folder where the image is saved", example = "/uploads")
     private String folder;
 
-    @Schema(description = "Artist ID associated with the image", example = "2")
-    private Long artist;
-
-    @Schema(description = "Product ID associated with the image", example = "5")
-    private Long product;
-
-    @Schema(description = "Category ID associated with the image", example = "3")
-    private Long category;
+    @Schema(description = "Media type (IMAGE, VIDEO, AUDIO, DOCUMENT)", example = "IMAGE")
+    private String type;
 }

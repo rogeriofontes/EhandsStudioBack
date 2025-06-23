@@ -39,7 +39,7 @@ public class ArtistController {
     })
     public ResponseEntity<List<ArtistDTO>> findAllArtists() {
         log.info("Listing all artists");
-        List<ArtistDTO> artists = artistService.findAllArtists();
+        List<ArtistDTO> artists = artistService.findAll();
         return ResponseEntity.ok(artists);
     }
 
@@ -56,7 +56,7 @@ public class ArtistController {
             @Parameter(description = "Unique ID of the artist", example = "1")
             @PathVariable Long id) {
         log.info("Finding artist by ID: {}", id);
-        ArtistDTO artistDTO = artistService.findArtistById(id);
+        ArtistDTO artistDTO = artistService.findById(id);
         return ResponseEntity.of(Optional.ofNullable(artistDTO));
     }
 
@@ -73,7 +73,7 @@ public class ArtistController {
             @Parameter(description = "Unique ID of the artist", example = "1")
             @PathVariable("userId") Long userId) {
         log.info("Finding artist by User ID: {}", userId);
-        ArtistDTO artistDTO = artistService.findArtistByUserId(userId);
+        ArtistDTO artistDTO = artistService.findByUserId(userId);
         return ResponseEntity.of(Optional.ofNullable(artistDTO));
     }
 
@@ -90,7 +90,7 @@ public class ArtistController {
             @RequestBody
             @Schema(description = "New artist data", required = true)
             ArtistDTO artistDTO) {
-        ArtistDTO createdArtist = artistService.saveArtist(artistDTO);
+        ArtistDTO createdArtist = artistService.save(artistDTO);
         log.info("Creating artist: {}", createdArtist);
         URI location = URI.create(String.format("/v1/artists/%s", createdArtist.getId()));
         return ResponseEntity.created(location).body(createdArtist);
@@ -113,7 +113,7 @@ public class ArtistController {
             @Schema(description = "Updated artist data", required = true)
             ArtistDTO artistDTO) {
         log.info("Updating artist with ID: {}", id);
-        ArtistDTO updatedArtist = artistService.updateArtist(id, artistDTO);
+        ArtistDTO updatedArtist = artistService.update(id, artistDTO);
         return ResponseEntity.ok(updatedArtist);
     }
 
@@ -130,7 +130,7 @@ public class ArtistController {
             @Parameter(description = "ID of the category", example = "1")
             @PathVariable Long categoryId) {
         log.info("Listing artists for category ID: {}", categoryId);
-        List<ArtistDTO> artists = artistService.findArtistsByCategoryId(categoryId);
+        List<ArtistDTO> artists = artistService.findByCategoryId(categoryId);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -150,7 +150,7 @@ public class ArtistController {
             @Parameter(description = "Name of the category", example = "Rock")
             @PathVariable String categoryName) {
         log.info("Listing artists for category name: {}", categoryName);
-        List<ArtistDTO> artists = artistService.findArtistsByCategoryName(categoryName);
+        List<ArtistDTO> artists = artistService.findByCategoryName(categoryName);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -168,7 +168,7 @@ public class ArtistController {
             @Parameter(description = "ID of the artist to be deleted", example = "1")
             @PathVariable Long id) {
         log.info("Deleting artist by ID: {}", id);
-        artistService.deleteArtist(id);
+        artistService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

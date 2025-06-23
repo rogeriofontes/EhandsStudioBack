@@ -5,6 +5,7 @@ import com.maosencantadas.api.dto.CategoryDTO;
 import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.domain.user.UserRole;
 import org.modelmapper.ModelMapper;
@@ -50,6 +51,10 @@ public class ArtistMapper {
                 destination.setCategoryId(categoryDTO.getId());
             }
 
+            if (source.getMedia() != null) {
+                destination.setMediaId(source.getMedia().getId());
+            }
+
             return destination;
         });
 
@@ -70,6 +75,12 @@ public class ArtistMapper {
                 Category category = new Category();
                 category.setId(categoryId);
                 destination.setCategory(category);
+            }
+
+            if (source.getMediaId() != null) {
+                Media media = new Media();
+                media.setId(source.getMediaId());
+                destination.setMedia(media);
             }
 
             return destination;

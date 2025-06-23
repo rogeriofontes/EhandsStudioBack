@@ -4,16 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Builder
 @Schema(name = "BudgetDTO", description = "DTO representing a budget")
 public class BudgetDTO {
@@ -50,4 +47,7 @@ public class BudgetDTO {
     @NotNull(message = "Product ID is required")
     @Schema(description = "ID of the product related to the budget", example = "3")
     private Long artistId;
+
+    @Schema(description = "Media ID", example = "1")
+    private Long mediaId;
 }

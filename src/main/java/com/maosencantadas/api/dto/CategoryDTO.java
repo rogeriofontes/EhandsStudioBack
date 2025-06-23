@@ -20,4 +20,7 @@ public class CategoryDTO {
     @Size(max = 100, message = "Name must have a maximum of 100 characters")
     @Schema(description = "Category name", example = "TestingCategory")
     private String name;
+
+    @Schema(description = "Media ID", example = "1")
+    private Long mediaId;
 }

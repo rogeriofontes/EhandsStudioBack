@@ -1,6 +1,7 @@
 package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.ProductDTO;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class ProductMapper {
         dto.setPrice(product.getPrice());
         dto.setArtistId(product.getArtist() != null ? product.getArtist().getId() : null);
         dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
+        dto.setMediaId(product.getMedia().getId() != null ? product.getMedia().getId() : null);
 
         return dto;
     }
@@ -33,6 +35,13 @@ public class ProductMapper {
         product.setSize(dto.getSize());
         product.setImageUrl(dto.getImageUrl());
         product.setPrice(dto.getPrice());
+
+        if (dto.getMediaId() != null) {
+            Media media = new Media();
+            media.setId(dto.getMediaId());
+            product.setMedia(media);
+        }
+
         return product;
     }
 }

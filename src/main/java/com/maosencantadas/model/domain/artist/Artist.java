@@ -3,6 +3,7 @@ package com.maosencantadas.model.domain.artist;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -80,5 +81,10 @@ public class Artist extends AuditDomain {
     @JsonManagedReference
     @Schema(description = "Artist user")
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id", nullable = false)
+    @Schema(description = "Artist's media")
+    private Media media;
 }
 

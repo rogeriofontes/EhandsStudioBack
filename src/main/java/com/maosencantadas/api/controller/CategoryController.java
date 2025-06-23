@@ -63,7 +63,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> createCategory(
+    public ResponseEntity<CategoryDTO> create(
             @RequestBody
             @Schema(description = "New category data", required = true)
             CategoryDTO categoryDTO) {

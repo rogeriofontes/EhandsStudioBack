@@ -2,6 +2,7 @@ package com.maosencantadas.model.domain.customer;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maosencantadas.model.domain.AuditDomain;
+import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -60,5 +61,8 @@ public class Customer extends AuditDomain {
     @Schema(description = "Customer user")
     private User user;
 
-    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id", nullable = false)
+    @Schema(description = "Customer's media")
+    private Media media;
 }
