@@ -13,6 +13,9 @@ import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class ArtistMapper {
 
@@ -93,5 +96,17 @@ public class ArtistMapper {
 
     public Artist toEntity(ArtistDTO artistDTO) {
         return modelMapper.map(artistDTO, Artist.class);
+    }
+
+    public List<Artist> toEntity(List<ArtistDTO> artistDTOs) {
+        return artistDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<ArtistDTO> toDTO(List<Artist> artists) {
+        return artists.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

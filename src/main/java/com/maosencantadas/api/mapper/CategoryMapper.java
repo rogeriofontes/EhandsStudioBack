@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import com.maosencantadas.api.dto.CategoryDTO;
 import com.maosencantadas.model.domain.category.Category;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class CategoryMapper {
 
@@ -59,5 +62,11 @@ public class CategoryMapper {
 
     public Category toEntity(CategoryDTO categoryDTO) {
         return modelMapper.map(categoryDTO, Category.class);
+    }
+
+    public List<CategoryDTO> toDTO(List<Category> categories) {
+        return categories.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

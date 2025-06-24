@@ -1,18 +1,23 @@
 package com.maosencantadas.model.service;
 
-import com.maosencantadas.api.dto.CategoryDTO;
+import com.maosencantadas.model.domain.category.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
 
-    List<CategoryDTO> findAllCategories();
+    List<Category> findAll();
 
-    CategoryDTO findCategoryById(Long id);
+    Category findById(Long id);
 
-    CategoryDTO saveCategory(CategoryDTO categoryDTO);
+    Category save(Category category);
 
-    CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO);
+    Category update(Long id, Category category);
 
-    void deleteCategory(Long id);
+    void delete(Long id);
+
+    Optional<Category> findByName(String categoryName);
+
+    boolean existsById(Long categoryId);
 }

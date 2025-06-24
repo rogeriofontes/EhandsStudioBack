@@ -1,7 +1,5 @@
 package com.maosencantadas.model.service.impl;
 
-import com.maosencantadas.api.dto.CategoryDTO;
-import com.maosencantadas.api.mapper.CategoryMapper;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.category.Category;
 import com.maosencantadas.model.repository.CategoryRepository;
@@ -9,59 +7,63 @@ import com.maosencantadas.model.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
 
     @Override
-    public List<CategoryDTO> findAllCategories() {
+    public List<Category> findAll() {
         log.info("Listing all categories");
-        List<Category> categories = categoryRepository.findAll();
-        return categories.stream()
-                .map(categoryMapper::toDTO)
-                .toList();
+        return categoryRepository.findAll();
     }
 
     @Override
-    public CategoryDTO findCategoryById(Long id) {
+    public Category findById(Long id) {
         log.info("Finding category by id: {}", id);
-        Category category = categoryRepository.findById(id)
+        return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + id));
-        return categoryMapper.toDTO(category);
     }
 
     @Override
-    public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
-        log.info("Saving new category: {}", categoryDTO.getName());
-        Category category = categoryMapper.toEntity(categoryDTO);
-        Category categorySave = categoryRepository.save(category);
-        return categoryMapper.toDTO(categorySave);
+    public Category save(Category category) {
+        log.info("Saving new category: {}", category.getName());
+        return categoryRepository.save(category);
     }
 
     @Override
-    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+    public Category update(Long id, Category category) {
         log.info("Updating category with id: {}", id);
-        Category categoryUpdated = categoryRepository.findById(id)
-                .map(category -> {
-                    category.setName(categoryDTO.getName());
+        return categoryRepository.findById(id)
+                .map(categoryR -> {
+                    categoryR.setName(category.getName());
                     return categoryRepository.save(category);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + id));
-        return categoryMapper.toDTO(categoryUpdated);
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void delete(Long id) {
         log.info("Deleting category with id: {}", id);
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Category not found with id " + id);
         }
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Category> findByName(String categoryName) {
+        return categoryRepository.findByName(categoryName);
+    }
+
+    @Override
+    public boolean existsById(Long categoryId) {
+        return categoryRepository.existsById(categoryId);
     }
 }

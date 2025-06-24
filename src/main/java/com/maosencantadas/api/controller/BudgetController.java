@@ -2,7 +2,10 @@ package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.BudgetDTO;
 import com.maosencantadas.api.dto.BudgetResponseDTO;
+import com.maosencantadas.api.mapper.BudgetMapper;
+import com.maosencantadas.model.domain.budget.Budget;
 import com.maosencantadas.model.service.BudgetService;
+import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +32,7 @@ import java.util.List;
 public class BudgetController {
 
     private final BudgetService budgetService;
+    private final BudgetMapper budgetMapper;
 
     @Operation(summary = "List all budgets")
     @ApiResponses(value = {
@@ -37,9 +41,10 @@ public class BudgetController {
                             schema = @Schema(implementation = BudgetDTO.class)))
     })
     @GetMapping
-    public ResponseEntity<List<BudgetDTO>> findAllBudgets() {
-        List<BudgetDTO> budgets = budgetService.findAllBudgets();
-        return ResponseEntity.ok(budgets);
+    public ResponseEntity<List<BudgetDTO>> findAll() {
+        List<Budget> budgets = budgetService.findAll();
+        List<BudgetDTO> budgetDTOS = budgetMapper.toDto(budgets);
+        return ResponseEntity.ok(budgetDTOS);
     }
 
     @Operation(summary = "Get a budget by ID")
@@ -51,8 +56,9 @@ public class BudgetController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<BudgetDTO> findById(@PathVariable Long id) {
-        BudgetDTO budget = budgetService.findBudgetById(id);
-        return ResponseEntity.ok(budget);
+        Budget budget = budgetService.findById(id);
+        BudgetDTO budgetDTO = budgetMapper.toDto(budget);
+        return ResponseEntity.ok(budgetDTO);
     }
 
     @Operation(summary = "Get a budget by ID")
@@ -64,8 +70,9 @@ public class BudgetController {
     })
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<BudgetDTO> findByCustomerId(@PathVariable("customerId") Long customerId) {
-        BudgetDTO budget = budgetService.findBudgetByCustomerId(customerId);
-        return ResponseEntity.ok(budget);
+        Budget budget = budgetService.findByCustomerId(customerId);
+        BudgetDTO budgetDTO = budgetMapper.toDto(budget);
+        return ResponseEntity.ok(budgetDTO);
     }
 
     @Operation(summary = "Create a new budget")
@@ -77,8 +84,12 @@ public class BudgetController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BudgetDTO> create(@RequestBody BudgetDTO request) {
-        BudgetDTO created = budgetService.createBudgetWithoutImage(request);
-        return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
+        Budget budget = budgetMapper.toEntity(request);
+        Budget created = budgetService.create(budget);
+
+        BudgetDTO createdDTO = budgetMapper.toDto(created);
+        URI location = RestUtils.getUri(createdDTO.getId());
+        return ResponseEntity.created(location).body(createdDTO);
     }
 
     @Operation(summary = "Create a new budget")
@@ -92,8 +103,10 @@ public class BudgetController {
     public ResponseEntity<BudgetDTO> createResponse(
             @PathVariable("budgetId") Long budgetId,
             @RequestBody BudgetResponseDTO budgetResponseDTO) {
-        BudgetDTO created = budgetService.createBudgetResponse(budgetId, budgetResponseDTO);
-        return ResponseEntity.created(URI.create("/v1/budgets/" + created.getId())).body(created);
+        Budget created = budgetService.createResponse(budgetId, budgetResponseDTO);
+        BudgetDTO createdDTO = budgetMapper.toDtoWithResponse(created);
+        URI location = RestUtils.getUri(createdDTO.getId());
+        return ResponseEntity.created(location).body(createdDTO);
     }
 
     @Operation(summary = "Update an existing budget")
@@ -104,9 +117,14 @@ public class BudgetController {
             @ApiResponse(responseCode = "404", description = "Budget not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BudgetDTO> update(@PathVariable Long id, @Valid @RequestBody BudgetDTO updatedBudget) {
-        BudgetDTO budget = budgetService.updateBudget(id, updatedBudget);
-        return ResponseEntity.ok(budget);
+    public ResponseEntity<BudgetDTO> update(@PathVariable Long id, @Valid @RequestBody BudgetDTO budgetDTO) {
+        log.info("Updating budget with ID: {}", id);
+        Budget updatedBudget = budgetMapper.toEntity(budgetDTO);
+        Budget budget = budgetService.update(id, updatedBudget);
+
+        log.info("Budget updated successfully: {}", budget.getId());
+        budgetDTO = budgetMapper.toDto(budget);
+        return ResponseEntity.ok(budgetDTO);
     }
 
     @Operation(summary = "Delete a budget by ID")
@@ -116,7 +134,7 @@ public class BudgetController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        budgetService.deleteBudget(id);
+        budgetService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -11,6 +11,8 @@ import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class BudgetMapper {
 
@@ -86,5 +88,28 @@ public class BudgetMapper {
                 .build();
     }
 
+    public BudgetDTO toDtoWithResponse(Budget budget) {
+        BudgetDTO dto = toDto(budget);
+        dto.setResponse(budget.getResponse());
+        return dto;
+    }
+
+    public Budget toEntityWithResponse(BudgetDTO dto) {
+        Budget budget = toEntity(dto);
+        budget.setResponse(dto.getResponse());
+        return budget;
+    }
+
+    public List<BudgetDTO> toDto(List<Budget> budgets) {
+        return budgets.stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public List<Budget> toEntity(List<BudgetDTO> dtos) {
+        return dtos.stream()
+                .map(this::toEntity)
+                .toList();
+    }
 
 }

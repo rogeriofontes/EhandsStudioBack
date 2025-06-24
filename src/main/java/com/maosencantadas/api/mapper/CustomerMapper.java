@@ -11,6 +11,9 @@ import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class CustomerMapper {
 
@@ -78,5 +81,17 @@ public class CustomerMapper {
 
     public Customer toEntity(CustomerDTO customerDTO) {
         return modelMapper.map(customerDTO, Customer.class);
+    }
+
+    public List<CustomerDTO> toDTO(List<Customer> customers) {
+        return customers.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Customer> toEntity(List<CustomerDTO> customerDTOs) {
+        return customerDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

@@ -5,6 +5,10 @@ import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class ProductMapper {
 
@@ -43,6 +47,22 @@ public class ProductMapper {
         }
 
         return product;
+    }
+
+    public List<ProductDTO> toDTO(List<Product> products) {
+        if (products == null || products.isEmpty()) return Collections.emptyList();
+
+        return products.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> toEntity(List<ProductDTO> dtos) {
+        if (dtos == null || dtos.isEmpty()) return Collections.emptyList();
+
+        return dtos.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }
 

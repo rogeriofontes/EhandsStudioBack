@@ -1,7 +1,10 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.CategoryDTO;
+import com.maosencantadas.api.mapper.CategoryMapper;
+import com.maosencantadas.model.domain.category.Category;
 import com.maosencantadas.model.service.CategoryService;
+import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +28,7 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
     @GetMapping
     @Operation(summary = "List all categories", description = "Returns a list of all available categories.")
@@ -33,10 +37,11 @@ public class CategoryController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<CategoryDTO>> findAllCategories() {
+    public ResponseEntity<List<CategoryDTO>> findAll() {
         log.info("Listing all categories");
-        List<CategoryDTO> categories = categoryService.findAllCategories();
-        return ResponseEntity.ok(categories);
+        List<Category> categories = categoryService.findAll();
+        List<CategoryDTO> categoryDTOS = categoryMapper.toDTO(categories);
+        return ResponseEntity.ok(categoryDTOS);
     }
 
     @GetMapping("/{id}")
@@ -47,12 +52,12 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> findCategoryById(@PathVariable("id") Long id) {
+    public ResponseEntity<CategoryDTO> findById(@PathVariable("id") Long id) {
         log.info("Finding category by ID: {}", id);
-        CategoryDTO categoryDTO = categoryService.findCategoryById(id);
-        return categoryDTO != null
-                ? ResponseEntity.ok(categoryDTO)
-                : ResponseEntity.notFound().build();
+        Category category = categoryService.findById(id);
+        CategoryDTO categoryDTO = categoryMapper.toDTO(category);
+        log.info("Category found: {}", categoryDTO.getName());
+        return ResponseEntity.ok(categoryDTO);
     }
 
     @PostMapping
@@ -65,12 +70,16 @@ public class CategoryController {
     })
     public ResponseEntity<CategoryDTO> create(
             @RequestBody
-            @Schema(description = "New category data", required = true)
+            @Schema(description = "New category data", requiredMode = Schema.RequiredMode.REQUIRED)
             CategoryDTO categoryDTO) {
         log.info("Creating new category: {}", categoryDTO.getName());
-        CategoryDTO newCategory = categoryService.saveCategory(categoryDTO);
-        URI location = URI.create(String.format("/v1/categories/%s", newCategory.getId()));
-        return ResponseEntity.created(location).body(newCategory);
+        Category category = categoryMapper.toEntity(categoryDTO);
+        Category newCategory = categoryService.save(category);
+
+        log.info("Category created with ID: {}", newCategory.getId());
+        CategoryDTO newCategoryDTO = categoryMapper.toDTO(newCategory);
+        URI location = RestUtils.getUri(newCategoryDTO.getId());
+        return ResponseEntity.created(location).body(newCategoryDTO);
     }
 
     @PutMapping("/{id}")
@@ -82,16 +91,20 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> updateCategory(
+    public ResponseEntity<CategoryDTO> update(
             @PathVariable("id")
             @Schema(description = "ID of the category to be updated", example = "1")
             Long id,
             @RequestBody
-            @Schema(description = "Updated category data", required = true)
+            @Schema(description = "Updated category data", requiredMode = Schema.RequiredMode.REQUIRED)
             CategoryDTO categoryDTO) {
         log.info("Updating category with id: {}", id);
-        CategoryDTO updatedCategory = categoryService.updateCategory(id, categoryDTO);
-        return ResponseEntity.ok(updatedCategory);
+        Category category = categoryMapper.toEntity(categoryDTO);
+        Category updatedCategory = categoryService.update(id, category);
+
+        log.info("Category updated: {}", updatedCategory.getName());
+        CategoryDTO updatedCategoryDTO = categoryMapper.toDTO(updatedCategory);
+        return ResponseEntity.ok(updatedCategoryDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -101,12 +114,12 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<Void> deleteCategory(
+    public ResponseEntity<Void> delete(
             @PathVariable("id")
             @Schema(description = "ID of the category to be deleted", example = "1")
             Long id) {
         log.info("Deleting category by ID: {}", id);
-        categoryService.deleteCategory(id);
+        categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

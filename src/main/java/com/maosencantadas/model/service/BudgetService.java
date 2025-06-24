@@ -1,26 +1,23 @@
 package com.maosencantadas.model.service;
 
-import com.maosencantadas.api.dto.BudgetDTO;
 import com.maosencantadas.api.dto.BudgetResponseDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.maosencantadas.model.domain.budget.Budget;
 
 import java.util.List;
 
 public interface BudgetService {
 
-    List<BudgetDTO> findAllBudgets();
+    List<Budget> findAll();
 
-    BudgetDTO findBudgetById(Long id);
+    Budget findById(Long id);
 
-    BudgetDTO createBudget(BudgetDTO dto);
+    Budget create(Budget budget);
 
-    BudgetDTO updateBudget(Long id, BudgetDTO budgetDTO);
+    Budget update(Long id, Budget budget);
 
-    void deleteBudget(Long id);
+    void delete(Long id);
 
-    BudgetDTO findBudgetByCustomerId(Long customerID);
+    Budget findByCustomerId(Long customerId);
 
-    BudgetDTO createBudgetWithoutImage(BudgetDTO request);
-
-    BudgetDTO createBudgetResponse(Long budgetId, BudgetResponseDTO budgetResponseDTO);
+    Budget createResponse(Long budgetId, BudgetResponseDTO budgetResponseDTO);
 }

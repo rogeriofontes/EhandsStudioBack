@@ -6,6 +6,7 @@ import com.maosencantadas.model.domain.media.MediaType;
 import com.maosencantadas.model.repository.MediaRepository;
 import com.maosencantadas.model.service.MediaService;
 import com.maosencantadas.utils.MediaUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -60,7 +62,7 @@ public class MediaServiceImpl implements MediaService {
             log.info("Saving media file: {}", filename);
             log.info("File saved at: {}", absolutePath);
             log.info("Media type: {}", type);
-            
+
             Media dto = Media.builder()
                     .name(filename)
                     .folder(absolutePath)
@@ -74,5 +76,20 @@ public class MediaServiceImpl implements MediaService {
         }
 
         return null;
+    }
+
+    @Override
+    public Media findById(Long mediaId) {
+        log.info("Creating user for artist with media ID: {}", mediaId);
+
+        Optional<Media> media = mediaRepository.findById(mediaId);
+
+        if (media.isPresent()) {
+            log.debug("Media found with ID: {}", media.get().getId());
+            return media.get();
+        } else {
+            log.warn("Media not found with ID: {}", media);
+            throw new EntityNotFoundException("User not found with ID: " + media);
+        }
     }
 }

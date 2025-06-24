@@ -1,18 +1,18 @@
 package com.maosencantadas.model.service;
 
-import com.maosencantadas.api.dto.CustomerDTO;
+import com.maosencantadas.model.domain.customer.Customer;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    List<CustomerDTO> findAllCustomers();
+    List<Customer> findAll();
 
-    CustomerDTO findCustomerById(Long id);
+    Customer findById(Long id);
 
-    CustomerDTO saveCustomer(CustomerDTO customerDTO);
+    Customer save(Customer customer);
 
-    CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO);
+    Customer update(Long id, Customer customer);
 
-    void deleteCustomer(Long id);
+    void delete(Long id);
 }

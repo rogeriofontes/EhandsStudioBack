@@ -1,22 +1,23 @@
 package com.maosencantadas.model.service;
 
 import com.maosencantadas.api.dto.ProductDTO;
+import com.maosencantadas.model.domain.product.Product;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDTO> findAllProducts();
+    List<Product> findAll();
 
-    List<ProductDTO> findProductsByCategory(Long categoryId);
+    List<Product> findByCategory(Long categoryId);
 
-    List<ProductDTO> findProductsByArtist(Long artistId);
+    List<Product> findByArtist(Long artistId);
 
-    ProductDTO findProductById(Long id);
+    Product findById(Long id);
 
-    ProductDTO saveProduct(ProductDTO productDTO);
+    Product save(Product product);
 
-    ProductDTO updateProduct(Long id, ProductDTO updatedProductDTO);
+    Product update(Long id, Product updatedProduct);
 
-    void deleteProduct(Long id);
+    void delete(Long id);
 }

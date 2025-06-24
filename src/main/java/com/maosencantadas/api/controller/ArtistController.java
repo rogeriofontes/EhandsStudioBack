@@ -1,7 +1,10 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.ArtistDTO;
+import com.maosencantadas.api.mapper.ArtistMapper;
+import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.service.ArtistService;
+import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +31,7 @@ import java.util.Optional;
 public class ArtistController {
 
     private final ArtistService artistService;
+    private final ArtistMapper artistMapper;
 
     @GetMapping
     @Operation(summary = "List all artists", description = "Returns a list of all registered artists.")
@@ -37,10 +41,11 @@ public class ArtistController {
                             schema = @Schema(implementation = ArtistDTO.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ArtistDTO>> findAllArtists() {
+    public ResponseEntity<List<ArtistDTO>> findAll() {
         log.info("Listing all artists");
-        List<ArtistDTO> artists = artistService.findAll();
-        return ResponseEntity.ok(artists);
+        List<Artist> artists = artistService.findAll();
+        List<ArtistDTO> artistDTOS = artistMapper.toDTO(artists);
+        return ResponseEntity.ok(artistDTOS);
     }
 
     @GetMapping("/{id}")
@@ -52,11 +57,12 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Artist not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<ArtistDTO> findArtistById(
+    public ResponseEntity<ArtistDTO> findById(
             @Parameter(description = "Unique ID of the artist", example = "1")
             @PathVariable Long id) {
         log.info("Finding artist by ID: {}", id);
-        ArtistDTO artistDTO = artistService.findById(id);
+        Artist artist = artistService.findById(id);
+        ArtistDTO artistDTO = artistMapper.toDTO(artist);
         return ResponseEntity.of(Optional.ofNullable(artistDTO));
     }
 
@@ -69,11 +75,12 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Artist not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<ArtistDTO> findArtistByUserId(
+    public ResponseEntity<ArtistDTO> findByUserId(
             @Parameter(description = "Unique ID of the artist", example = "1")
             @PathVariable("userId") Long userId) {
         log.info("Finding artist by User ID: {}", userId);
-        ArtistDTO artistDTO = artistService.findByUserId(userId);
+        Artist artist = artistService.findByUserId(userId);
+        ArtistDTO artistDTO = artistMapper.toDTO(artist);
         return ResponseEntity.of(Optional.ofNullable(artistDTO));
     }
 
@@ -86,14 +93,17 @@ public class ArtistController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<ArtistDTO> createArtist(
-            @RequestBody
-            @Schema(description = "New artist data", required = true)
-            ArtistDTO artistDTO) {
-        ArtistDTO createdArtist = artistService.save(artistDTO);
+    public ResponseEntity<ArtistDTO> create(
+            @Schema(description = "New artist data", requiredMode = Schema.RequiredMode.REQUIRED)
+            @RequestBody ArtistDTO artistDTO) {
+        log.info("Creating new artist: {}", artistDTO.getName());
+        Artist artist = artistMapper.toEntity(artistDTO);
+        Artist createdArtist = artistService.save(artist);
         log.info("Creating artist: {}", createdArtist);
-        URI location = URI.create(String.format("/v1/artists/%s", createdArtist.getId()));
-        return ResponseEntity.created(location).body(createdArtist);
+
+        ArtistDTO createdArtistDTO = artistMapper.toDTO(createdArtist);
+        URI location = RestUtils.getUri(createdArtist.getId());
+        return ResponseEntity.created(location).body(createdArtistDTO);
     }
 
     @PutMapping("/{id}")
@@ -106,15 +116,16 @@ public class ArtistController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<ArtistDTO> updateArtist(
+    public ResponseEntity<ArtistDTO> update(
             @Parameter(description = "ID of the artist to be updated", example = "1")
             @PathVariable Long id,
-            @RequestBody
-            @Schema(description = "Updated artist data", required = true)
-            ArtistDTO artistDTO) {
+            @Schema(description = "Updated artist data", requiredMode = Schema.RequiredMode.REQUIRED)
+            @RequestBody ArtistDTO artistDTO) {
         log.info("Updating artist with ID: {}", id);
-        ArtistDTO updatedArtist = artistService.update(id, artistDTO);
-        return ResponseEntity.ok(updatedArtist);
+        Artist artist = artistMapper.toEntity(artistDTO);
+        Artist updatedArtist = artistService.update(id, artist);
+        ArtistDTO artistResponseDTO = artistMapper.toDTO(updatedArtist);
+        return ResponseEntity.ok(artistResponseDTO);
     }
 
     @GetMapping("/category/{categoryId}")
@@ -126,15 +137,17 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Category or artists not found for the provided ID"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ArtistDTO>> getArtistsByCategoryId(
+    public ResponseEntity<List<ArtistDTO>> getByCategoryId(
             @Parameter(description = "ID of the category", example = "1")
             @PathVariable Long categoryId) {
         log.info("Listing artists for category ID: {}", categoryId);
-        List<ArtistDTO> artists = artistService.findByCategoryId(categoryId);
+        List<Artist> artists = artistService.findByCategoryId(categoryId);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(artists);
+
+        List<ArtistDTO> artistDTOS = artistMapper.toDTO(artists);
+        return ResponseEntity.ok(artistDTOS);
     }
 
     @GetMapping("/category/name/{categoryName}")
@@ -146,15 +159,17 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ArtistDTO>> findArtistsByCategoryName(
+    public ResponseEntity<List<ArtistDTO>> findByCategoryName(
             @Parameter(description = "Name of the category", example = "Rock")
             @PathVariable String categoryName) {
         log.info("Listing artists for category name: {}", categoryName);
-        List<ArtistDTO> artists = artistService.findByCategoryName(categoryName);
+        List<Artist> artists = artistService.findByCategoryName(categoryName);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(artists);
+
+        List<ArtistDTO> artistDTOS = artistMapper.toDTO(artists);
+        return ResponseEntity.ok(artistDTOS);
     }
 
     @DeleteMapping("/{id}")
@@ -164,7 +179,7 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Artist not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<Void> deleteArtist(
+    public ResponseEntity<Void> delete(
             @Parameter(description = "ID of the artist to be deleted", example = "1")
             @PathVariable Long id) {
         log.info("Deleting artist by ID: {}", id);

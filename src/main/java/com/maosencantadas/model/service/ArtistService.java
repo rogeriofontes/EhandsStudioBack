@@ -1,24 +1,25 @@
 package com.maosencantadas.model.service;
 
 import com.maosencantadas.api.dto.ArtistDTO;
+import com.maosencantadas.model.domain.artist.Artist;
 
 import java.util.List;
 
 public interface ArtistService {
 
-    List<ArtistDTO> findAll();
+    List<Artist> findAll();
 
-    ArtistDTO findById(Long id);
+    Artist findById(Long id);
 
-    List<ArtistDTO> findByCategoryId(Long categoryId);
+    List<Artist> findByCategoryId(Long categoryId);
 
-    ArtistDTO save(ArtistDTO artistDTO);
+    Artist save(Artist artist);
 
-    ArtistDTO update(Long id, ArtistDTO artistDTO);
+    Artist update(Long id, Artist artist);
 
     void delete(Long id);
 
-    List<ArtistDTO> findByCategoryName(String categoryName);
+    List<Artist> findByCategoryName(String categoryName);
 
-    ArtistDTO findByUserId(Long userId);
+    Artist findByUserId(Long userId);
 }
