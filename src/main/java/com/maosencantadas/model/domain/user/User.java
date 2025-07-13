@@ -28,8 +28,12 @@ public class User extends AuditDomain implements UserDetails {
     private Long id;
 
     @NotBlank
+    @Schema(description = "User name", example = "Amanda Smith")
+    private String name;
+
+    @NotBlank
     @Schema(description = "User login", example = "amanda@example.com")
-    private String login;
+    private String email;
 
     @Schema(description = "User password", example = "senha123")
     private String password;
@@ -46,21 +50,14 @@ public class User extends AuditDomain implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Artist artist;
 
-    public User(String login, String password, UserRole role){
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return name;
     }
 
     @Override

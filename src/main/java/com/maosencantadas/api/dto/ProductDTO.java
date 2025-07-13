@@ -1,11 +1,6 @@
 package com.maosencantadas.api.dto;
 
-import com.maosencantadas.model.domain.artist.Artist;
-import com.maosencantadas.model.domain.category.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
 import lombok.*;

@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/budgets")
 @CrossOrigin(origins = "*")
-@Tag(name = "Budget", description = "API for managing budgets")
+@Tag(name = "Budget")//, description = "API for managing budgets")
 @RequiredArgsConstructor
 public class BudgetController {
 

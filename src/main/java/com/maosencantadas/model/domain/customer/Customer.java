@@ -56,7 +56,7 @@ public class Customer extends AuditDomain {
     private String whatsapp;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     @JsonManagedReference
     @Schema(description = "Customer user")
     private User user;

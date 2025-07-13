@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,7 +37,7 @@ public class TokenService {
 
             var tokenBuilder = JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(user.getLogin())
+                    .withSubject(user.getEmail())
                     .withClaim("userId", user.getId())
                     .withClaim("role", user.getRole().name())
                     .withExpiresAt(genExpirationDate());
@@ -68,5 +69,13 @@ public class TokenService {
 
     private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public String generateActivationToken() {
+        UUID uuid = UUID.randomUUID();
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(uuid.toString().getBytes())
+                .substring(0, 8);
     }
 }

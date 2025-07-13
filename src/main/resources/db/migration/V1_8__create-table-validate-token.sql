@@ -1,9 +1,8 @@
-CREATE TABLE tb_user (
+CREATE TABLE tb_validation_token (
     id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
+    user_id BIGINT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expiry_date TIMESTAMP NOT NULL,
     status varchar(255) NOT NULL,
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

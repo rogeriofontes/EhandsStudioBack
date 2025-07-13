@@ -77,7 +77,7 @@ public class Artist extends AuditDomain {
     private Category category;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     @JsonManagedReference
     @Schema(description = "Artist user")
     private User user;

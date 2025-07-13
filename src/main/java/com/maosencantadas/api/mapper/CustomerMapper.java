@@ -41,7 +41,8 @@ public class CustomerMapper {
                 User user = source.getUser();
                 UserDTO userDTO = new UserDTO();
                 userDTO.setId(user.getId());
-                userDTO.setLogin(user.getLogin());
+                userDTO.setName(user.getName());
+                userDTO.setEmail(user.getEmail());
                 userDTO.setUserRole(user.getRole().name());
                 destination.setUserId(userDTO.getId());
             }

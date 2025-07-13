@@ -49,6 +49,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/v1/image/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/v1/image/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/v1/image/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/features/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/check-feature/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/upload").permitAll()
                         .requestMatchers(HttpMethod.GET, "/upload").permitAll()

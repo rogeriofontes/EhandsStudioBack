@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Optional<User> findById(Long userId) {

@@ -10,7 +10,7 @@ CREATE TABLE tb_artist (
     whatsapp VARCHAR(20) NOT NULL,
     cpf varchar(20),
     category_id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL UNIQUE,
     media_id BIGINT NOT NULL,
     status varchar(255) NOT NULL,
     create_by varchar(255) NOT NULL DEFAULT 'system_user',

@@ -6,7 +6,7 @@ CREATE TABLE tb_customer (
     phone VARCHAR(20),
     whatsapp VARCHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    user_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL UNIQUE,
     media_id BIGINT NOT NULL,
     status varchar(255) NOT NULL,
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
