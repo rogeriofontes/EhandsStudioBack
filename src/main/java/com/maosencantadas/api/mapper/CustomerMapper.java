@@ -5,7 +5,6 @@ import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
-import com.maosencantadas.model.domain.user.UserRole;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;

@@ -2,8 +2,6 @@ package com.maosencantadas.config;
 
 import org.ff4j.FF4j;
 import org.ff4j.core.Feature;
-import org.ff4j.web.FF4jDispatcherServlet;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

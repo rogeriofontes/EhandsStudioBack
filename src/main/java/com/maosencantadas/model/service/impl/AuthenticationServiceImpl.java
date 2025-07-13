@@ -11,8 +11,6 @@ import com.maosencantadas.model.repository.ActivationTokenRepository;
 import com.maosencantadas.model.repository.UserRepository;
 import com.maosencantadas.model.service.AuthenticationService;
 import com.maosencantadas.model.service.EmailService;
-import com.maosencantadas.utils.PasswordValidator;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ff4j.FF4j;

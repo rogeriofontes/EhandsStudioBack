@@ -2,8 +2,10 @@ package com.maosencantadas.api.dto;
 
 import com.maosencantadas.commons.StrongPassword;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

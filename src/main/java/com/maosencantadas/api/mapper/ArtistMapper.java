@@ -1,9 +1,6 @@
 package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.ArtistDTO;
-import com.maosencantadas.api.dto.CategoryDTO;
-import com.maosencantadas.api.dto.MediaDTO;
-import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.category.Category;
 import com.maosencantadas.model.domain.media.Media;
