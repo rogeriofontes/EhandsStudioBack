@@ -28,6 +28,9 @@ public class ActivationToken extends AuditDomain {
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
     public boolean isExpired() {
         return expiryDate.isBefore(LocalDateTime.now());
     }

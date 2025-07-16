@@ -84,9 +84,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userRepository.findAll();
     }
 
+    @Override
+    public boolean validateActiveToken(String token) {
+        ActivationToken byToken = activationTokenRepository.findByToken(token);
+        if (byToken == null || byToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            log.warn("Token is invalid or expired: {}", token);
+            return false;
+        }
+
+        log.info("Token is valid: {}", token);
+        try {
+            User user = byToken.getUser();
+            activationTokenRepository.activateTokenByUserId(user.getId());
+            return true;
+        } catch (Exception e) {
+            log.error("Error checking token expiry: {}", e.getMessage());
+            return false;
+        }
+    }
+
     private void sendEmail(String name, String email, String validatedToken) {
         try {
-            emailService.publish(name, email, "Bem-vindo ao MentorAPI", true, validatedToken);
+            emailService.publish(name, email, "Bem-vindo ao Mãos encantadas!", true, validatedToken);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -97,6 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .user(user)
                 .expiryDate(LocalDateTime.now().plusDays(1)) // Token válido por 1 dia
                 .token(tokenService.generateActivationToken())
+                .active(false)
                 .build();
 
         ActivationToken saved = activationTokenRepository.save(activationToken);

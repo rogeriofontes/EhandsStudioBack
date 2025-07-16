@@ -72,6 +72,28 @@ public class AuthController {
         return ResponseEntity.created(location).body(registeredUser);
     }
 
+    @Operation(summary = "Find user by ID",
+            description = "Returns a specific user by their ID.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "User not found"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
+    @GetMapping("/activation-token")
+    public ResponseEntity<Boolean> generateActivationToken(@RequestParam("token") String token) {
+        boolean validated = service.validateActiveToken(token);
+        if (!validated) {
+            log.warn("Invalid activation token: {}", token);
+            return ResponseEntity.status(400).body(false);
+        }
+
+        log.info("Activation token validated successfully: {}", token);
+        return ResponseEntity.ok(true);
+    }
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     @Operation(summary = "Find category by ID", description = "Returns a specific category by its ID.")

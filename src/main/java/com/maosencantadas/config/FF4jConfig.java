@@ -14,7 +14,7 @@ public class FF4jConfig {
 
         // Cria a feature flag "send-email" desabilitada por padrão
         if (!ff4j.exist("send-email")) {
-            ff4j.createFeature(new Feature("send-email", false));
+            ff4j.createFeature(new Feature("send-email", true));
         }
 
         ff4j.setEnableAudit(true);

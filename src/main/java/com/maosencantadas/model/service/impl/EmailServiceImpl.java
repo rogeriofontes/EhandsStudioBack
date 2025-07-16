@@ -68,23 +68,26 @@ public class EmailServiceImpl implements EmailService {
     public String toBodyArtist(String name, String activationLink) {
         return "<html>" +
                 "<head>" +
+                "<meta charset='UTF-8'>" +
                 "<style>" +
-                "body { font-family: Arial, sans-serif; margin: 20px; }" +
-                "h1 { color: #333; }" +
-                "p { font-size: 14px; color: #555; }" +
-                "ol { padding-left: 20px; }" +
-                "li { margin-bottom: 10px; }" +
-                "a { color: #1a73e8; text-decoration: none; }" +
-                "a:hover { text-decoration: underline; }" +
+                "body { background: #f4f4f7; margin: 0; padding: 0; font-family: Arial, sans-serif; }" +
+                ".container { background: #fff; max-width: 480px; margin: 40px auto; padding: 32px 24px; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }" +
+                "h1 { color: #2563eb; font-size: 26px; margin-bottom: 8px; }" +
+                "p { color: #444; font-size: 16px; margin-top: 0; }" +
+                ".btn { display: inline-block; margin: 24px 0 18px 0; padding: 12px 28px; background: #2563eb; color: #fff !important; font-size: 17px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 2px 6px rgba(37,99,235,0.09); transition: background 0.18s; }" +
+                ".btn:hover { background: #1a4ec6; }" +
+                ".small { font-size: 12px; color: #888; margin-top: 20px; }" +
                 "</style>" +
                 "</head>" +
                 "<body>" +
+                "<div class='container'>" +
                 "<h1>Olá, " + name + "!</h1>" +
-                "<p>Seja bem-vinda à nossa plataforma. Para ativar sua conta, clique no link abaixo:</p>" +
-                "<ol>" +
-                "<li><b>Valide seu cadastro:</b> " + activationLink + " </li>" +
-                "</ol>" +
-                "<p>Obrigado por se registrar em nosso projeto.</p>" +
+                "<p>Seja bem-vinda à nossa plataforma.<br>" +
+                "Para ativar sua conta, clique no botão abaixo:</p>" +
+                "<a class='btn' href='" + activationLink + "' target='_blank'>Ativar Conta</a>" +
+                "<p class='small'>Se não solicitou este cadastro, apenas ignore este e-mail.</p>" +
+                "<p style='margin-top: 28px; color: #888;'>Obrigado por se registrar em nosso projeto.<br>Equipe Mãos Encantadas</p>" +
+                "</div>" +
                 "</body>" +
                 "</html>";
     }
@@ -104,6 +107,6 @@ public class EmailServiceImpl implements EmailService {
         HttpServletRequest request = attrs.getRequest();
         String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath());
 
-        return appUrl + "/activated?token=" + validatedToken;
+        return appUrl + "/auth/activation-token?token=" + validatedToken;
     }
 }

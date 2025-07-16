@@ -17,6 +17,8 @@ public interface AuthenticationService {
 
     List<User> findAll();
 
+    boolean validateActiveToken(String token);
+
     // RegisterResponse getUser(Long id);
 
    // RefreshTokenResponse refreshToken(RefreshTokenRequest request);

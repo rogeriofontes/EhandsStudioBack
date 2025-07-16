@@ -6,6 +6,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
     public static final String BRAZILIAN_DATE = "dd/MM/yyyy HH:mm:ss";
-    public static final String FROM_EMAIL = "noreplay@maosencantadas.com.br";
+    public static final String FROM_EMAIL = "noreplay@maosencantadas.art.br";
     public static final String SEND_EMAIL = "send-email";
 }
