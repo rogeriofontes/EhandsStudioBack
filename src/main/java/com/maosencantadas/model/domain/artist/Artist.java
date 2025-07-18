@@ -2,7 +2,7 @@ package com.maosencantadas.model.domain.artist;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maosencantadas.model.domain.AuditDomain;
-import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,14 +54,6 @@ public class Artist extends AuditDomain {
     @Schema(description = "Artist's phone number", example = "(34) 98765-4321")
     private String phone;
 
-    @Schema(description = "Artist's Instagram profile", example = "@testingartista")
-    @Column(name="insta")
-    private String insta;
-
-    @Schema(description = "Artist's Facebook profile", example = "facebook.com/testingartista")
-    @Column(name="face")
-    private String face;
-
     @Schema(description = "Artist's WhatsApp number", example = "(11) 91234-5678")
     @Column(name="whatsapp")
     private String whatsapp;
@@ -72,9 +64,9 @@ public class Artist extends AuditDomain {
     private String cpf;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "artist_category_id", nullable = false)
     @Schema(description = "Artist's category")
-    private Category category;
+    private ArtistCategory artistCategory;
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true, nullable = false)

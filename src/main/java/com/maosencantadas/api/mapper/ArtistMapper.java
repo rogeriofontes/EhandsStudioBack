@@ -2,7 +2,8 @@ package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.ArtistDTO;
 import com.maosencantadas.model.domain.artist.Artist;
-import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.artist.ArtistCategory;
+import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import org.modelmapper.ModelMapper;
@@ -43,8 +44,8 @@ public class ArtistMapper {
                 destination.setUserId(source.getUser().getId());
             }
 
-            if (source.getCategory() != null) {
-                destination.setCategoryId(source.getCategory().getId());
+            if (source.getArtistCategory() != null) {
+                destination.setArtistCategoryId(source.getArtistCategory().getId());
             }
 
             if (source.getMedia() != null) {
@@ -67,10 +68,10 @@ public class ArtistMapper {
                 destination.setUser(user);
             }
 
-            if (source.getCategoryId() != null) {
-                Category category = new Category();
-                category.setId(source.getCategoryId());
-                destination.setCategory(category);
+            if (source.getArtistCategoryId() != null) {
+                ArtistCategory artistCategory = new ArtistCategory();
+                artistCategory.setId(source.getArtistCategoryId());
+                destination.setArtistCategory(artistCategory);
             }
 
             if (source.getMediaId() != null) {

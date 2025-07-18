@@ -61,8 +61,9 @@ public class CustomerMapper {
             if (source.getUserId() != null) {
                 Long userId = source.getUserId();
                 // Assuming you have a method to fetch UserDTO by ID
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId(userId);
+                User user = new User();
+                user.setId(userId);
+                destination.setUser(user);
             }
 
             if (source.getMediaId() != null) {

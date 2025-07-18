@@ -1,6 +1,7 @@
 package com.maosencantadas.api.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -26,6 +27,10 @@ public class ProductDTO {
     @Schema(description = "Description of the product", example = "Handcrafted horse sculpture made from recycled materials.")
     private String description;
 
+    @Size(max = 255, message = "Technical data must be at most 255 characters")
+    @Schema(description = "Technical data of the product", example = "Material: Recycled Metal; Dimensions: 30x20x15 cm")
+    private String technicalData;
+
     @Size(max = 50, message = "Size must be at most 50 characters")
     @Schema(description = "Size of the product", example = "Medium")
     private String size;
@@ -37,8 +42,11 @@ public class ProductDTO {
     @Schema(description = "Price of the product", example = "150.00")
     private BigDecimal price;
 
+    @Schema(description = "Tags associated with the product", example = "recycled, sculpture, horse")
+    private int discount;
+
     @Schema(description = "ID of the product's category or Name of the product's category", example = "2, Arts em Geral")
-    private Long categoryId;
+    private Long productCategoryId;
 
     @Schema(description = "ID of the product's artist or Name of the product's artist", example = "5, Gerald")
     private Long artistId;

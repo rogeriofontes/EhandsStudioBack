@@ -1,4 +1,4 @@
-package com.maosencantadas.model.domain.category;
+package com.maosencantadas.model.domain.product;
 
 import com.maosencantadas.model.domain.AuditDomain;
 import com.maosencantadas.model.domain.media.Media;
@@ -9,14 +9,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "tb_category")
+@Table(name = "tb_product_category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
 @Schema(name = "Category", description = "Represents a category of products")
-public class Category extends AuditDomain {
+public class ProductCategory extends AuditDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

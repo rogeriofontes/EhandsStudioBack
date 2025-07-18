@@ -5,8 +5,9 @@ import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.product.Product;
 import com.maosencantadas.model.repository.ProductRepository;
 import com.maosencantadas.model.service.ArtistService;
-import com.maosencantadas.model.service.CategoryService;
+import com.maosencantadas.model.service.ProductCategoryService;
 import com.maosencantadas.model.service.ProductService;
+import com.maosencantadas.utils.GeneratedCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final CategoryService categoryService;
+    private final ProductCategoryService categoryService;
     private final ArtistService artistService;
 
     @Override
@@ -30,9 +31,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findByCategory(Long categoryId) {
-        log.info("Finding products by category with id: {}", categoryId);
-        return productRepository.findByCategoryIdWithArtist(categoryId);
+    public List<Product> findByCategory(Long productCategoryId) {
+        log.info("Finding products by category with id: {}", productCategoryId);
+        return productRepository.findByProductCategoryIdWithArtist(productCategoryId);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product save(Product product) {
         log.info("Saving new product");
+        product.setCode(GeneratedCode.generateProductCode());
         return productRepository.save(product);
     }
 
@@ -64,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
                     existingProduct.setSize(product.getSize());
                     existingProduct.setImageUrl(product.getImageUrl());
                     existingProduct.setPrice(product.getPrice());
-                    existingProduct.setCategory(product.getCategory());
+                    existingProduct.setProductCategory(product.getProductCategory());
                     existingProduct.setArtist(product.getArtist());
                     return productRepository.save(existingProduct);
                 })

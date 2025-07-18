@@ -137,11 +137,11 @@ public class ArtistController {
             @ApiResponse(responseCode = "404", description = "Category or artists not found for the provided ID"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ArtistDTO>> getByCategoryId(
+    public ResponseEntity<List<ArtistDTO>> getByArtistCategoryId(
             @Parameter(description = "ID of the category", example = "1")
             @PathVariable Long categoryId) {
         log.info("Listing artists for category ID: {}", categoryId);
-        List<Artist> artists = artistService.findByCategoryId(categoryId);
+        List<Artist> artists = artistService.findByArtistCategoryId(categoryId);
         if (artists.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

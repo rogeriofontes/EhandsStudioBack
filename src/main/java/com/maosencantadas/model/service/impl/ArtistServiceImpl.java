@@ -2,12 +2,12 @@ package com.maosencantadas.model.service.impl;
 
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.artist.Artist;
-import com.maosencantadas.model.domain.category.Category;
+import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.domain.user.UserRole;
 import com.maosencantadas.model.repository.ArtistRepository;
 import com.maosencantadas.model.service.ArtistService;
-import com.maosencantadas.model.service.CategoryService;
+import com.maosencantadas.model.service.ProductCategoryService;
 import com.maosencantadas.model.service.IUserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
-    private final CategoryService categoryService;
+    private final ProductCategoryService categoryService;
     private final IUserService userService;
 
     @Override
@@ -42,10 +42,10 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public List<Artist> findByCategoryName(String categoryName) {
         log.info("Finding artists by category name: {}", categoryName);
-        Category category = categoryService.findByName(categoryName)
+        ProductCategory productCategory = categoryService.findByName(categoryName)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with name '" + categoryName + "'"));
 
-        return artistRepository.findByCategoryId(category.getId());
+        return artistRepository.findByArtistCategoryId(productCategory.getId());
     }
 
     @Override
@@ -62,15 +62,15 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public List<Artist> findByCategoryId(Long categoryId) {
-        log.info("Finding artists by category ID: {}", categoryId);
+    public List<Artist> findByArtistCategoryId(Long artistCategoryId) {
+        log.info("Finding artists by category ID: {}", artistCategoryId);
 
-        if (!categoryService.existsById(categoryId)) {
-            log.warn("Category not found with ID '{}'", categoryId);
-            throw new ResourceNotFoundException("Category not found with ID '" + categoryId + "'");
+        if (!categoryService.existsById(artistCategoryId)) {
+            log.warn("Category not found with ID '{}'", artistCategoryId);
+            throw new ResourceNotFoundException("Category not found with ID '" + artistCategoryId + "'");
         }
 
-        return artistRepository.findByCategoryId(categoryId);
+        return artistRepository.findByArtistCategoryId(artistCategoryId);
     }
 
     @Override
@@ -110,11 +110,9 @@ public class ArtistServiceImpl implements ArtistService {
                     existingArtist.setAddress(artist.getAddress());
                     existingArtist.setEmail(artist.getEmail());
                     existingArtist.setPhone(artist.getPhone());
-                    existingArtist.setFace(artist.getFace());
-                    existingArtist.setInsta(artist.getInsta());
                     existingArtist.setWhatsapp(artist.getWhatsapp());
                     existingArtist.setCpf(artist.getCpf());
-                    existingArtist.setCategory(artist.getCategory());
+                    existingArtist.setArtistCategory(artist.getArtistCategory());
                     existingArtist.setMedia(artist.getMedia());
                     existingArtist.setUser(artist.getUser());
 

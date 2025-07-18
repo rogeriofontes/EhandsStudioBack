@@ -1,9 +1,9 @@
 package com.maosencantadas.model.repository;
 
+import com.maosencantadas.model.domain.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import com.maosencantadas.model.domain.product.Product;
 
 import java.util.List;
 
@@ -12,15 +12,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByArtistId(Long artistId);
 
-    List<Product> findByCategoryId(long categoryId);
+    List<Product> findByProductCategoryId(long productCategoryId);
 
-
-    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.category")
+    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.productCategory")
     List<Product> findAllWithArtistAndCategory();
 
-    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.category WHERE p.category.id = :categoryId")
-    List<Product> findByCategoryIdWithArtist(Long categoryId);
+    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.productCategory WHERE p.productCategory.id = :productCategoryId")
+    List<Product> findByProductCategoryIdWithArtist(Long productCategoryId);
 
-    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.category WHERE p.artist.id = :artistId")
+    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.productCategory WHERE p.artist.id = :artistId")
     List<Product> findByArtistIdWithCategory(Long artistId);
 }

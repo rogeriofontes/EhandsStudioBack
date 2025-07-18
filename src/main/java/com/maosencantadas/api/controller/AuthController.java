@@ -1,9 +1,6 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.api.dto.AuthRequest;
-import com.maosencantadas.api.dto.AuthResponse;
-import com.maosencantadas.api.dto.CategoryDTO;
-import com.maosencantadas.api.dto.UserDTO;
+import com.maosencantadas.api.dto.*;
 import com.maosencantadas.api.mapper.UserMapper;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.service.AuthenticationService;
@@ -16,12 +13,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,6 +30,7 @@ import java.util.List;
 public class AuthController {
 
     private final AuthenticationService service;
+
     private final UserMapper userMapper;
 
     @Operation(summary = "User Login",
@@ -43,9 +43,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthRequest request) {
         AuthResponse register = service.authenticate(request);
-        log.info("User logged in successfully: {}", request.login());
+        log.info("User logged in successfully: {}", request.email());
         if (register == null) {
-            log.warn("Login failed for user: {}", request.login());
+            log.warn("Login failed for user: {}", request.email());
             return ResponseEntity.status(401).build();
         }
 
@@ -70,6 +70,18 @@ public class AuthController {
         log.info("User registered Association {] id: {} - email: {} - Perfil: {}", registeredUser.getId(), registeredUser.getEmail(), registeredUser.getUserRole());
         URI location = RestUtils.getUri(registeredUser.getId());
         return ResponseEntity.created(location).body(registeredUser);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String requestRefreshToken = request.get("refreshToken");
+        ResponseEntity<Map<String, String>> mapResponseEntity = service.refreshToken(requestRefreshToken);
+        if (mapResponseEntity.getStatusCode().isError()) {
+            log.error("Failed to refresh token for request: {}", request);
+            return ResponseEntity.status(mapResponseEntity.getStatusCode()).body(mapResponseEntity.getBody());
+        }
+        log.info("Token refreshed successfully for request: {}", request);
+        return ResponseEntity.ok(mapResponseEntity.getBody());
     }
 
     @Operation(summary = "Find user by ID",
@@ -99,7 +111,7 @@ public class AuthController {
     @Operation(summary = "Find category by ID", description = "Returns a specific category by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category found",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductCategoryDTO.class))),
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
@@ -107,5 +119,37 @@ public class AuthController {
         List<User> all = service.findAll();
         List<UserDTO> list = userMapper.toDTO(all);
         return ResponseEntity.ok(list);
+    }
+
+    @Operation(summary = "Update a ResidentDetails by Id", tags = {"associateDetailss", "put"})
+    @ApiResponse(responseCode = "200", content = {
+            @Content(schema = @Schema(implementation = ForgotPasswordResponse.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})
+    @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())})
+    @PutMapping("/forgot-password")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        User user = service.forgotPassword(email);
+        if (user == null) {
+            log.warn("User not found for email: {}", email);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado com o e-mail fornecido.");
+        }
+
+        return ResponseEntity.ok("E-mail enviado!");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String newPassword = request.get("newPassword");
+
+        User user = service.validatePasswordToken(token, newPassword);
+        if (user == null) {
+            log.warn("Invalid token or user not found for token: {}", token);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido ou usuário não encontrado.");
+        }
+
+        return ResponseEntity.ok("Senha redefinida com sucesso!");
     }
 }

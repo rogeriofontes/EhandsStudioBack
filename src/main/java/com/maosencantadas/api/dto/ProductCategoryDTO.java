@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @Builder
 @Schema(name = "CategoryDTO", description = "DTO representing a category of products")
-public class CategoryDTO {
+public class ProductCategoryDTO {
 
     @Schema(description = "Identifies the category", example = "1")
     private Long id;

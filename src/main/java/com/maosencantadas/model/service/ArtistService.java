@@ -1,6 +1,5 @@
 package com.maosencantadas.model.service;
 
-import com.maosencantadas.api.dto.ArtistDTO;
 import com.maosencantadas.model.domain.artist.Artist;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public interface ArtistService {
 
     Artist findById(Long id);
 
-    List<Artist> findByCategoryId(Long categoryId);
+    List<Artist> findByArtistCategoryId(Long categoryId);
 
     Artist save(Artist artist);
 

@@ -1,22 +1,22 @@
 package com.maosencantadas.api.mapper;
 
+import com.maosencantadas.api.dto.ArtistCategoryDTO;
 import com.maosencantadas.model.domain.media.Media;
+import com.maosencantadas.model.domain.artist.ArtistCategory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
-import com.maosencantadas.api.dto.CategoryDTO;
-import com.maosencantadas.model.domain.category.Category;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CategoryMapper {
+public class ArtistCategoryMapper {
 
     private final ModelMapper modelMapper;
 
-    public CategoryMapper(ModelMapper modelMapper) {
+    public ArtistCategoryMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         this.configureMappings();
     }
@@ -28,10 +28,10 @@ public class CategoryMapper {
                 .setMatchingStrategy(MatchingStrategies.STRICT);
 
         // Category → CategoryDTO
-        TypeMap<Category, CategoryDTO> toDTOTypeMap = modelMapper.createTypeMap(Category.class, CategoryDTO.class);
+        TypeMap<ArtistCategory, ArtistCategoryDTO> toDTOTypeMap = modelMapper.createTypeMap(ArtistCategory.class, ArtistCategoryDTO.class);
         toDTOTypeMap.setPostConverter(context -> {
-            Category source = context.getSource();
-            CategoryDTO destination = context.getDestination();
+            ArtistCategory source = context.getSource();
+            ArtistCategoryDTO destination = context.getDestination();
 
             if (source.getMedia() != null) {
                 destination.setMediaId(source.getMedia().getId());
@@ -41,10 +41,10 @@ public class CategoryMapper {
         });
 
         // CategoryDTO → Category
-        TypeMap<CategoryDTO, Category> toEntityTypeMap = modelMapper.createTypeMap(CategoryDTO.class, Category.class);
+        TypeMap<ArtistCategoryDTO, ArtistCategory> toEntityTypeMap = modelMapper.createTypeMap(ArtistCategoryDTO.class, ArtistCategory.class);
         toEntityTypeMap.setPostConverter(context -> {
-            CategoryDTO source = context.getSource();
-            Category destination = context.getDestination();
+            ArtistCategoryDTO source = context.getSource();
+            ArtistCategory destination = context.getDestination();
 
             if (source.getMediaId() != null) {
                 Media media = new Media();
@@ -56,15 +56,15 @@ public class CategoryMapper {
         });
     }
 
-    public CategoryDTO toDTO(Category category) {
-        return modelMapper.map(category, CategoryDTO.class);
+    public ArtistCategoryDTO toDTO(ArtistCategory artistCategory) {
+        return modelMapper.map(artistCategory, ArtistCategoryDTO.class);
     }
 
-    public Category toEntity(CategoryDTO categoryDTO) {
-        return modelMapper.map(categoryDTO, Category.class);
+    public ArtistCategory toEntity(ArtistCategoryDTO artistCategoryDTO) {
+        return modelMapper.map(artistCategoryDTO, ArtistCategory.class);
     }
 
-    public List<CategoryDTO> toDTO(List<Category> categories) {
+    public List<ArtistCategoryDTO> toDTO(List<ArtistCategory> categories) {
         return categories.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());

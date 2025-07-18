@@ -3447,7 +3447,7 @@ instanceKlass com/maosencantadas/model/domain/user/User$HibernateInstantiator$97
 instanceKlass net/bytebuddy/description/type/TypeDescription$Generic$AnnotationReader$ForWildcardUpperBoundType$AnnotatedWildcardType
 instanceKlass net/bytebuddy/description/type/TypeDescription$Generic$AnnotationReader$ForTypeArgument$AnnotatedParameterizedType
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601884c00
-instanceKlass com/maosencantadas/model/domain/category/Category$HibernateInstantiator$2OZjiln4
+instanceKlass com/maosencantadas/model/domain/productCategory/Category$HibernateInstantiator$2OZjiln4
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601884800
 # instanceKlass java/lang/invoke/LambdaForm$MH+0x0000022601884400
 instanceKlass com/maosencantadas/model/domain/budget/Budget$HibernateInstantiator$MLxWu82R
@@ -4430,7 +4430,7 @@ instanceKlass jakarta/validation/constraints/DecimalMin$List
 instanceKlass com/maosencantadas/model/domain/product/Product$ProductBuilder
 instanceKlass com/maosencantadas/model/domain/media/Image$ImageBuilder
 instanceKlass com/maosencantadas/model/domain/customer/Customer$CustomerBuilder
-instanceKlass com/maosencantadas/model/domain/category/Category$CategoryBuilder
+instanceKlass com/maosencantadas/model/domain/productCategory/Category$CategoryBuilder
 instanceKlass jakarta/validation/constraints/NotNull$List
 instanceKlass com/maosencantadas/model/domain/budget/Budget$BudgetBuilder
 instanceKlass org/hibernate/annotations/FetchProfiles
@@ -7874,7 +7874,7 @@ instanceKlass com/maosencantadas/model/domain/media/Image
 instanceKlass com/maosencantadas/model/repository/ImageRepository
 instanceKlass com/maosencantadas/model/domain/customer/Customer
 instanceKlass com/maosencantadas/model/repository/CustomerRepository
-instanceKlass com/maosencantadas/model/domain/category/Category
+instanceKlass com/maosencantadas/model/domain/productCategory/Category
 instanceKlass com/maosencantadas/model/repository/CategoryRepository
 instanceKlass com/maosencantadas/model/domain/budget/Budget
 instanceKlass com/maosencantadas/model/repository/BudgetRepository
@@ -8439,7 +8439,7 @@ instanceKlass org/springframework/expression/spel/standard/SpelExpression
 instanceKlass org/springframework/expression/spel/standard/Token
 instanceKlass org/springframework/expression/spel/standard/Tokenizer
 instanceKlass  @bci java/util/regex/Pattern union (Ljava/util/regex/Pattern$CharPredicate;Ljava/util/regex/Pattern$CharPredicate;Z)Ljava/util/regex/Pattern$CharPredicate; 14 <appendix> member <vmtarget> ; # java/util/regex/Pattern$$Lambda+0x0000022601342450
-instanceKlass  @bci java/util/regex/CharPredicates category (I)Ljava/util/regex/Pattern$CharPredicate; 1 <appendix> member <vmtarget> ; # java/util/regex/CharPredicates$$Lambda+0x0000022601342200
+instanceKlass  @bci java/util/regex/CharPredicates productCategory (I)Ljava/util/regex/Pattern$CharPredicate; 1 <appendix> member <vmtarget> ; # java/util/regex/CharPredicates$$Lambda+0x0000022601342200
 instanceKlass org/springframework/expression/spel/ast/SpelNodeImpl
 instanceKlass org/springframework/expression/spel/SpelNode
 instanceKlass org/springframework/security/web/SecurityFilterChain

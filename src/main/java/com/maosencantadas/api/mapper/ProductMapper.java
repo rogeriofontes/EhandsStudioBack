@@ -1,6 +1,8 @@
 package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.ProductDTO;
+import com.maosencantadas.model.domain.artist.Artist;
+import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
 import org.springframework.stereotype.Component;
@@ -19,11 +21,13 @@ public class ProductMapper {
         dto.setId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
+        dto.setTechnicalData(product.getTechnicalData());
         dto.setSize(product.getSize());
+        dto.setDiscount(product.getDiscount());
         dto.setImageUrl(product.getImageUrl());
         dto.setPrice(product.getPrice());
         dto.setArtistId(product.getArtist() != null ? product.getArtist().getId() : null);
-        dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
+        dto.setProductCategoryId(product.getProductCategory() != null ? product.getProductCategory().getId() : null);
         dto.setMediaId(product.getMedia().getId() != null ? product.getMedia().getId() : null);
 
         return dto;
@@ -36,7 +40,9 @@ public class ProductMapper {
         product.setId(dto.getId());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
+        product.setTechnicalData(dto.getTechnicalData());
         product.setSize(dto.getSize());
+        product.setDiscount(dto.getDiscount());
         product.setImageUrl(dto.getImageUrl());
         product.setPrice(dto.getPrice());
 
@@ -44,6 +50,18 @@ public class ProductMapper {
             Media media = new Media();
             media.setId(dto.getMediaId());
             product.setMedia(media);
+        }
+
+        if (dto.getArtistId() != null) {
+            Artist artist = new Artist();
+            artist.setId(dto.getArtistId());
+            product.setArtist(artist);
+        }
+
+        if (dto.getProductCategoryId() != null) {
+            ProductCategory productCategory = new ProductCategory();
+            productCategory.setId(dto.getProductCategoryId());
+            product.setProductCategory(productCategory);
         }
 
         return product;

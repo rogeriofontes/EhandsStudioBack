@@ -1,16 +1,16 @@
 package com.maosencantadas.api.controller;
 
-import com.maosencantadas.api.dto.CategoryDTO;
-import com.maosencantadas.api.mapper.CategoryMapper;
-import com.maosencantadas.model.domain.category.Category;
-import com.maosencantadas.model.service.CategoryService;
+import com.maosencantadas.api.dto.ArtistCategoryDTO;
+import com.maosencantadas.api.mapper.ArtistCategoryMapper;
+import com.maosencantadas.model.domain.artist.ArtistCategory;
+import com.maosencantadas.model.service.ArtistCategoryService;
 import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,90 +21,90 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/categories")
+@RequestMapping("/v1/artist-categories")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@Tag(name = "Category", description = "Operations related to product categories")
-public class CategoryController {
+@Tag(name = "Category", description = "Operations related to artist categories")
+public class ArtistCategoryController {
 
-    private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
+    private final ArtistCategoryService categoryService;
+    private final ArtistCategoryMapper categoryMapper;
 
     @GetMapping
     @Operation(summary = "List all categories", description = "Returns a list of all available categories.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categories successfully listed",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistCategoryDTO.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<CategoryDTO>> findAll() {
+    public ResponseEntity<List<ArtistCategoryDTO>> findAll() {
         log.info("Listing all categories");
-        List<Category> categories = categoryService.findAll();
-        List<CategoryDTO> categoryDTOS = categoryMapper.toDTO(categories);
-        return ResponseEntity.ok(categoryDTOS);
+        List<ArtistCategory> categories = categoryService.findAll();
+        List<ArtistCategoryDTO> artistCategoryDTOS = categoryMapper.toDTO(categories);
+        return ResponseEntity.ok(artistCategoryDTOS);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Find category by ID", description = "Returns a specific category by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category found",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistCategoryDTO.class))),
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<ArtistCategoryDTO> findById(@PathVariable("id") Long id) {
         log.info("Finding category by ID: {}", id);
-        Category category = categoryService.findById(id);
-        CategoryDTO categoryDTO = categoryMapper.toDTO(category);
-        log.info("Category found: {}", categoryDTO.getName());
-        return ResponseEntity.ok(categoryDTO);
+        ArtistCategory artistCategory = categoryService.findById(id);
+        ArtistCategoryDTO artistCategoryDTO = categoryMapper.toDTO(artistCategory);
+        log.info("Category found: {}", artistCategoryDTO.getName());
+        return ResponseEntity.ok(artistCategoryDTO);
     }
 
     @PostMapping
     @Operation(summary = "Create a new category", description = "Creates and returns a new category with the provided data.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category created successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistCategoryDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> create(
+    public ResponseEntity<ArtistCategoryDTO> create(
             @RequestBody
             @Schema(description = "New category data", requiredMode = Schema.RequiredMode.REQUIRED)
-            CategoryDTO categoryDTO) {
-        log.info("Creating new category: {}", categoryDTO.getName());
-        Category category = categoryMapper.toEntity(categoryDTO);
-        Category newCategory = categoryService.save(category);
+            ArtistCategoryDTO artistCategoryDTO) {
+        log.info("Creating new category: {}", artistCategoryDTO.getName());
+        ArtistCategory artistCategory = categoryMapper.toEntity(artistCategoryDTO);
+        ArtistCategory newArtistCategory = categoryService.save(artistCategory);
 
-        log.info("Category created with ID: {}", newCategory.getId());
-        CategoryDTO newCategoryDTO = categoryMapper.toDTO(newCategory);
-        URI location = RestUtils.getUri(newCategoryDTO.getId());
-        return ResponseEntity.created(location).body(newCategoryDTO);
+        log.info("Category created with ID: {}", newArtistCategory.getId());
+        ArtistCategoryDTO newArtistCategoryDTO = categoryMapper.toDTO(newArtistCategory);
+        URI location = RestUtils.getUri(newArtistCategoryDTO.getId());
+        return ResponseEntity.created(location).body(newArtistCategoryDTO);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing category", description = "Update an existing category by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category updated successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistCategoryDTO.class))),
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CategoryDTO> update(
+    public ResponseEntity<ArtistCategoryDTO> update(
             @PathVariable("id")
             @Schema(description = "ID of the category to be updated", example = "1")
             Long id,
             @RequestBody
             @Schema(description = "Updated category data", requiredMode = Schema.RequiredMode.REQUIRED)
-            CategoryDTO categoryDTO) {
+            ArtistCategoryDTO artistCategoryDTO) {
         log.info("Updating category with id: {}", id);
-        Category category = categoryMapper.toEntity(categoryDTO);
-        Category updatedCategory = categoryService.update(id, category);
+        ArtistCategory artistCategory = categoryMapper.toEntity(artistCategoryDTO);
+        ArtistCategory updatedArtistCategory = categoryService.update(id, artistCategory);
 
-        log.info("Category updated: {}", updatedCategory.getName());
-        CategoryDTO updatedCategoryDTO = categoryMapper.toDTO(updatedCategory);
-        return ResponseEntity.ok(updatedCategoryDTO);
+        log.info("Category updated: {}", updatedArtistCategory.getName());
+        ArtistCategoryDTO updatedArtistCategoryDTO = categoryMapper.toDTO(updatedArtistCategory);
+        return ResponseEntity.ok(updatedArtistCategoryDTO);
     }
 
     @DeleteMapping("/{id}")

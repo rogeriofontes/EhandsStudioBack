@@ -41,12 +41,6 @@ public class ArtistDTO {
     @Schema(description = "Artist's phone number", example = "(34) 98765-4321")
     private String phone;
 
-    @Schema(description = "Artist's Instagram profile", example = "@testingartista")
-    private String insta;
-
-    @Schema(description = "Artist's Facebook profile", example = "facebook.com/testingartista")
-    private String face;
-
     @Schema(description = "Artist's WhatsApp number", example = "(11) 91234-5678")
     private String whatsapp;
 
@@ -55,7 +49,7 @@ public class ArtistDTO {
     private String cpf;
 
     @Schema(description = "Category ID", example = "1")
-    private Long categoryId;
+    private Long artistCategoryId;
 
     @Schema(description = "User ID associated with the Artist", example = "id: 2, login: test@test.com, password: ******, UserRole: ARTIST")
     private Long userId;

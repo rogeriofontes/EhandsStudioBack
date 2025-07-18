@@ -6,8 +6,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Table(name = "tb_validation_token")
 @Entity
+@Table(name = "tb_validation_token")
 @Data
 @Builder
 @NoArgsConstructor

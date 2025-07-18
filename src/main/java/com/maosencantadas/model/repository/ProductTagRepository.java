@@ -1,12 +1,12 @@
 package com.maosencantadas.model.repository;
 
+import com.maosencantadas.model.domain.product.ProductTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.maosencantadas.model.domain.category.Category;
 
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Optional<Category> findByName(String name);
+public interface ProductTagRepository extends JpaRepository<ProductTag, Long> {
+    Optional<ProductTag> findByName(String name);
 }

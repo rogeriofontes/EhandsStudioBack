@@ -1,6 +1,5 @@
 package com.maosencantadas.model.service;
 
-import com.maosencantadas.api.dto.ProductDTO;
 import com.maosencantadas.model.domain.product.Product;
 
 import java.util.List;
