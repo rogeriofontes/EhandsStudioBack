@@ -1,7 +1,6 @@
 package com.maosencantadas.model.service;
 
 import com.maosencantadas.model.domain.product.ProductAssessment;
-import com.maosencantadas.model.domain.product.ProductCategory;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,8 +3,6 @@ package com.maosencantadas.model.service.impl;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.product.ProductAssessment;
-import com.maosencantadas.model.domain.user.User;
-import com.maosencantadas.model.domain.user.UserRole;
 import com.maosencantadas.model.repository.CustomerRepository;
 import com.maosencantadas.model.repository.ProductAssessmentRepository;
 import com.maosencantadas.model.service.ProductAssessmentService;
