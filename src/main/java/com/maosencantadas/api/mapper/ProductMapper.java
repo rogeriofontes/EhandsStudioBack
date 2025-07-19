@@ -45,6 +45,7 @@ public class ProductMapper {
         product.setDiscount(dto.getDiscount());
         product.setImageUrl(dto.getImageUrl());
         product.setPrice(dto.getPrice());
+        product.setAcceptPersonalization(true);
 
         if (dto.getMediaId() != null) {
             Media media = new Media();

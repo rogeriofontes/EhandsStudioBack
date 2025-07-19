@@ -75,4 +75,8 @@ public class Product extends AuditDomain {
     @JoinColumn(name = "media_id", nullable = false)
     @Schema(description = "Product's media")
     private Media media;
+
+    @Schema(description = "Indicates if the product is available for purchase", example = "true")
+    @Column(name = "accept_personalization")
+    private Boolean acceptPersonalization;
 }

@@ -93,7 +93,7 @@ public class ArtistServiceImpl implements ArtistService {
             Artist savedArtist = artistRepository.save(artist);
             log.debug("Artist saved with ID: {}", savedArtist.getId());
 
-            return savedArtist;
+                return savedArtist;
         }
 
         return null;
