@@ -2,11 +2,12 @@ package com.maosencantadas.model.domain.product;
 
 import com.maosencantadas.model.domain.AuditDomain;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tb_product_tag")
 @Data

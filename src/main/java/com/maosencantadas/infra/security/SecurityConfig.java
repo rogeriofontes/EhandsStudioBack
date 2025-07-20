@@ -58,9 +58,31 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/upload").permitAll()
                         .requestMatchers(HttpMethod.POST, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/artists/**").hasAnyRole("ADMIN", "ARTIST")
+                        .requestMatchers(HttpMethod.PUT, "/v1/artists/**").hasAnyRole("ADMIN", "ARTIST")
+                        .requestMatchers(HttpMethod.GET, "/v1/artists/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/customers/**").hasAnyRole("ADMIN", "CUSTOMER")
+                        .requestMatchers(HttpMethod.PUT, "/v1/customers/**").hasAnyRole("ADMIN", "CUSTOMER")
+                        //todos os métodos DELETE são restritos a ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/v1/artists/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/artist-categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/artist-social-medias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/budgets/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/medias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/product-assessments/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/product-categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/product-tags/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/quote-messages/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+
+
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
                 .build();
     }
 

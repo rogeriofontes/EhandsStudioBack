@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,4 +54,6 @@ public class ProductDTO {
 
     @Schema(description = "Media ID", example = "1")
     private Long mediaId;
+
+    private Set<Long> tagIds; // Lista de IDs das tags selecionadas pelo usuário
 }

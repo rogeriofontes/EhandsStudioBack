@@ -10,13 +10,15 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_product")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
+@ToString(exclude = {"productCategory", "artist", "media", "tags"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder
 @Schema(name = "Product", description = "Represents a product")
@@ -79,4 +81,13 @@ public class Product extends AuditDomain {
     @Schema(description = "Indicates if the product is available for purchase", example = "true")
     @Column(name = "accept_personalization")
     private Boolean acceptPersonalization;
+
+    // Nuvem de tags
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "product_tags",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<ProductTag> tags = new HashSet<>();
 }

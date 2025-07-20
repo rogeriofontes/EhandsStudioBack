@@ -4,6 +4,7 @@ import com.maosencantadas.api.dto.BudgetResponseDTO;
 import com.maosencantadas.api.mapper.BudgetMapper;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.budget.Budget;
+import com.maosencantadas.model.domain.budget.BudgetStatus;
 import com.maosencantadas.model.repository.BudgetRepository;
 import com.maosencantadas.model.service.BudgetService;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,7 @@ public class BudgetServiceImpl implements BudgetService {
         }
 
         Budget existingBudget = budget.get();
+        existingBudget.setBudgetStatus(BudgetStatus.COMPLETED.name());
         existingBudget.setResponse(budgetResponseDTO.getResponse());
         return budgetRepository.save(existingBudget);
     }

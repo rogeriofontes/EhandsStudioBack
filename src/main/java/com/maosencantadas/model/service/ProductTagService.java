@@ -4,6 +4,7 @@ import com.maosencantadas.model.domain.product.ProductTag;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ProductTagService {
 
@@ -20,4 +21,6 @@ public interface ProductTagService {
     Optional<ProductTag> findByName(String categoryName);
 
     boolean existsById(Long categoryId);
+
+    List<ProductTag> findAllById(Set<Long> tagIds);
 }

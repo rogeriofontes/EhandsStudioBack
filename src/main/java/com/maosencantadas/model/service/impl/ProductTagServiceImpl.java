@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -68,5 +69,10 @@ public class ProductTagServiceImpl implements ProductTagService {
     @Override
     public boolean existsById(Long productCategoryId) {
         return productTagRepository.existsById(productCategoryId);
+    }
+
+    @Override
+    public List<ProductTag> findAllById(Set<Long> tagIds) {
+        return productTagRepository.findAllById(tagIds);
     }
 }
