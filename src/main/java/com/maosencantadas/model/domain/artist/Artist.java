@@ -2,9 +2,8 @@ package com.maosencantadas.model.domain.artist;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maosencantadas.model.domain.AuditDomain;
-import com.maosencantadas.model.domain.person.Person;
-import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
+import com.maosencantadas.model.domain.person.Person;
 import com.maosencantadas.model.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;

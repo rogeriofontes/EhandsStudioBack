@@ -4,9 +4,6 @@ import com.maosencantadas.model.domain.AuditDomain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tb_product_tag")

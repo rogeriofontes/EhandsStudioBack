@@ -1,11 +1,8 @@
 package com.maosencantadas.model.service.impl;
 
 import com.maosencantadas.exception.ResourceNotFoundException;
-import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.product.ProductTag;
-import com.maosencantadas.model.repository.ProductCategoryRepository;
 import com.maosencantadas.model.repository.ProductTagRepository;
-import com.maosencantadas.model.service.ProductCategoryService;
 import com.maosencantadas.model.service.ProductTagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

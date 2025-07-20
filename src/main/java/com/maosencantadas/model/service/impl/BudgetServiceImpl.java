@@ -1,7 +1,6 @@
 package com.maosencantadas.model.service.impl;
 
 import com.maosencantadas.api.dto.BudgetResponseDTO;
-import com.maosencantadas.api.mapper.BudgetMapper;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.budget.Budget;
 import com.maosencantadas.model.domain.budget.BudgetStatus;
