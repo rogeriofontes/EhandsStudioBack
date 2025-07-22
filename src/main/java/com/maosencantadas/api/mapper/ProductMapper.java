@@ -2,9 +2,9 @@ package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.ProductDTO;
 import com.maosencantadas.model.domain.artist.Artist;
-import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
+import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.product.ProductTag;
 import com.maosencantadas.model.service.ProductTagService;
 import org.springframework.beans.factory.annotation.Autowired;

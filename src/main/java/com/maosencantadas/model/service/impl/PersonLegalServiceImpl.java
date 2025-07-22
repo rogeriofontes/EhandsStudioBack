@@ -1,12 +1,9 @@
 package com.maosencantadas.model.service.impl;
 
-import com.maosencantadas.api.mapper.PersonLegalMapper;
 import com.maosencantadas.exception.ResourceNotFoundException;
-import com.maosencantadas.model.domain.person.PersonLegal;
 import com.maosencantadas.model.domain.person.PersonLegal;
 import com.maosencantadas.model.repository.PersonLegalRepository;
 import com.maosencantadas.model.service.ArtistService;
-import com.maosencantadas.model.service.PersonLegalService;
 import com.maosencantadas.model.service.PersonLegalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -72,7 +72,7 @@ public class ArtistAssembly {
         log.info("PersonNatural created DTO: {}", personNaturalDto);
 
         if (personNaturalDto == null) {
-            log.error("PersonNatural DTO is null for person: {}", personNatural.getName());
+            log.error("PersonNatural DTO is null for person: {}", personNatural != null ? personNatural.getName() : null);
             return null;
         }
 

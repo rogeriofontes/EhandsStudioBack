@@ -3,7 +3,6 @@ package com.maosencantadas.api.mapper;
 import com.maosencantadas.api.dto.ArtistDTO;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.artist.ArtistCategory;
-import com.maosencantadas.model.domain.product.ProductCategory;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.user.User;
 import org.modelmapper.ModelMapper;
