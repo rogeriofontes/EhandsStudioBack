@@ -1,5 +1,5 @@
 package com.maosencantadas.model.domain;
 
 public enum Status {
-    ATIVO, INATIVO;
+    ACTIVE, INACTIVE, DELETED;
 }

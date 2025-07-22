@@ -12,7 +12,7 @@ CREATE TABLE tb_product (
     artist_id BIGINT NOT NULL,
     media_id BIGINT NOT NULL,
     accept_personalization BOOLEAN NOT NULL DEFAULT FALSE,
-    status varchar(255) NOT NULL,
+    status varchar(255) NOT NULL DEFAULT 'ACTIVE',
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_by VARCHAR(255),

@@ -23,61 +23,27 @@ import lombok.*;
 @Schema(name = "Artist", description = "represents an artist")
 public class Artist extends AuditDomain {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    @Schema(description = "Identify the artist", example = "1")
     private Long id;
 
-    @NotBlank(message = "Name is mandatory")
-    @Size(max = 100, message = "Name must have a maximum of 100 characters")
-    @Schema(description = "Artist name", example = "Amanda")
-    private String name;
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    @JsonManagedReference
+    private User user;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     @Schema(description = "Artist photo URL", example = "https://testing.com/foto.jpg")
     @Column(name="image_url")
     private String imageUrl;
 
-    @Size(max = 200, message = "Address must have a maximum of 200 characters")
-    @Column(name="address")
-    @Schema(description = "Artist address", example = "Rua Padre Pio, 123 - Centro")
-    private String address;
-
-    @Email(message = "Invalid email")
-    @Column(name="email")
-    @Schema(description = "Artist email", example = "testing@example.com")
-    private String email;
-
-    @Size(max = 20, message = "Phone number must have a maximum of 20 characters")
-    @Column(name="phone")
-    @Schema(description = "Artist's phone number", example = "(34) 98765-4321")
-    private String phone;
-
-    @Schema(description = "Artist's WhatsApp number", example = "(11) 91234-5678")
-    @Column(name="whatsapp")
-    private String whatsapp;
-
-    @NotBlank(message = "CPF is mandatory")
-    @Column(name="cpf")
-    @Schema(description = "Artist's CPF", example = "123.456.789-00")
-    private String cpf;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_category_id", nullable = false)
     @Schema(description = "Artist's category")
     private ArtistCategory artistCategory;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    @JsonManagedReference
-    @Schema(description = "Artist user")
-    private User user;
-
-    // Artist.java
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
-    private Person person;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "media_id", nullable = false)

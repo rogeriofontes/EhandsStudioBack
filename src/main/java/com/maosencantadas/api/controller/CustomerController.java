@@ -76,7 +76,7 @@ public class CustomerController {
         Customer customer = customerMapper.toEntity(customerDTO);
         Customer newCustomer = customerService.save(customer);
 
-        log.info("New customer created with ID: {}", newCustomer.getId());
+        log.info("New customer created with ID: {}", newCustomer.getPerson().getId());
         CustomerDTO customerDTOResponse = customerMapper.toDTO(newCustomer);
         URI location = RestUtils.getUri(customerDTOResponse.getId());
         return ResponseEntity.created(location).body(customerDTOResponse);

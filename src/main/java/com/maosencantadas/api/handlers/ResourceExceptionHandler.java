@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 
 import java.net.URI;
 import java.text.ParseException;
@@ -108,8 +110,10 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ProblemDetail> dataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<ProblemDetail> dataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
         ProblemDetail problemDetails = createProblemDetails("about:blank", "Conflict", HttpStatus.CONFLICT.value(), ex.getMessage());
+        String path = ((ServletWebRequest) request).getRequest().getRequestURI();
+        problemDetails.setInstance(URI.create(path));
         return new ResponseEntity<>(problemDetails, HttpStatus.CONFLICT);
     }
 

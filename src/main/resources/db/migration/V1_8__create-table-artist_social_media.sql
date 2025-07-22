@@ -10,7 +10,7 @@ CREATE TABLE tb_artist_social_media (
     telegram VARCHAR(255),
     website VARCHAR(255),
     artist_id BIGINT NOT NULL,
-    status varchar(255) NOT NULL,
+    status varchar(255) NOT NULL DEFAULT 'ACTIVE',
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_by VARCHAR(255),

@@ -4,7 +4,7 @@ CREATE TABLE tb_budget_quote_message (
     message TEXT NOT NULL,
     sent_by_customer BOOLEAN NOT NULL DEFAULT FALSE,
     sent_at TIMESTAMP NOT NULL,
-    status varchar(255) NOT NULL,
+    status varchar(255) NOT NULL DEFAULT 'ACTIVE',
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_by VARCHAR(255),

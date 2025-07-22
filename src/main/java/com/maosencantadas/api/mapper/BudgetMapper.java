@@ -59,33 +59,54 @@ public class BudgetMapper {
     }
 
     public Budget toEntity(BudgetDTO dto) {
-        return Budget.builder()
-                .id(dto.getId())
-                .budgetStatus(dto.getStatus())
-                .dateBudget(dto.getDateBudget())
-                .description(dto.getDescription())
-                .response(dto.getResponse())
-                .imageUrl(dto.getImageUrl())
-                .customer(Customer.builder().id(dto.getCustomerId()).build())
-                .product(Product.builder().id(dto.getProductId()).build())
-                .artist(Artist.builder().id(dto.getArtistId()).build())
-                .media(Media.builder().id(dto.getMediaId()).build())
-                .build();
+        if (dto == null) {
+            return null;
+        }
+
+        Budget budget = modelMapper.map(dto, Budget.class);
+
+        // Set Customer, Product, Artist if IDs are present
+        if (dto.getCustomerId() != null) {
+            Customer customer = new Customer();
+            customer.getPerson().setId(dto.getCustomerId());
+            budget.setCustomer(customer);
+        }
+        if (dto.getProductId() != null) {
+            Product product = new Product();
+            product.setId(dto.getProductId());
+            budget.setProduct(product);
+        }
+        if (dto.getArtistId() != null) {
+            Artist artist = new Artist();
+            artist.getPerson().setId(dto.getArtistId());
+            budget.setArtist(artist);
+        }
+
+        return budget;
     }
 
     public BudgetDTO toDto(Budget budget) {
-        return BudgetDTO.builder()
-                .id(budget.getId())
-                .status(budget.getBudgetStatus())
-                .dateBudget(budget.getDateBudget())
-                .description(budget.getDescription())
-                .response(budget.getResponse())
-                .imageUrl(budget.getImageUrl())
-                .customerId(budget.getCustomer() != null ? budget.getCustomer().getId() : null)
-                .productId(budget.getProduct() != null ? budget.getProduct().getId() : null)
-                .artistId(budget.getArtist() != null ? budget.getArtist().getId() : null)
-                .mediaId(budget.getMedia() != null ? budget.getMedia().getId() : null)
-                .build();
+        if (budget == null) {
+            return null;
+        }
+
+        BudgetDTO dto = modelMapper.map(budget, BudgetDTO.class);
+
+        // Set IDs for Customer, Product, Artist, and Media
+        if (budget.getCustomer() != null) {
+            dto.setCustomerId(budget.getCustomer().getPerson().getId());
+        }
+        if (budget.getProduct() != null) {
+            dto.setProductId(budget.getProduct().getId());
+        }
+        if (budget.getArtist() != null) {
+            dto.setArtistId(budget.getArtist().getPerson().getId());
+        }
+        if (budget.getMedia() != null) {
+            dto.setMediaId(budget.getMedia().getId());
+        }
+
+        return dto;
     }
 
     public BudgetDTO toDtoWithResponse(Budget budget) {

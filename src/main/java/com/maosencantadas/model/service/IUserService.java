@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface IUserService {
     Optional<User> findById(Long userId);
+    Optional<User> save(User user);
 }

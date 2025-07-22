@@ -54,5 +54,5 @@ public class AuditDomain implements Serializable {
     @Column(name = "status", nullable = false)
     @NotNull(message = "o campo \"status\" é obrigario")
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ATIVO;
+    private Status status = Status.ACTIVE;
 }

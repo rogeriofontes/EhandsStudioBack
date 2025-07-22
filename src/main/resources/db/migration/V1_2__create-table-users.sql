@@ -4,7 +4,7 @@ CREATE TABLE tb_user (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
-    status varchar(255) NOT NULL,
+    status varchar(255) NOT NULL DEFAULT 'ACTIVE',
     create_by varchar(255) NOT NULL DEFAULT 'system_user',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_by VARCHAR(255),

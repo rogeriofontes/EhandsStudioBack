@@ -161,7 +161,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return savedUser;
     }
 
-    private void sendEmail(String name, String email, String validatedToken) {
+    @Override
+    public void sendEmail(String name, String email, String validatedToken) {
         try {
             emailService.publish(name, email, "Bem-vindo ao Mãos encantadas!", true, validatedToken);
         } catch (Exception e) {
@@ -169,7 +170,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private String getValidatedToken(User user) {
+    @Override
+    public String getValidatedToken(User user) {
         ActivationToken activationToken = ActivationToken.builder()
                 .user(user)
                 .expiryDate(LocalDateTime.now().plusDays(1)) // Token válido por 1 dia

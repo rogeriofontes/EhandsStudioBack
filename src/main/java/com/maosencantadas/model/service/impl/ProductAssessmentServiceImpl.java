@@ -38,11 +38,11 @@ public class ProductAssessmentServiceImpl implements ProductAssessmentService {
     public ProductAssessment save(ProductAssessment productAssessment) {
         log.info("Saving new customer: {}", productAssessment.getName());
 
-        if (productAssessment.getCustomer() == null || productAssessment.getCustomer().getId() == null) {
+        if (productAssessment.getCustomer() == null || productAssessment.getCustomer().getPerson().getId() == null) {
             throw new IllegalArgumentException("Customer must have a user with a valid ID");
         }
 
-        Long customerId = productAssessment.getCustomer().getId();
+        Long customerId = productAssessment.getCustomer().getPerson().getId();
         Optional<Customer> customerById = customerRepository.findById(customerId);
         if (customerById.isPresent()) {
             log.debug("User with ID {} already exists, using existing user", customerId);

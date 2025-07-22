@@ -38,7 +38,7 @@ public class ArtistSocialMediaMapper {
             ArtistSocialMediaDTO destination = context.getDestination();
 
             if (source.getArtist() != null) {
-                destination.setArtistId(source.getArtist().getId());
+                destination.setArtistId(source.getArtist().getPerson().getId());
             }
 
             return destination;
@@ -53,7 +53,7 @@ public class ArtistSocialMediaMapper {
 
             if (source.getArtistId() != null) {
                 Artist artist = new Artist();
-                artist.setId(source.getArtistId());
+                artist.getPerson().setId(source.getArtistId());
                 destination.setArtist(artist);
             }
 

@@ -1,6 +1,7 @@
 package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.UserDTO;
+import com.maosencantadas.api.dto.request.UserRequest;
 import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.domain.user.UserRole;
 import org.modelmapper.ModelMapper;
@@ -48,6 +49,10 @@ public class UserMapper {
 
     public User toEntity(UserDTO userDTO) {
         return modelMapper.map(userDTO, User.class);
+    }
+
+    public User toEntity(UserRequest userRequest) {
+        return modelMapper.map(userRequest, User.class);
     }
 
     public List<User> toEntity(List<UserDTO> userDTOs) {

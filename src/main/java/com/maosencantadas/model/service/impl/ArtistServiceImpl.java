@@ -76,7 +76,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     @Transactional
     public Artist save(Artist artist) {
-        log.info("Saving new artist: {}", artist.getName());
+        log.info("Saving new artist: {}", artist.getPerson().getName());
         if (artist.getUser() == null || artist.getUser().getId() == null) {
             throw new IllegalArgumentException("User information is required to save an artist");
         }
@@ -91,7 +91,7 @@ public class ArtistServiceImpl implements ArtistService {
             }
 
             Artist savedArtist = artistRepository.save(artist);
-            log.debug("Artist saved with ID: {}", savedArtist.getId());
+            log.debug("Artist saved with ID: {}", savedArtist.getPerson().getId());
 
                 return savedArtist;
         }
@@ -105,18 +105,19 @@ public class ArtistServiceImpl implements ArtistService {
         log.info("Updating product with id: {}", id);
         return artistRepository.findById(id)
                 .map(existingArtist -> {
-                    existingArtist.setName(artist.getName());
-                    existingArtist.setImageUrl(artist.getImageUrl());
-                    existingArtist.setAddress(artist.getAddress());
-                    existingArtist.setEmail(artist.getEmail());
-                    existingArtist.setPhone(artist.getPhone());
-                    existingArtist.setWhatsapp(artist.getWhatsapp());
-                    existingArtist.setCpf(artist.getCpf());
-                    existingArtist.setArtistCategory(artist.getArtistCategory());
-                    existingArtist.setMedia(artist.getMedia());
-                    existingArtist.setUser(artist.getUser());
-
-                    log.debug("Artist updated with ID: {}", existingArtist.getId());
+                    log.info("Updating artist: {}", existingArtist.getPerson().getName());
+                    if (artist.getUser() != null) {
+                        existingArtist.setUser(artist.getUser());
+                    }
+                    if (artist.getPerson() != null) {
+                        existingArtist.getPerson().setName(artist.getPerson().getName());
+                        existingArtist.getPerson().setEmail(artist.getPerson().getEmail());
+                        existingArtist.getPerson().setPhone(artist.getPerson().getPhone());
+                    }
+                    if (artist.getMedia() != null) {
+                        existingArtist.setMedia(artist.getMedia());
+                    }
+                    log.debug("Artist updated with ID: {}", existingArtist.getPerson().getId());
                     return artistRepository.save(existingArtist);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));

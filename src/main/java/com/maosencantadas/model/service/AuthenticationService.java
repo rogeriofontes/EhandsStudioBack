@@ -22,4 +22,8 @@ public interface AuthenticationService {
     User forgotPassword(String email);
 
     User validatePasswordToken(String token, String newPassword);
+
+    void sendEmail(String name, String email, String validatedToken);
+
+    String getValidatedToken(User user);
 }

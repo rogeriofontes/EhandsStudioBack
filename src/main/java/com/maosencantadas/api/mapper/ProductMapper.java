@@ -34,7 +34,7 @@ public class ProductMapper {
         dto.setDiscount(product.getDiscount());
         dto.setImageUrl(product.getImageUrl());
         dto.setPrice(product.getPrice());
-        dto.setArtistId(product.getArtist() != null ? product.getArtist().getId() : null);
+        dto.setArtistId(product.getArtist() != null ? product.getArtist().getPerson().getId() : null);
         dto.setProductCategoryId(product.getProductCategory() != null ? product.getProductCategory().getId() : null);
         dto.setMediaId(product.getMedia().getId() != null ? product.getMedia().getId() : null);
 
@@ -68,7 +68,7 @@ public class ProductMapper {
 
         if (dto.getArtistId() != null) {
             Artist artist = new Artist();
-            artist.setId(dto.getArtistId());
+            artist.getPerson().setId(dto.getArtistId());
             product.setArtist(artist);
         }
 

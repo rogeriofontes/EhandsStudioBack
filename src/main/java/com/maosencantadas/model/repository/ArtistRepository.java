@@ -13,8 +13,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     List<Artist> findByArtistCategoryId(Long artistCategoryId);
 
-    Optional<Artist> findByName(String artistName);
-
     Optional<Artist> findByUser(User user);
 
     Optional<Artist> findByUserId(Long userId);

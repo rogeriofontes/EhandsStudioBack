@@ -1,37 +1,40 @@
-package com.maosencantadas.model.domain.person;
+package com.maosencantadas.api.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "tb_person_natural")
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class PersonNatural extends Person {
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@Valid
+@Schema(name = "ArtistDTO", description = "DTO representing an artist")
+public class ArtistNaturalResponse {
 
     @NotBlank(message = "CPF is mandatory")
-    @Column(name="document_number", unique = true, nullable = false)
+    @Schema(description = "Artist's CPF", example = "123.456.789-00")
+    private String cpf;
+
+
+
+    @NotBlank(message = "CPF is mandatory")
     @Schema(description = "Artist's CPF", example = "123.456.789-00")
     private String documentNumber;
 
     @NotBlank(message = "RG is mandatory")
-    @Column(name="identify_number", unique = true, nullable = false)
     @Schema(description = "Artist's RG", example = "12.345.678-9")
     private String identityNumber;
 
     @NotNull(message = "birthDate is mandatory")
-    @Schema(description = "Artist's birth date", example = "1990-01-01")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 }

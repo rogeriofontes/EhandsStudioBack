@@ -20,4 +20,9 @@ public class UserServiceImpl implements IUserService {
     public Optional<User> findById(Long userId) {
         return userRepository.findById(userId);
     }
+
+    @Override
+    public Optional<User> save(User user) {
+        return Optional.of(userRepository.save(user));
+    }
 }

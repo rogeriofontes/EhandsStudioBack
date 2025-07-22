@@ -1,6 +1,5 @@
-package com.maosencantadas.api.dto;
+package com.maosencantadas.api.dto.response;
 
-import com.maosencantadas.model.domain.person.Person;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -14,9 +13,8 @@ import lombok.*;
 @Setter
 @Builder
 @Valid
-
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
-public class ArtistDTO extends Person {
+public class PersonResponse {
 
     @Schema(description = "Identify the artist", example = "1")
     private Long id;
@@ -43,10 +41,6 @@ public class ArtistDTO extends Person {
 
     @Schema(description = "Artist's WhatsApp number", example = "(11) 91234-5678")
     private String whatsapp;
-
-    @NotBlank(message = "CPF is mandatory")
-    @Schema(description = "Artist's CPF", example = "123.456.789-00")
-    private String cpf;
 
     @Schema(description = "Category ID", example = "1")
     private Long artistCategoryId;

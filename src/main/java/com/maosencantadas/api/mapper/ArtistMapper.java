@@ -41,15 +41,15 @@ public class ArtistMapper {
             ArtistDTO destination = context.getDestination();
 
             if (source.getUser() != null) {
-                destination.setUserId(source.getUser().getId());
-            }
-
-            if (source.getArtistCategory() != null) {
-                destination.setArtistCategoryId(source.getArtistCategory().getId());
+                destination.setId(source.getUser().getId());
             }
 
             if (source.getMedia() != null) {
                 destination.setMediaId(source.getMedia().getId());
+            }
+
+            if (source.getArtistCategory() != null) {
+                destination.setArtistCategoryId(source.getArtistCategory().getId());
             }
 
             return destination;
@@ -62,16 +62,10 @@ public class ArtistMapper {
             ArtistDTO source = context.getSource();
             Artist destination = context.getDestination();
 
-            if (source.getUserId() != null) {
+            if (source.getId() != null) {
                 User user = new User();
-                user.setId(source.getUserId());
+                user.setId(source.getId());
                 destination.setUser(user);
-            }
-
-            if (source.getArtistCategoryId() != null) {
-                ArtistCategory artistCategory = new ArtistCategory();
-                artistCategory.setId(source.getArtistCategoryId());
-                destination.setArtistCategory(artistCategory);
             }
 
             if (source.getMediaId() != null) {
@@ -80,6 +74,11 @@ public class ArtistMapper {
                 destination.setMedia(media);
             }
 
+            if (source.getArtistCategoryId() != null) {
+                ArtistCategory artistCategory = new ArtistCategory();
+                artistCategory.setId(source.getArtistCategoryId());
+                destination.setArtistCategory(artistCategory);
+            }
             return destination;
         });
     }

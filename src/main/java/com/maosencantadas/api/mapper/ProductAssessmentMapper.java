@@ -23,7 +23,7 @@ public class ProductAssessmentMapper {
         // Configuração de mapeamento manual
         TypeMap<ProductAssessment, ProductAssessmentDTO> typeMap = modelMapper.createTypeMap(ProductAssessment.class, ProductAssessmentDTO.class);
         typeMap.addMappings(mapper -> {
-            mapper.map(src -> src.getCustomer().getId(), ProductAssessmentDTO::setCustomerId);
+            mapper.map(src -> src.getCustomer().getPerson().getId(), ProductAssessmentDTO::setCustomerId);
             mapper.map(src -> src.getProduct().getId(), ProductAssessmentDTO::setProductId);
         });
     }
@@ -37,7 +37,7 @@ public class ProductAssessmentMapper {
 
         // Conversão manual para evitar problemas com objetos nulos
         if (productAssessment.getCustomer() != null) {
-            dto.setCustomerId(productAssessment.getCustomer().getId());
+            dto.setCustomerId(productAssessment.getCustomer().getPerson().getId());
         }
         if (productAssessment.getProduct() != null) {
             dto.setProductId(productAssessment.getProduct().getId());
@@ -52,7 +52,7 @@ public class ProductAssessmentMapper {
         // Conversão manual de customerId para Customer
         if (productAssessmentDTO.getCustomerId() != null) {
             Customer customer = new Customer();
-            customer.setId(productAssessmentDTO.getCustomerId());
+            customer.getPerson().setId(productAssessmentDTO.getCustomerId());
             productAssessment.setCustomer(customer);
         }
 

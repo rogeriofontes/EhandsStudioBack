@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public Customer save(Customer customer) {
-        log.info("Saving new customer: {}", customer.getName());
+        log.info("Saving new customer: {}", customer.getPerson().getName());
 
         if (customer.getUser() == null || customer.getUser().getId() == null) {
             throw new IllegalArgumentException("Customer must have a user with a valid ID");
@@ -69,14 +69,18 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("Updating customer with id: {}", id);
         return customerRepository.findById(id)
                 .map(existingCustomer -> {
-                    existingCustomer.setName(customer.getName());
-                    existingCustomer.setEmail(customer.getEmail());
-                    existingCustomer.setPhone(customer.getPhone());
-                    existingCustomer.setAddress(customer.getAddress());
-                    existingCustomer.setUser(customer.getUser());
-                    existingCustomer.setCpf(customer.getCpf());
-                    existingCustomer.setWhatsapp(customer.getWhatsapp());
-                    existingCustomer.setMedia(customer.getMedia());
+                    log.info("Updating customer: {}", existingCustomer.getPerson().getName());
+                    if (customer.getUser() != null) {
+                        existingCustomer.setUser(customer.getUser());
+                    }
+                    if (customer.getPerson() != null) {
+                        existingCustomer.getPerson().setName(customer.getPerson().getName());
+                        existingCustomer.getPerson().setEmail(customer.getPerson().getEmail());
+                        existingCustomer.getPerson().setPhone(customer.getPerson().getPhone());
+                    }
+                    if (customer.getMedia() != null) {
+                        existingCustomer.setMedia(customer.getMedia());
+                    }
                     return customerRepository.save(existingCustomer);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));

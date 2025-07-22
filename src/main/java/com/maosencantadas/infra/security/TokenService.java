@@ -42,7 +42,7 @@ public class TokenService {
                     .withClaim("role", user.getRole().name())
                     .withExpiresAt(genExpirationDate());
 
-            artistOptional.ifPresent(artist -> tokenBuilder.withClaim("artistId", artist.getId()));
+            artistOptional.ifPresent(artist -> tokenBuilder.withClaim("artistId", artist.getPerson().getId()));
 
             return tokenBuilder.sign(getAlgorithm());
         } catch (JWTCreationException exception) {
