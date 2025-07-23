@@ -8,50 +8,50 @@
 
 ## 🧾 1. Cadastro de Usuário
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT01   | Cadastro de pessoa física            | Dados válidos de PF                       | Conta criada com sucesso                   |
-| CT02   | Cadastro de pessoa jurídica          | Dados válidos de PJ                       | Conta criada com sucesso                   |
-| CT03   | Tentativa de cadastro com email repetido | Email já existente                   | Erro 400 – email já registrado             |
-| CT04   | Cadastro sem campo obrigatório       | Dados faltando (ex: CPF, senha)           | Erro de validação                          |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT01-ok | Cadastro de pessoa física            | Dados válidos de PF                       | Conta criada com sucesso                   |
+| CT02-ok | Cadastro de pessoa jurídica          | Dados válidos de PJ                       | Conta criada com sucesso                   |
+| CT03-ok | Tentativa de cadastro com email repetido | Email já existente                   | Erro 400 – email já registrado             |
+| CT04-ok | Cadastro sem campo obrigatório       | Dados faltando (ex: CPF, senha)           | Erro de validação                          |
 
 ---
 
 ## 🔐 2. Login
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT05   | Login com credenciais corretas       | Email e senha válidos                     | Token JWT retornado                        |
-| CT06   | Login com senha incorreta            | Email correto, senha inválida             | Erro 401 – credenciais inválidas           |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT05-ok | Login com credenciais corretas       | Email e senha válidos                     | Token JWT retornado                        |
+| CT06-ok | Login com senha incorreta            | Email correto, senha inválida             | Erro 401 – credenciais inválidas           |
 
 ---
 
 ## 🎨 3. Cadastro de Artista
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT07   | Cadastro de artista com usuário válido | ID de usuário e dados de bio/foto        | Artista vinculado com sucesso              |
-| CT08   | Cadastro com usuário inexistente     | ID inválido                               | Erro 404 – usuário não encontrado          |
-| CT09   | Cadastro com artista já existente    | ID já associado a artista                 | Erro 400 – artista já registrado           |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT07-ok | Cadastro de artista com usuário válido | ID de usuário e dados de bio/foto        | Artista vinculado com sucesso              |
+| CT08-ok | Cadastro com usuário inexistente     | ID inválido                               | Erro 404 – usuário não encontrado          |
+| CT09-ok | Cadastro com artista já existente    | ID já associado a artista                 | Erro 400 – artista já registrado           |
 
 ---
 
 ## 🛍️ 4. Cadastro de Produto
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT10   | Cadastro de produto completo         | Nome, descrição, imagem, preço            | Produto salvo com sucesso                  |
-| CT11   | Produto com categoria nova           | Categoria não existente                   | Nova categoria criada automaticamente      |
-| CT12   | Produto sem nome                     | Nome vazio                                | Erro de validação                          |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT10-ok | Cadastro de produto completo         | Nome, descrição, imagem, preço            | Produto salvo com sucesso                  |
+| CT11-ok | Produto com categoria nova           | Categoria não existente                   | Nova categoria criada automaticamente      |
+| CT12-ok | Produto sem nome                     | Nome vazio                                | Erro de validação                          |
 
 ---
 
 ## 🔎 5. Exploração de Produtos
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT13   | Buscar lista de produtos             | Sem filtros                               | Lista com produtos ativos                  |
-| CT14   | Buscar por categoria                 | Categoria específica                      | Lista filtrada com sucesso                 |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT13-ok | Buscar lista de produtos             | Sem filtros                               | Lista com produtos ativos                  |
+| CT14    | Buscar por categoria                 | Categoria específica                      | Lista filtrada com sucesso                 |
 
 ---
 
@@ -77,11 +77,11 @@
 
 ## ⭐ 8. Avaliações
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT21   | Avaliação válida                     | Nota 1–5, comentário                      | Avaliação registrada                       |
-| CT22   | Avaliação sem compra anterior        | Cliente sem vínculo com o produto         | Erro 403 – não autorizado                  |
-| CT23   | Nota fora do intervalo               | Nota 0 ou 6                               | Erro de validação                          |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT21-ok | Avaliação válida                     | Nota 1–5, comentário                      | Avaliação registrada                       |
+| CT22    | Avaliação sem compra anterior        | Cliente sem vínculo com o produto         | Erro 403 – não autorizado                  |
+| CT23    | Nota fora do intervalo               | Nota 0 ou 6                               | Erro de validação                          |
 
 ---
 

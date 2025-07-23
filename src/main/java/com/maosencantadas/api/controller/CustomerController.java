@@ -1,6 +1,9 @@
 package com.maosencantadas.api.controller;
 
+import com.maosencantadas.api.assembly.CustomerAssembly;
 import com.maosencantadas.api.dto.CustomerDTO;
+import com.maosencantadas.api.dto.request.CustomerCreateRequest;
+import com.maosencantadas.api.dto.response.CustomerResponse;
 import com.maosencantadas.api.mapper.CustomerMapper;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.service.CustomerService;
@@ -28,6 +31,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerAssembly customerAssembly;
     private final CustomerMapper customerMapper;
 
     @GetMapping
@@ -69,17 +73,14 @@ public class CustomerController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<CustomerDTO> create(
+    public ResponseEntity<CustomerResponse> create(
             @Schema(description = "New customer data", requiredMode = Schema.RequiredMode.REQUIRED)
-            @RequestBody CustomerDTO customerDTO) {
-        log.info("Creating new customer: {}", customerDTO.getName());
-        Customer customer = customerMapper.toEntity(customerDTO);
-        Customer newCustomer = customerService.save(customer);
+            @RequestBody CustomerCreateRequest customerCreateRequest) {
+        log.info("Creating new customer: {}", customerCreateRequest);
+        CustomerResponse customerResponse = customerAssembly.create(customerCreateRequest);
 
-        log.info("New customer created with ID: {}", newCustomer.getPerson().getId());
-        CustomerDTO customerDTOResponse = customerMapper.toDTO(newCustomer);
-        URI location = RestUtils.getUri(customerDTOResponse.getId());
-        return ResponseEntity.created(location).body(customerDTOResponse);
+        URI location = RestUtils.getUri(customerResponse.getId());
+        return ResponseEntity.created(location).body(customerResponse);
     }
 
     @PutMapping("/{id}")

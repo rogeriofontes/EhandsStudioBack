@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @Valid
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
-public class ArtistNaturalResponse {
+public class CustomerNaturalResponse {
 
     @NotBlank(message = "CPF is mandatory")
     @Schema(description = "Artist's CPF", example = "123.456.789-00")

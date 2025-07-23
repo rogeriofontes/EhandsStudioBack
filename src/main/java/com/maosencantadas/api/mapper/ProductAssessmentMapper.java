@@ -37,7 +37,7 @@ public class ProductAssessmentMapper {
 
         // Conversão manual para evitar problemas com objetos nulos
         if (productAssessment.getCustomer() != null) {
-            dto.setCustomerId(productAssessment.getCustomer().getPerson().getId());
+            dto.setCustomerId(productAssessment.getCustomer().getId());
         }
         if (productAssessment.getProduct() != null) {
             dto.setProductId(productAssessment.getProduct().getId());
@@ -52,7 +52,7 @@ public class ProductAssessmentMapper {
         // Conversão manual de customerId para Customer
         if (productAssessmentDTO.getCustomerId() != null) {
             Customer customer = new Customer();
-            customer.getPerson().setId(productAssessmentDTO.getCustomerId());
+            customer.setId(productAssessmentDTO.getCustomerId());
             productAssessment.setCustomer(customer);
         }
 

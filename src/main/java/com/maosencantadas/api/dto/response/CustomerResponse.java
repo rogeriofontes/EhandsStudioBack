@@ -11,10 +11,10 @@ import lombok.*;
 @Builder
 @Valid
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
-public class ArtistResponse {
+public class CustomerResponse {
     private Long id;
     private String token;
     private PersonResponse personResponse;
-    private ArtistLegalResponse artistLegalResponse;
-    private ArtistNaturalResponse artistNaturalResponse;
+    private CustomerLegalResponse customerLegalResponse;
+    private CustomerNaturalResponse customerNaturalResponse;
 }

@@ -2,23 +2,12 @@ package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.assembly.ArtistAssembly;
 import com.maosencantadas.api.dto.ArtistDTO;
-import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.api.dto.request.ArtistCreateRequest;
-import com.maosencantadas.api.dto.request.UserRequest;
-import com.maosencantadas.api.dto.response.ArtistLegalResponse;
-import com.maosencantadas.api.dto.response.ArtistNaturalResponse;
 import com.maosencantadas.api.dto.response.ArtistResponse;
-import com.maosencantadas.api.dto.response.PersonResponse;
 import com.maosencantadas.api.mapper.ArtistMapper;
-import com.maosencantadas.api.mapper.UserMapper;
-import com.maosencantadas.commons.Constants;
 import com.maosencantadas.model.domain.artist.Artist;
-import com.maosencantadas.model.domain.person.PersonLegal;
-import com.maosencantadas.model.domain.person.PersonNatural;
-import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.service.ArtistService;
 import com.maosencantadas.model.service.AuthenticationService;
-import com.maosencantadas.model.service.IUserService;
 import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,10 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ff4j.FF4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.List;
@@ -48,12 +35,8 @@ import java.util.Optional;
 public class ArtistController {
 
     private final ArtistService artistService;
-    private final IUserService userService;
     private final ArtistMapper artistMapper;
-    private final UserMapper userMapper;
     private final ArtistAssembly artistAssembly;
-    private final AuthenticationService authenticationService;
-    private final FF4j ff4j;
 
     @GetMapping
     @Operation(summary = "List all artists", description = "Returns a list of all registered artists.")
@@ -119,89 +102,9 @@ public class ArtistController {
             @Schema(description = "New artist data", requiredMode = Schema.RequiredMode.REQUIRED)
             @RequestBody ArtistCreateRequest artistCreateRequest) {
 
-        UserRequest userRequest = artistCreateRequest.getUser();
-        if (artistAssembly.isUserRequestInvalid(userRequest)) {
-            log.error("Invalid user request: {}", userRequest);
-            return ResponseEntity.badRequest().build();
-        }
-
-        User user = userMapper.toEntity(userRequest);
-        var userSaved = userService.save(user)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to create user"));
-
-        log.info("User created: {}", user.getName());
-        UserDTO userDTO = userMapper.toDTO(userSaved);
-
-        if (userDTO.getId() == null) {
-            log.error("User ID is null after saving user: {}", userDTO);
-            return ResponseEntity.badRequest().build();
-        }
-
-        String validatedToken = authenticationService.getValidatedToken(userSaved);
-        log.info("User registered successfully: {}", userSaved);
-
-        String personType = artistCreateRequest.getPersonType();
-        PersonNatural personNatural = null;
-        ArtistNaturalResponse artistNaturalResponse = null;
-
-        PersonLegal personLegal = null;
-        ArtistLegalResponse artistLegalResponse = null;
-
-        if (Constants.PERSON_NATURAL.equalsIgnoreCase(personType)) {
-            var personNaturalRequest = artistCreateRequest.getPersonNatural();
-            personNatural = artistAssembly.processNaturalPerson(personNaturalRequest);
-            if (personNatural == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            artistNaturalResponse = artistAssembly.processNaturalPersonResponse(personNatural);
-            if (artistNaturalResponse == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-        } else if (Constants.PERSON_LEGAL.equalsIgnoreCase(personType)) {
-            var personLegalRequest = artistCreateRequest.getPersonLegal();
-            personLegal = artistAssembly.processLegalPerson(personLegalRequest);
-            if (personLegal == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            artistLegalResponse = artistAssembly.processLegalPersonResponse(personLegal);
-            if (artistLegalResponse == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-        } else {
-            log.error("Invalid person type: {}", personType);
-            return ResponseEntity.badRequest().build();
-        }
-
-        ArtistDTO artistDTO = artistCreateRequest.getArtist();
-        if (artistDTO == null || artistDTO.getArtistCategoryId() == null) {
-            log.error("Artist category ID is required");
-            return ResponseEntity.badRequest().build();
-        }
-
-        Artist artist = artistMapper.toEntity(artistDTO);
-        artist.setUser(user);
-
-        artist.setPerson(personNatural != null ? personNatural : personLegal);
-
-        Artist createdArtist = artistService.save(artist);
-        log.info("Creating artist: {}", createdArtist);
-
-        ArtistDTO createdArtistDTO = artistMapper.toDTO(createdArtist);
-
-        PersonResponse personResponse = artistAssembly.buildPerson(createdArtist, userDTO);
-        ArtistResponse artistResponse = artistAssembly.buildArtistResponse(
-                validatedToken,
-                personResponse,
-                artistNaturalResponse,
-                artistLegalResponse
-        );
-
-        log.info("Artist created successfully: {}", createdArtistDTO.getName());
-        URI location = RestUtils.getUri(createdArtist.getPerson().getId());
+        ArtistResponse artistResponse = artistAssembly.create(artistCreateRequest);
+        log.info("Artist created successfully: {}", artistResponse.getPersonResponse().getName());
+        URI location = RestUtils.getUri(artistResponse.getId());
 
         return ResponseEntity.created(location).body(artistResponse);
     }

@@ -1,22 +1,23 @@
 package com.maosencantadas.api.assembly;
 
-import com.maosencantadas.api.dto.ArtistDTO;
+import com.maosencantadas.api.dto.CustomerDTO;
 import com.maosencantadas.api.dto.UserDTO;
-import com.maosencantadas.api.dto.request.ArtistCreateRequest;
+import com.maosencantadas.api.dto.request.CustomerCreateRequest;
 import com.maosencantadas.api.dto.request.PersonLegalRequest;
 import com.maosencantadas.api.dto.request.PersonNaturalRequest;
 import com.maosencantadas.api.dto.request.UserRequest;
-import com.maosencantadas.api.dto.response.ArtistLegalResponse;
-import com.maosencantadas.api.dto.response.ArtistNaturalResponse;
-import com.maosencantadas.api.dto.response.ArtistResponse;
+import com.maosencantadas.api.dto.response.CustomerLegalResponse;
+import com.maosencantadas.api.dto.response.CustomerNaturalResponse;
+import com.maosencantadas.api.dto.response.CustomerResponse;
 import com.maosencantadas.api.dto.response.PersonResponse;
-import com.maosencantadas.api.mapper.ArtistMapper;
+import com.maosencantadas.api.mapper.CustomerMapper;
 import com.maosencantadas.api.mapper.PersonLegalMapper;
 import com.maosencantadas.api.mapper.PersonNaturalMapper;
 import com.maosencantadas.api.mapper.UserMapper;
 import com.maosencantadas.commons.Constants;
+import com.maosencantadas.exception.ResourceFoundException;
 import com.maosencantadas.exception.ResourceNotFoundException;
-import com.maosencantadas.model.domain.artist.Artist;
+import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.person.PersonLegal;
 import com.maosencantadas.model.domain.person.PersonNatural;
 import com.maosencantadas.model.domain.user.User;
@@ -32,23 +33,23 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ArtistAssembly {
+public class CustomerAssembly {
 
     private final PersonNaturalService personNaturalService;
     private final PersonLegalService personLegalService;
     private final AuthenticationService authenticationService;
+    private final CustomerService customerService;
     private final EmailService emailService;
-    private final ArtistService artistService;
     private final IUserService userService;
     private final UserMapper userMapper;
     private final PersonNaturalMapper personNaturalMapper;
     private final PersonLegalMapper personLegalMapper;
-    private final ArtistMapper artistMapper;
+    private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
     private final FF4j ff4j;
 
-    public ArtistResponse create(ArtistCreateRequest artistCreateRequest) {
-        UserRequest userRequest = artistCreateRequest.getUser();
+    public CustomerResponse create(CustomerCreateRequest customerCreateRequest) {
+        UserRequest userRequest = customerCreateRequest.getUser();
         if (isUserRequestInvalid(userRequest)) {
             log.error("Invalid user request: {}", userRequest);
             throw new ResourceNotFoundException("User request is invalid. Email and role are required.");
@@ -64,94 +65,97 @@ public class ArtistAssembly {
 
         if (userDTO.getId() == null) {
             log.error("User ID is null after saving user: {}", userDTO);
-            throw new ResourceNotFoundException("User ID is null after saving user. Please check the user creation process.");
+            throw new ResourceNotFoundException("User ID is null after saving user");
         }
 
         String validatedToken = authenticationService.getValidatedToken(userSaved);
         log.info("User registered successfully: {}", userSaved);
 
-        String personType = artistCreateRequest.getPersonType();
+        String personType = customerCreateRequest.getPersonType();
         PersonNatural personNatural = null;
-        ArtistNaturalResponse artistNaturalResponse = null;
+        CustomerNaturalResponse customerNaturalResponse = null;
 
         PersonLegal personLegal = null;
-        ArtistLegalResponse artistLegalResponse = null;
+        CustomerLegalResponse customerLegalResponse = null;
 
         if (Constants.PERSON_NATURAL.equalsIgnoreCase(personType)) {
-            var personNaturalRequest = artistCreateRequest.getPersonNatural();
+            var personNaturalRequest = customerCreateRequest.getPersonNatural();
             personNatural = processNaturalPerson(personNaturalRequest);
             if (personNatural == null) {
                 log.error("Failed to create PersonNatural: {}", personNaturalRequest);
-                throw new ResourceNotFoundException("Failed to create PersonNatural. Please check the request data.");
+                throw new ResourceNotFoundException("Failed to create PersonNatural: " + personNaturalRequest);
             }
 
-            artistNaturalResponse = processNaturalPersonResponse(personNatural);
-            if (artistNaturalResponse == null) {
-               log.error("Failed to create ArtistNaturalResponse for person: {}", personNatural != null ? personNatural.getName() : null);
-                throw new ResourceNotFoundException("Failed to create ArtistNaturalResponse. Please check the person data.");
+            customerNaturalResponse = processNaturalPersonResponse(personNatural);
+            if (customerNaturalResponse == null) {
+                log.error("Failed to create CustomerNaturalResponse for person: {}", personNatural.getName());
+                throw new ResourceNotFoundException("Failed to create CustomerNaturalResponse for person: " + personNatural.getName());
             }
 
         } else if (Constants.PERSON_LEGAL.equalsIgnoreCase(personType)) {
-            var personLegalRequest = artistCreateRequest.getPersonLegal();
+            var personLegalRequest = customerCreateRequest.getPersonLegal();
             personLegal = processLegalPerson(personLegalRequest);
             if (personLegal == null) {
                 log.error("Failed to create PersonLegal: {}", personLegalRequest);
-                throw new ResourceNotFoundException("Failed to create PersonLegal. Please check the request data.");
+                throw new ResourceNotFoundException("Failed to create PersonLegal: " + personLegalRequest);
             }
 
-            artistLegalResponse = processLegalPersonResponse(personLegal);
-            if (artistLegalResponse == null) {
+            customerLegalResponse = processLegalPersonResponse(personLegal);
+            if (customerLegalResponse == null) {
                 log.error("Failed to create PersonLegal: {}", personLegalRequest);
-                throw new ResourceNotFoundException("Failed to create ArtistLegalResponse. Please check the person data.");
+                throw new ResourceNotFoundException("Failed to create CustomerLegalResponse for person: " + personLegal.getName());
             }
 
         } else {
             log.error("Invalid person type: {}", personType);
             log.error("Failed to create PersonLegal: {}", personType);
-            throw new ResourceNotFoundException("Invalid person type. Expected 'natural' or 'legal'.");
+            throw new ResourceFoundException("Invalid person type: " + personType);
         }
 
-        ArtistDTO artistDTO = artistCreateRequest.getArtist();
-        if (artistDTO == null || artistDTO.getArtistCategoryId() == null) {
-            log.error("Artist category ID is required");
+        CustomerDTO customerDTO = customerCreateRequest.getCustomer();
+        if (customerDTO == null) {
+            log.error("Customer category ID is required");
+            throw new ResourceNotFoundException("Customer category ID is required");
         }
 
-        Artist artist = artistMapper.toEntity(artistDTO);
-        artist.setUser(user);
+        Customer customer = customerMapper.toEntity(customerDTO);
+        customer.setUser(user);
 
-        artist.setPerson(personNatural != null ? personNatural : personLegal);
+        customer.setPerson(personNatural != null ? personNatural : personLegal);
 
-        Artist createdArtist = artistService.save(artist);
-        log.info("Creating artist: {}", createdArtist);
+        Customer createdCustomer = customerService.save(customer);
+        log.info("Creating customer: {}", createdCustomer);
 
-        ArtistDTO createdArtistDTO = artistMapper.toDTO(createdArtist);
+        CustomerDTO createdCustomerDTO = customerMapper.toDTO(createdCustomer);
 
-        PersonResponse personResponse = buildPerson(createdArtist, userDTO);
+        PersonResponse personResponse = buildPerson(createdCustomer, userDTO);
 
         if (ff4j.check(Constants.SEND_EMAIL)) {
             sendEmail(user.getName(), user.getEmail(), validatedToken);
         }
-        return buildArtistResponse(
-                createdArtistDTO.getId(),
+
+        log.info("Customer created successfully: {}", createdCustomer.getPerson().getName());
+        return buildCustomerResponse(
+                createdCustomerDTO.getId(),
                 validatedToken,
                 personResponse,
-                artistNaturalResponse,
-                artistLegalResponse
+                customerNaturalResponse,
+                customerLegalResponse
         );
     }
 
-    private PersonResponse buildPerson(Artist artist, UserDTO userDTO) {
+    private PersonResponse buildPerson(Customer customer, UserDTO userDTO) {
         return PersonResponse.builder()
-                .id(artist.getPerson().getId())
-                .name(artist.getPerson().getName())
-                .imageUrl(artist.getImageUrl())
-                .address(artist.getPerson().getAddress())
-                .email(artist.getPerson().getEmail())
-                .phone(artist.getPerson().getPhone())
-                .whatsapp(artist.getPerson().getWhatsapp())
-                .categoryId(artist.getArtistCategory().getId())
+                .id(customer.getPerson().getId())
+                .name(customer.getPerson().getName())
+                .imageUrl(null)
+                .address(customer.getPerson().getAddress())
+                .email(customer.getPerson().getEmail())
+                .phone(customer.getPerson().getPhone())
+                .whatsapp(customer.getPerson().getWhatsapp())
+                .categoryId(0L)
                 .userId(userDTO.getId())
-                .mediaId(artist.getMedia().getId() != null ? artist.getMedia().getId() : null)
+                .mediaId(customer.getMedia().getId() != null ? customer.getMedia().getId() : null)
                 .build();
     }
 
@@ -174,7 +178,7 @@ public class ArtistAssembly {
         return personNaturalSaved;
     }
 
-    public ArtistNaturalResponse processNaturalPersonResponse(PersonNatural personNatural) {
+    private CustomerNaturalResponse processNaturalPersonResponse(PersonNatural personNatural) {
         if (personNatural == null || personNatural.getDocumentNumber() == null || personNatural.getDocumentNumber().isEmpty()) {
             log.error("CPF is required for natural person");
         }
@@ -187,7 +191,7 @@ public class ArtistAssembly {
             return null;
         }
 
-        return ArtistNaturalResponse.builder()
+        return CustomerNaturalResponse.builder()
                 .cpf(personNatural != null ? personNatural.getDocumentNumber() : null)
                 .documentNumber(personNatural != null ? personNatural.getDocumentNumber() : null)
                 .identityNumber(personNatural != null ? personNatural.getIdentityNumber() : null)
@@ -195,7 +199,7 @@ public class ArtistAssembly {
                 .build();
     }
 
-    public PersonLegal processLegalPerson(PersonLegalRequest personLegalRequest) {
+    private PersonLegal processLegalPerson(PersonLegalRequest personLegalRequest) {
         if (personLegalRequest == null || personLegalRequest.getDocumentNumber() == null || personLegalRequest.getDocumentNumber().isEmpty()) {
             log.error("CNPJ is required for legal person");
         }
@@ -208,7 +212,7 @@ public class ArtistAssembly {
         return personLegalSaved;
     }
 
-    public ArtistLegalResponse processLegalPersonResponse(PersonLegal personLegal) {
+    private CustomerLegalResponse processLegalPersonResponse(PersonLegal personLegal) {
         if (personLegal == null || personLegal.getDocumentNumber() == null || personLegal.getDocumentNumber().isEmpty()) {
             log.error("CNPJ is required for legal person");
         }
@@ -216,7 +220,7 @@ public class ArtistAssembly {
         var personLegalDto = personLegalMapper.toDTO(personLegal);
         log.info("PersonLegal created: {}", personLegalDto);
 
-        return ArtistLegalResponse.builder()
+        return CustomerLegalResponse.builder()
                 .documentNumber(personLegal != null ? personLegal.getDocumentNumber() : null)
                 .companyName(personLegal != null ? personLegal.getCompanyName() : null)
                 .fantasyName(personLegal != null ? personLegal.getFantasyName() : null)
@@ -227,19 +231,19 @@ public class ArtistAssembly {
                 .build();
     }
 
-    private ArtistResponse buildArtistResponse(
+    private CustomerResponse buildCustomerResponse(
             Long id,
             String validatedToken,
             PersonResponse personResponse,
-            ArtistNaturalResponse artistNaturalResponse,
-            ArtistLegalResponse artistLegalResponse) {
+            CustomerNaturalResponse customerNaturalResponse,
+            CustomerLegalResponse customerLegalResponse) {
 
-        return ArtistResponse.builder()
+        return CustomerResponse.builder()
                 .id(id)
                 .token(validatedToken)
                 .personResponse(personResponse)
-                .artistNaturalResponse(artistNaturalResponse)
-                .artistLegalResponse(artistLegalResponse)
+                .customerNaturalResponse(customerNaturalResponse)
+                .customerLegalResponse(customerLegalResponse)
                 .build();
     }
 
@@ -250,4 +254,5 @@ public class ArtistAssembly {
             throw new RuntimeException(e);
         }
     }
+
 }
