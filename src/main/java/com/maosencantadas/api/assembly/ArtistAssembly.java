@@ -87,7 +87,7 @@ public class ArtistAssembly {
 
             artistNaturalResponse = processNaturalPersonResponse(personNatural);
             if (artistNaturalResponse == null) {
-               log.error("Failed to create ArtistNaturalResponse for person: {}", personNatural != null ? personNatural.getName() : null);
+               log.error("Failed to create ArtistNaturalResponse for person: {}", personNatural.getName());
                 throw new ResourceNotFoundException("Failed to create ArtistNaturalResponse. Please check the person data.");
             }
 

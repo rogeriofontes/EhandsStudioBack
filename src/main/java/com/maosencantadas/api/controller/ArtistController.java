@@ -7,7 +7,6 @@ import com.maosencantadas.api.dto.response.ArtistResponse;
 import com.maosencantadas.api.mapper.ArtistMapper;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.service.ArtistService;
-import com.maosencantadas.model.service.AuthenticationService;
 import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,7 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ff4j.FF4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
