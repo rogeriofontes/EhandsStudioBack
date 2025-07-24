@@ -29,7 +29,7 @@ public class Customer extends AuditDomain {
     @Schema(description = "Customer user")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
 

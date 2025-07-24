@@ -4,6 +4,7 @@ import com.maosencantadas.api.dto.ArtistDTO;
 import com.maosencantadas.model.domain.artist.Artist;
 import com.maosencantadas.model.domain.artist.ArtistCategory;
 import com.maosencantadas.model.domain.media.Media;
+import com.maosencantadas.model.domain.person.Person;
 import com.maosencantadas.model.domain.user.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -36,22 +37,40 @@ public class ArtistMapper {
     private void configureArtistToArtistDTO() {
         TypeMap<Artist, ArtistDTO> typeMap = modelMapper.createTypeMap(Artist.class, ArtistDTO.class);
         typeMap.setPostConverter(context -> {
-            Artist source = context.getSource();
-            ArtistDTO destination = context.getDestination();
+            try {
+                Artist source = context.getSource();
+                ArtistDTO destination = context.getDestination();
 
-            if (source.getUser() != null) {
-                destination.setId(source.getUser().getId());
+                // Corrija aqui: pega o ID do próprio Artist!
+                destination.setId(source.getId());
+
+                // Mapeie campos vindos de Person
+                Person person = source.getPerson();
+                if (person != null) {
+                    destination.setName(person.getName());
+                    destination.setAddress(person.getAddress());
+                    destination.setEmail(person.getEmail());
+                    destination.setPhone(person.getPhone());
+                    destination.setWhatsapp(person.getWhatsapp());
+                }
+
+                if (source.getMedia() != null) {
+                    destination.setMediaId(source.getMedia().getId());
+                }
+
+                if (source.getArtistCategory() != null) {
+                    destination.setArtistCategoryId(source.getArtistCategory().getId());
+                }
+
+                if (source.getUser() != null) {
+                    destination.setUserId(source.getUser().getId());
+                }
+
+                return destination;
+            } catch (Exception ex) {
+                ex.printStackTrace(); // Loga para identificar o problema real
+                throw ex; // Relança para o ModelMapper capturar
             }
-
-            if (source.getMedia() != null) {
-                destination.setMediaId(source.getMedia().getId());
-            }
-
-            if (source.getArtistCategory() != null) {
-                destination.setArtistCategoryId(source.getArtistCategory().getId());
-            }
-
-            return destination;
         });
     }
 

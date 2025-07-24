@@ -35,9 +35,10 @@ public class BudgetMapper {
             Budget source = context.getSource();
             BudgetDTO destination = context.getDestination();
 
-            if (source.getMedia() != null) {
-                destination.setMediaId(source.getMedia().getId());
-            }
+            if (source.getCustomer() != null) destination.setCustomerId(source.getCustomer().getId());
+            if (source.getProduct() != null) destination.setProductId(source.getProduct().getId());
+            if (source.getArtist() != null) destination.setArtistId(source.getArtist().getId());
+            if (source.getMedia() != null) destination.setMediaId(source.getMedia().getId());
 
             return destination;
         });
@@ -48,6 +49,23 @@ public class BudgetMapper {
             BudgetDTO source = context.getSource();
             Budget destination = context.getDestination();
 
+            destination.setId(source.getId());
+
+            if (source.getCustomerId() != null) {
+                Customer customer = new Customer();
+                customer.setId(source.getCustomerId());
+                destination.setCustomer(customer);
+            }
+            if (source.getProductId() != null) {
+                Product product = new Product();
+                product.setId(source.getProductId());
+                destination.setProduct(product);
+            }
+            if (source.getArtistId() != null) {
+                Artist artist = new Artist();
+                artist.setId(source.getArtistId());
+                destination.setArtist(artist);
+            }
             if (source.getMediaId() != null) {
                 Media media = new Media();
                 media.setId(source.getMediaId());
@@ -68,17 +86,19 @@ public class BudgetMapper {
         // Set Customer, Product, Artist if IDs are present
         if (dto.getCustomerId() != null) {
             Customer customer = new Customer();
-            customer.getPerson().setId(dto.getCustomerId());
+            customer.setId(dto.getCustomerId());
             budget.setCustomer(customer);
         }
+
         if (dto.getProductId() != null) {
             Product product = new Product();
             product.setId(dto.getProductId());
             budget.setProduct(product);
         }
+
         if (dto.getArtistId() != null) {
             Artist artist = new Artist();
-            artist.getPerson().setId(dto.getArtistId());
+            artist.setId(dto.getArtistId());
             budget.setArtist(artist);
         }
 
@@ -86,27 +106,7 @@ public class BudgetMapper {
     }
 
     public BudgetDTO toDto(Budget budget) {
-        if (budget == null) {
-            return null;
-        }
-
-        BudgetDTO dto = modelMapper.map(budget, BudgetDTO.class);
-
-        // Set IDs for Customer, Product, Artist, and Media
-        if (budget.getCustomer() != null) {
-            dto.setCustomerId(budget.getCustomer().getPerson().getId());
-        }
-        if (budget.getProduct() != null) {
-            dto.setProductId(budget.getProduct().getId());
-        }
-        if (budget.getArtist() != null) {
-            dto.setArtistId(budget.getArtist().getPerson().getId());
-        }
-        if (budget.getMedia() != null) {
-            dto.setMediaId(budget.getMedia().getId());
-        }
-
-        return dto;
+        return (budget == null) ? null : modelMapper.map(budget, BudgetDTO.class);
     }
 
     public BudgetDTO toDtoWithResponse(Budget budget) {

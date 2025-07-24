@@ -1,13 +1,21 @@
 package com.maosencantadas.model.service.impl;
 
 import com.maosencantadas.api.dto.BudgetResponseDTO;
+import com.maosencantadas.exception.AccessDeniedException;
+import com.maosencantadas.exception.BusinessException;
 import com.maosencantadas.exception.ResourceNotFoundException;
 import com.maosencantadas.model.domain.budget.Budget;
 import com.maosencantadas.model.domain.budget.BudgetStatus;
+import com.maosencantadas.model.domain.user.User;
 import com.maosencantadas.model.repository.BudgetRepository;
+import com.maosencantadas.model.repository.UserRepository;
 import com.maosencantadas.model.service.BudgetService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +27,7 @@ import java.util.Optional;
 public class BudgetServiceImpl implements BudgetService {
 
     private final BudgetRepository budgetRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Budget> findAll() {
@@ -67,9 +76,45 @@ public class BudgetServiceImpl implements BudgetService {
         }
 
         Budget existingBudget = budget.get();
-        existingBudget.setBudgetStatus(BudgetStatus.COMPLETED.name());
+        existingBudget.setBudgetStatus(BudgetStatus.COMPLETED);
         existingBudget.setResponse(budgetResponseDTO.getResponse());
         return budgetRepository.save(existingBudget);
+    }
+
+    @Transactional
+    public void acceptBudget(Long budgetId) {
+
+        //1. Pegue o usuário autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        Optional<User> byEmail = userRepository.findByEmail(currentUserEmail);
+        if (byEmail.isEmpty()) {
+            log.warn("Usuário não encontrado com email: {}", currentUserEmail);
+            throw new ResourceNotFoundException("Usuário não encontrado com email: " + currentUserEmail);
+        }
+
+        User user = byEmail.get();
+        Long userId = user.getId();
+        log.info("Usuário autenticado: {}", userId);
+
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new EntityNotFoundException("Orçamento não encontrado"));
+
+        // 3. Cheque se o usuário autenticado é o mesmo que criou o orçamento
+        Long budgetUserId = budget.getCustomer().getUser().getId(); // ajuste conforme seu modelo
+        log.info("Usuário que fez o bucket: {}", budgetUserId);
+
+        if (!userId.equals(budgetUserId)) {
+            throw new AccessDeniedException("Você não tem permissão para aceitar este orçamento.");
+        }
+
+        if (!budget.getBudgetStatus().equals(BudgetStatus.COMPLETED)) {
+            throw new BusinessException("Só é possível aceitar orçamentos respondidos pelo artista");
+        }
+
+        budget.setBudgetStatus(BudgetStatus.APPROVED);
+        // Se quiser, registre data de aceite, usuário que aceitou, etc.
+        budgetRepository.save(budget);
     }
 
     @Override

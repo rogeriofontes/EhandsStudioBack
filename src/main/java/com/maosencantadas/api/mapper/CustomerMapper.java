@@ -4,6 +4,7 @@ import com.maosencantadas.api.dto.CustomerDTO;
 import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.media.Media;
+import com.maosencantadas.model.domain.person.Person;
 import com.maosencantadas.model.domain.user.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -31,26 +32,35 @@ public class CustomerMapper {
 
         TypeMap<Customer, CustomerDTO> typeMap = modelMapper.createTypeMap(Customer.class, CustomerDTO.class);
 
-
         typeMap.setPostConverter(context -> {
-            Customer source = context.getSource();
-            CustomerDTO destination = context.getDestination();
+            try {
+                Customer source = context.getSource();
+                CustomerDTO destination = context.getDestination();
 
-            if (source.getUser() != null) {
-                User user = source.getUser();
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId(user.getId());
-                userDTO.setName(user.getName());
-                userDTO.setEmail(user.getEmail());
-                userDTO.setUserRole(user.getRole().name());
-                destination.setUserId(userDTO.getId());
+                destination.setId(source.getId());
+
+                Person person = source.getPerson();
+                if (person != null) {
+                    destination.setName(person.getName());
+                    destination.setAddress(person.getAddress());
+                    destination.setEmail(person.getEmail());
+                    destination.setPhone(person.getPhone());
+                    destination.setWhatsapp(person.getWhatsapp());
+                }
+
+                if (source.getUser() != null) {
+                    destination.setUserId(source.getUser().getId());
+                }
+
+                if (source.getMedia() != null) {
+                    destination.setMediaId(source.getMedia().getId());
+                }
+
+                return destination;
+            } catch (Exception e) {
+                e.printStackTrace(); // Veja o erro no log/console
+                throw e;
             }
-
-            if (source.getMedia() != null) {
-                destination.setMediaId(source.getMedia().getId());
-            }
-
-            return destination;
         });
 
         TypeMap<CustomerDTO, Customer> typeMapReverse = modelMapper.createTypeMap(CustomerDTO.class, Customer.class);

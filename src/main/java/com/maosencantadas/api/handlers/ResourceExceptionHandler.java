@@ -26,6 +26,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.net.URI;
 import java.text.ParseException;
+import java.util.Map;
 import java.util.Set;
 
 @ControllerAdvice(annotations = RestController.class)
@@ -110,10 +111,29 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ProblemDetail> dataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        ProblemDetail problemDetails = createProblemDetails("about:blank", "Conflict", HttpStatus.CONFLICT.value(), ex.getMessage());
+    public ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, WebRequest request) {
+
+        // Mensagem padrão
+        String message = "Violação de restrição no banco de dados. Verifique se os dados enviados estão corretos!";
+
+        // Verifica se é a constraint específica
+        String details = ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage();
+        if (details != null && details.contains("tb_product_assessment_chk_1")) {
+            message = "Avaliação inválida: algum campo não está conforme a regra de negócio.";
+        }
+
         String path = ((ServletWebRequest) request).getRequest().getRequestURI();
+
+        ProblemDetail problemDetails = createProblemDetails(
+                "about:blank",
+                "Conflict",
+                HttpStatus.CONFLICT.value(),
+                message
+        );
         problemDetails.setInstance(URI.create(path));
+        problemDetails.setDetail(details);
+
         return new ResponseEntity<>(problemDetails, HttpStatus.CONFLICT);
     }
 

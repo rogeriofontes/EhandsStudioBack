@@ -20,4 +20,6 @@ public interface BudgetService {
     Budget findByCustomerId(Long customerId);
 
     Budget createResponse(Long budgetId, BudgetResponseDTO budgetResponseDTO);
+
+    void acceptBudget(Long budgetId);
 }

@@ -16,7 +16,7 @@ import lombok.*;
 @Valid
 
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
-public class ArtistDTO extends Person {
+public class ArtistDTO {
 
     @Schema(description = "Identify the artist", example = "1")
     private Long id;

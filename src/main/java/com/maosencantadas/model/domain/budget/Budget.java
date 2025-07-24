@@ -31,11 +31,11 @@ public class Budget extends AuditDomain {
     @Schema(description = "Unique identifier of the budget", example = "1")
     private Long id;
 
-    @NotBlank(message = "Status is required")
-    @Size(max = 50, message = "Status must be at most 50 characters")
+    @NotNull(message = "Status is required")
     @Column(name = "budget_status")
+    @Enumerated(EnumType.STRING)
     @Schema(description = "Current status of the budget", example = "Pending")
-    private String budgetStatus;
+    private BudgetStatus budgetStatus;
 
     @NotNull(message = "Budget date is required")
     @Column(name = "date_budget")

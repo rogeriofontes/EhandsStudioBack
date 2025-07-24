@@ -4,6 +4,7 @@ import com.maosencantadas.api.dto.BudgetDTO;
 import com.maosencantadas.api.dto.BudgetResponseDTO;
 import com.maosencantadas.api.mapper.BudgetMapper;
 import com.maosencantadas.model.domain.budget.Budget;
+import com.maosencantadas.model.domain.budget.BudgetStatus;
 import com.maosencantadas.model.service.BudgetService;
 import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,6 +85,7 @@ public class BudgetController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BudgetDTO> create(@RequestBody BudgetDTO request) {
         Budget budget = budgetMapper.toEntity(request);
+        budget.setBudgetStatus(BudgetStatus.PENDING); // Default status
         Budget created = budgetService.create(budget);
 
         BudgetDTO createdDTO = budgetMapper.toDto(created);
@@ -106,6 +108,12 @@ public class BudgetController {
         BudgetDTO createdDTO = budgetMapper.toDtoWithResponse(created);
         URI location = RestUtils.getUri(createdDTO.getId());
         return ResponseEntity.created(location).body(createdDTO);
+    }
+
+    @PutMapping("/{budgetId}/accept")
+    public ResponseEntity<Void> acceptBudget(@PathVariable Long budgetId) {
+        budgetService.acceptBudget(budgetId);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Update an existing budget")

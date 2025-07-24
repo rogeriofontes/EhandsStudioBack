@@ -28,8 +28,8 @@ public class Artist extends AuditDomain {
     @JoinColumn(name = "user_id", unique = true, nullable = false)
     @JsonManagedReference
     private User user;
-    
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
 

@@ -51,27 +51,27 @@
 | ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
 |---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
 | CT13-ok | Buscar lista de produtos             | Sem filtros                               | Lista com produtos ativos                  |
-| CT14    | Buscar por categoria                 | Categoria específica                      | Lista filtrada com sucesso                 |
+| CT14-ok | Buscar por categoria                 | Categoria específica                      | Lista filtrada com sucesso                 |
 
 ---
 
 ## 📝 6. Orçamentos
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT15   | Enviar orçamento personalizado       | Cliente envia descrição                   | Orçamento criado e vinculado ao cliente    |
-| CT16   | Enviar orçamento baseado em produto  | Seleção de produto + descrição            | Orçamento vinculado ao produto             |
-| CT17   | Orçamento com campos obrigatórios faltando | Descrição vazia                       | Erro de validação                          |
+| ID       | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|----------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT150-ok | Enviar orçamento personalizado       | Cliente envia descrição                   | Orçamento criado e vinculado ao cliente    |
+| CT16-ok  | Enviar orçamento baseado em produto  | Seleção de produto + descrição            | Orçamento vinculado ao produto             |
+| CT17-ok  | Orçamento com campos obrigatórios faltando | Descrição vazia                       | Erro de validação                          |
 
 ---
 
 ## 📬 7. Resposta a Orçamentos
 
-| ID     | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
-|--------|--------------------------------------|-------------------------------------------|--------------------------------------------|
-| CT18   | Artista responde orçamento           | Valor e mensagem                          | Status alterado para “respondido”          |
-| CT19   | Artista responde orçamento que não é seu | ID inválido ou de outro artista        | Erro 403 – acesso negado                   |
-| CT20   | Cliente aceita orçamento             | ID do orçamento                           | Status alterado para “aceito”              |
+| ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
+|---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
+| CT18-ok | Artista responde orçamento           | Valor e mensagem                          | Status alterado para “respondido”          |
+| CT19-ok | Artista responde orçamento que não é seu | ID inválido ou de outro artista        | Erro 403 – acesso negado                   |
+| CT20-ok | Cliente aceita orçamento             | ID do orçamento                           | Status alterado para “aceito”              |
 
 ---
 
@@ -80,8 +80,8 @@
 | ID      | Caso de Teste                        | Entrada                                   | Resultado Esperado                         |
 |---------|--------------------------------------|-------------------------------------------|--------------------------------------------|
 | CT21-ok | Avaliação válida                     | Nota 1–5, comentário                      | Avaliação registrada                       |
-| CT22    | Avaliação sem compra anterior        | Cliente sem vínculo com o produto         | Erro 403 – não autorizado                  |
-| CT23    | Nota fora do intervalo               | Nota 0 ou 6                               | Erro de validação                          |
+| CT22-ok | Avaliação sem compra anterior        | Cliente sem vínculo com o produto         | Erro 403 – não autorizado                  |
+| CT23-ok | Nota fora do intervalo               | Nota 0 ou 6                               | Erro de validação                          |
 
 ---
 

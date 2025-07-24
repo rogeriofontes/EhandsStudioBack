@@ -1,5 +1,6 @@
 package com.maosencantadas.api.dto;
 
+import com.maosencantadas.model.domain.budget.BudgetStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,9 +20,8 @@ public class BudgetDTO {
     private Long id;
 
     @NotBlank(message = "Status is required")
-    @Size(max = 50, message = "Status must be at most 50 characters")
     @Schema(description = "Current status of the budget", example = "Pending")
-    private String status;
+    private BudgetStatus budgetStatus;
 
     @NotNull(message = "Budget date is required")
     @Schema(description = "Date and time the budget was created", example = "2024-04-27T15:30:00")
