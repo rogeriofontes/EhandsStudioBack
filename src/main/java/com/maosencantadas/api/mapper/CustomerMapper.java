@@ -1,7 +1,6 @@
 package com.maosencantadas.api.mapper;
 
 import com.maosencantadas.api.dto.CustomerDTO;
-import com.maosencantadas.api.dto.UserDTO;
 import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.person.Person;

@@ -6,10 +6,9 @@ import com.maosencantadas.model.domain.customer.Customer;
 import com.maosencantadas.model.domain.media.Media;
 import com.maosencantadas.model.domain.product.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;

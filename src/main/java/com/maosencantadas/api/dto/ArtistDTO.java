@@ -1,6 +1,5 @@
 package com.maosencantadas.api.dto;
 
-import com.maosencantadas.model.domain.person.Person;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

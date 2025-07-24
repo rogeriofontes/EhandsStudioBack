@@ -26,7 +26,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.net.URI;
 import java.text.ParseException;
-import java.util.Map;
 import java.util.Set;
 
 @ControllerAdvice(annotations = RestController.class)
