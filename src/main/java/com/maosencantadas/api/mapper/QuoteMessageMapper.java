@@ -18,10 +18,13 @@ public class QuoteMessageMapper {
 
         return QuoteMessage.builder()
                 .id(dto.getId())
-                .budget(dto.getBudget())
                 .message(dto.getMessage())
                 .sentByCustomer(dto.getSentByCustomer())
                 .sentAt(dto.getSentAt())
+                .acceptPersonalization(dto.isAcceptPersonalization())
+                .budget(dto.getBudgetId() != null
+                        ? com.maosencantadas.model.domain.budget.Budget.builder().id(dto.getBudgetId()).build()
+                        : null)
                 .build();
     }
 
@@ -32,10 +35,11 @@ public class QuoteMessageMapper {
 
         return QuoteMessageDTO.builder()
                 .id(entity.getId())
-                .budget(entity.getBudget())
                 .message(entity.getMessage())
                 .sentByCustomer(entity.getSentByCustomer())
                 .sentAt(entity.getSentAt())
+                .acceptPersonalization(entity.isAcceptPersonalization())
+                .budgetId(entity.getBudget() != null ? entity.getBudget().getId() : null)
                 .build();
     }
 

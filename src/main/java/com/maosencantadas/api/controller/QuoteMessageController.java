@@ -60,7 +60,7 @@ public class QuoteMessageController {
         return ResponseEntity.ok(quoteMessageDTO);
     }
 
-    @PostMapping
+
     @Operation(summary = "Create a new category", description = "Creates and returns a new category with the provided data.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category created successfully",
@@ -68,10 +68,8 @@ public class QuoteMessageController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<QuoteMessageDTO> create(
-            @RequestBody
-            @Schema(description = "New category data", requiredMode = Schema.RequiredMode.REQUIRED)
-            QuoteMessageDTO quoteMessageDTO) {
+    @PostMapping
+    public ResponseEntity<QuoteMessageDTO> create(@RequestBody QuoteMessageDTO quoteMessageDTO) {
         log.info("Creating new category: {}", quoteMessageDTO.getId());
         QuoteMessage quoteMessage = quoteMessageMapper.toEntity(quoteMessageDTO);
         QuoteMessage newQuoteMessage = quoteMessageService.save(quoteMessage);

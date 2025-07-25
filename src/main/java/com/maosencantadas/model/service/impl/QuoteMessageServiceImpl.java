@@ -1,7 +1,9 @@
 package com.maosencantadas.model.service.impl;
 
 import com.maosencantadas.exception.ResourceNotFoundException;
+import com.maosencantadas.model.domain.budget.Budget;
 import com.maosencantadas.model.domain.budget.QuoteMessage;
+import com.maosencantadas.model.repository.BudgetRepository;
 import com.maosencantadas.model.repository.QuoteMessageRepository;
 import com.maosencantadas.model.service.QuoteMessageService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,6 +19,7 @@ import java.util.List;
 public class QuoteMessageServiceImpl implements QuoteMessageService {
 
     private final QuoteMessageRepository quoteMessageRepository;
+    private final BudgetRepository budgetRepository;
 
     @Override
     public List<QuoteMessage> findAll() {
@@ -33,6 +37,16 @@ public class QuoteMessageServiceImpl implements QuoteMessageService {
     @Override
     public QuoteMessage save(QuoteMessage quoteMessage) {
         log.info("Saving new category: {}", quoteMessage.getId());
+        Long budgetId = quoteMessage.getBudget().getId();
+        if (budgetId == null) {
+            throw new IllegalArgumentException("Budget ID must not be null");
+        }
+
+        Optional<Budget> byId = budgetRepository.findById(budgetId);
+        if (byId.isEmpty()) {
+            throw new ResourceNotFoundException("Budget not found with id " + budgetId);
+        }
+
         return quoteMessageRepository.save(quoteMessage);
     }
 

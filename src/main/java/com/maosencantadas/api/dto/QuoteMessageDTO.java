@@ -1,5 +1,6 @@
 package com.maosencantadas.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.maosencantadas.model.domain.budget.Budget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -23,8 +24,7 @@ public class QuoteMessageDTO {
 
     @NotNull(message = "Product ID is required")
     @Schema(description = "ID of the product related to the budget", example = "3")
-    @ToString.Exclude
-    private Budget budget;
+    private Long budgetId;
 
     @Size(max = 200, message = "Description must be at most 200 characteres")
     @Column(name = "message")
@@ -37,6 +37,7 @@ public class QuoteMessageDTO {
 
     @Schema(description = "Date and time when the message was sent", example = "2023-10-01T12:00:00")
     @Column(name = "sent_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime sentAt;
 
     @Schema(description = "Indicates whether the customer accepts personalization of the product", example = "true")

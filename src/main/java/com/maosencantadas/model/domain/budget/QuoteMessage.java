@@ -46,4 +46,8 @@ public class QuoteMessage extends AuditDomain {
     @Column(name = "sent_at", nullable = false)
     private LocalDateTime sentAt;
 
+    @Schema(description = "Indicates whether the customer accepts personalization of the product", example = "true")
+    @Column(name = "accept_personalization", nullable = false)
+    private boolean acceptPersonalization;
+
 }
