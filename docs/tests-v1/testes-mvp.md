@@ -87,11 +87,11 @@
 
 ## 🛡️ 9. Regras de Acesso por Perfil
 
-| ID     | Caso de Teste                        | Perfil               | Ação                                     | Resultado Esperado                     |
-|--------|--------------------------------------|-----------------------|------------------------------------------|----------------------------------------|
-| CT24   | CUSTOMER acessa rota de ARTISTA      | CUSTOMER              | `/artista/produtos`                      | Erro 403 – acesso negado               |
-| CT25   | ARTISTA acessa rota de ADMIN         | ARTISTA               | `/admin/usuarios`                        | Erro 403 – acesso negado               |
-| CT26   | ADMIN acessa rota protegida          | ADMIN                 | `/admin/usuarios`                        | Sucesso                                |
+| ID      | Caso de Teste                        | Perfil               | Ação                                     | Resultado Esperado                     |
+|---------|--------------------------------------|-----------------------|------------------------------------------|----------------------------------------|
+| CT24-ok | CUSTOMER acessa rota de ARTISTA      | CUSTOMER              | `/artista/produtos`                      | Erro 403 – acesso negado               |
+| CT25-ok | ARTISTA acessa rota de ADMIN         | ARTISTA               | `/admin/usuarios`                        | Erro 403 – acesso negado               |
+| CT26-ok | ADMIN acessa rota protegida          | ADMIN                 | `/admin/usuarios`                        | Sucesso                                |
 
 ---
 

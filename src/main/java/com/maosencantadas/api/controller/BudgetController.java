@@ -1,10 +1,14 @@
 package com.maosencantadas.api.controller;
 
 import com.maosencantadas.api.dto.BudgetDTO;
+import com.maosencantadas.api.dto.BudgetMediaDTO;
 import com.maosencantadas.api.dto.BudgetResponseDTO;
 import com.maosencantadas.api.mapper.BudgetMapper;
+import com.maosencantadas.api.mapper.BudgetMediaMapper;
 import com.maosencantadas.model.domain.budget.Budget;
+import com.maosencantadas.model.domain.budget.BudgetMedia;
 import com.maosencantadas.model.domain.budget.BudgetStatus;
+import com.maosencantadas.model.service.BudgetMediaService;
 import com.maosencantadas.model.service.BudgetService;
 import com.maosencantadas.utils.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +37,8 @@ public class BudgetController {
 
     private final BudgetService budgetService;
     private final BudgetMapper budgetMapper;
+    private final BudgetMediaService budgetMediaService;
+    private final BudgetMediaMapper budgetMediaMapper;
 
     @Operation(summary = "List all budgets")
     @ApiResponses(value = {
@@ -108,6 +114,31 @@ public class BudgetController {
         BudgetDTO createdDTO = budgetMapper.toDtoWithResponse(created);
         URI location = RestUtils.getUri(createdDTO.getId());
         return ResponseEntity.created(location).body(createdDTO);
+    }
+
+    @Operation(summary = "Create a new budget")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Budget successfully created",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BudgetDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
+    })
+    @PatchMapping(value = "/{budgetId}/image/{mediaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BudgetMediaDTO> createResponse(
+            @PathVariable("budgetId") Long budgetId, @PathVariable("mediaId") Long mediaId) {
+        log.info("Creating budget media for budget ID: {} and media ID: {}", budgetId, mediaId);
+        BudgetMediaDTO budgetMediaDTO = BudgetMediaDTO.builder()
+                .budgetId(budgetId)
+                .mediaId(mediaId)
+                .build();
+        log.info("BudgetMediaDTO created: {}", budgetMediaDTO);
+
+        BudgetMedia budgetMedia = budgetMediaMapper.toEntity(budgetMediaDTO);
+        BudgetMedia budgetMediaResponse = budgetMediaService.create(budgetMedia);
+        log.info("BudgetMedia created: {}", budgetMediaResponse);
+
+        BudgetMediaDTO budgetMediaDTOResponse = budgetMediaMapper.toDTO(budgetMediaResponse);
+        return ResponseEntity.ok(budgetMediaDTOResponse);
     }
 
     @PutMapping("/{budgetId}/accept")
