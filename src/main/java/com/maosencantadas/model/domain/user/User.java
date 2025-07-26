@@ -18,6 +18,7 @@ import java.util.List;
 @Table(name = "tb_user")
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)

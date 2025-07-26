@@ -13,7 +13,6 @@ import lombok.*;
 @Setter
 @Builder
 @Valid
-
 @Schema(name = "ArtistDTO", description = "DTO representing an artist")
 public class ArtistDTO {
 
